@@ -1,4 +1,3 @@
-package SaratogaMK3;
 
 
 public class Main {
