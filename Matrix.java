@@ -79,6 +79,49 @@ public class Matrix {
         matrix[7] = 0.0;
         matrix[8] = -3.0;
     }
+    public void seedDiagnonal(){ //fills 1d array with random values 0 - 1
+        matrix[0] = 0.0;
+        matrix[1] = 1.0;
+        matrix[2] = 0.0;
+        matrix[3] = -1.0;
+        matrix[4] = 0.0;
+        matrix[5] = 1.0;
+        matrix[6] = 0.0;
+        matrix[7] = -1.0;
+        matrix[8] = 0.0;
+    }
+    public void seedSharpen(){ //fills 1d array with random values 0 - 1
+        if(size != 25){
+            System.out.println("wrong kernal size");
+        }
+        for(int i = 0; i < size; i++){
+            matrix[i] = 0.0;
+        }
+        matrix[7] = -1.0;
+        matrix[11] = -1.0;
+        matrix[12] = 5.0;
+        matrix[13] = -1.0;
+        matrix[17] = -1.0; 
+    }
+    public void seedZeros(){
+        for(int i = 0; i < size; i++){
+            matrix[i] = 0.0;
+        }
+    }
+    public void seedGrey(){
+        if(size != 3){
+            System.out.println("wrong kernal size");
+            for(int i = 0; i < size; i++){
+                matrix[i] = 0.0;
+            }
+            matrix[0] = 1.0;
+            matrix[2] = -1.0;
+            matrix[3] = 2.0;
+            matrix[5] = -2.0;
+            matrix[6] = 1.0;
+            matrix[8] = -1.0;
+        }
+    }
     public void imageToMatrix(BufferedImage image) throws IOException{
         int width = image.getWidth();
         int height = image.getHeight();
@@ -92,7 +135,7 @@ public class Matrix {
                 int avg = (r + g + b) / 3;
                 p = (a<<24) | (avg<<16) | (avg<<8) | avg;
                 image.setRGB(x, y, p);
-                matrix[y*cols+x] = (double) (r + g + b) / 3;
+                matrix[convert(x, y)] = (double) (r + g + b) / 3;
             }
         }
     }
@@ -136,9 +179,9 @@ public class Matrix {
         rows = resultant.rows;
     }
     public void display(BufferedImage image){
-        if(frame==null){
+        // if(frame==null){
             frame=new JFrame();
-            frame.setTitle("you are shit at programming, give up");
+            frame.setTitle("UwU");
             frame.setSize(image.getWidth(), image.getHeight());
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             label=new JLabel();
@@ -147,7 +190,7 @@ public class Matrix {
             frame.setLocationRelativeTo(null);
             frame.pack();
             frame.setVisible(true);
-        } else label.setIcon(new ImageIcon(image));
+        // } else label.setIcon(new ImageIcon(image));
     }
     public double dotProduct(Matrix matrixB){
         double sum = 0;
@@ -161,5 +204,14 @@ public class Matrix {
             matrix[i] = (matrix[i] < 255) ? ((matrix[i] > 0) ? matrix[i] : 0) : 255;
             // matrix[i] = (matrix[i] / (255 / 105.0)) + 150;
         }
+    }
+    public void maxPool(int kernalSize){
+        int resultSize = (int) Math.ceil((float) rows / (float) kernalSize);
+        Matrix result = new Matrix(resultSize, resultSize);
+
+    
+    }
+    public int convert(int x, int y){
+        return y * cols + x;
     }
 }
