@@ -139,7 +139,7 @@ public class Matrix {
             }
         }
     }
-    public BufferedImage squareImage(BufferedImage image){
+    public BufferedImage makeSquare(BufferedImage image){
         if(rows > cols){
             BufferedImage im = image.getSubimage(0, rows/2 - cols/2, cols, cols);
             rows = cols;
@@ -209,7 +209,23 @@ public class Matrix {
         int resultSize = (int) Math.ceil((float) rows / (float) kernalSize);
         Matrix result = new Matrix(resultSize, resultSize);
 
-    
+        for(int i = 0; i < rows; i += kernalSize){
+            for(int j = 0; j < cols; j += kernalSize){
+                double maxVal = matrix[convert(i, j)];
+                for(int k = 0; k < kernalSize && i + k < rows; k++){
+                    for(int h = 0; h < kernalSize && j + h < cols; h++){
+                        if(matrix[convert(i + k, j + h)] > maxVal){
+                            maxVal = matrix[convert(i + k, j + h)];
+                        }
+                    } 
+                }
+                result.matrix[result.convert(i / kernalSize, j / kernalSize)] = maxVal;
+            }
+        }
+        size = result.size;
+        cols = result.cols;
+        rows = result.rows;
+        matrix = result.matrix;
     }
     public int convert(int x, int y){
         return y * cols + x;
