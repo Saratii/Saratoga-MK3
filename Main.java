@@ -8,13 +8,13 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         int NODES_IN_DENSE = 4;
-        int NUM_FEATURE_SETS = 10;
+        int NUM_FEATURE_SETS = 15;
         Matrix[] featureSets = new Matrix[NUM_FEATURE_SETS];
         BufferedImage image = ImageIO.read(new File("images/bird.png"));
         Matrix matrix = new Matrix(image.getHeight(), image.getWidth());
         image = matrix.makeSquare(image);
         matrix.imageToMatrix(image);
-        BufferedImage[] featureSetImages = new BufferedImage[10];
+        BufferedImage[] featureSetImages = new BufferedImage[NUM_FEATURE_SETS];
 
         long startTime = System.currentTimeMillis();
         for(int i = 0 ; i < NUM_FEATURE_SETS; i++){
@@ -27,7 +27,7 @@ public class Main {
             featureSetImages[i] = outputImage;
             featureSets[i] = resultant;
         }
-        long endTime   = System.currentTimeMillis();
+        long endTime = System.currentTimeMillis();
         long totalTime = endTime - startTime;
         System.out.println("Convolutional Layer Time: " + totalTime + "ms");
 
