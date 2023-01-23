@@ -10,9 +10,8 @@ import java.awt.*;
 
 public class Matrix {
     private static JFrame frame;
-    private static JLabel label;
     private Random r = new Random();
-    private Double[] matrix;
+    public Double[] matrix;
     int rows;
     int cols;
     int size;
@@ -162,7 +161,7 @@ public class Matrix {
         }
         return image;
     }
-    public void convolution(Matrix kernal){
+    public Matrix convolution(Matrix kernal){
         Matrix resultant = new Matrix(rows - kernal.rows + 1, cols - kernal.cols + 1);
         for(int i = 0; i < resultant.size; i++){
             Matrix subby = new Matrix(kernal.rows, kernal.cols);
@@ -173,10 +172,7 @@ public class Matrix {
             }
             resultant.matrix[i] = subby.dotProduct(kernal);
         }
-        matrix = resultant.matrix;
-        size = resultant.size;
-        cols = resultant.cols;
-        rows = resultant.rows;
+        return resultant; 
     }
     public void display(BufferedImage image){
         // if(frame==null){
@@ -184,9 +180,7 @@ public class Matrix {
             frame.setTitle("UwU");
             frame.setSize(image.getWidth(), image.getHeight());
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-            label=new JLabel();
-            label.setIcon(new ImageIcon(image));
-            frame.getContentPane().add(label, BorderLayout.CENTER);
+            frame.add(new JLabel(new ImageIcon(image)));
             frame.setLocationRelativeTo(null);
             frame.pack();
             frame.setVisible(true);
