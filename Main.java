@@ -31,7 +31,16 @@ public class Main {
         long totalTime = endTime - startTime;
         System.out.println("Convolutional Layer Time: " + totalTime + "ms");
 
-        Node[] denseLayer = new Node[NODES_IN_DENSE];
+        startTime = System.currentTimeMillis();
+        Matrix denseInput = new Matrix(featureSets.length * featureSets[0].size, 1);
+        for(int i = 0; i < featureSets.length; i++){
+            for(int j = 0; j < featureSets[0].size; j++){
+                denseInput.matrix[i * featureSets[0].size + j] =  featureSets[i].matrix[j];
+            }
+            
+        }
+        System.out.println(denseInput.rows);
+     
         // for(int i = 0; i < NODES_IN_DENSE; i++){
         //     denseLayer[i] = new Node(m2.matrix);
         // }

@@ -78,17 +78,7 @@ public class Matrix {
         matrix[7] = 0.0;
         matrix[8] = -3.0;
     }
-    public void seedDiagnonal(){ //fills 1d array with random values 0 - 1
-        matrix[0] = 0.0;
-        matrix[1] = 1.0;
-        matrix[2] = 0.0;
-        matrix[3] = -1.0;
-        matrix[4] = 0.0;
-        matrix[5] = 1.0;
-        matrix[6] = 0.0;
-        matrix[7] = -1.0;
-        matrix[8] = 0.0;
-    }
+   
     public void seedSharpen(){ //fills 1d array with random values 0 - 1
         if(size != 25){
             System.out.println("wrong kernal size");
