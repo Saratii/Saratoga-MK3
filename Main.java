@@ -49,39 +49,16 @@ public class Main {
 
 
 
-        //testing
-        Matrix inputs = new Matrix(1, 4);
-        inputs.matrix = new Double[]{1.0, 2.0, 3.0, 2.5};
-        Matrix weights = new Matrix(1, 12);
-        weights.matrix = new Double[]{0.2, 0.8, -0.5, 1.0, 0.5, -0.91, 0.26, -0.5, -0.26, -0.27, 0.17, 0.87};
-        Matrix biases = new Matrix(1, 3);
-        biases.matrix = new Double[]{2.0, 3.0, 0.5};
-        
+        Matrix inputs = new Matrix(1, 5);
+        Matrix actual = new Matrix(1, 3);
+        actual.matrix = new Double[]{0.0, 1.0, 0.0};
+        inputs.matrix = new Double[]{1.0, -2.0, 3.0, -4.0, 5.0};
         DenseLayer dense = new DenseLayer(3, inputs);
-        dense.weights = weights;
-        dense.biases = biases;
+        Matrix denseOutput = dense.forward();
+        Matrix activationOutput = Softmax.forward(denseOutput);
+        double loss = Loss.calcLoss(activationOutput, actual);
         
-        
-        
-       
-
-
-        Matrix yTrue = new Matrix(3, 1);
-        yTrue.matrix = new Double[]{1.0, 0.0, 0.0};
-    
-        
-        for(int i = 0; i < 10; i++){
-            Matrix denseOutput = dense.forward();
-            Matrix yPred = dense.softmax();
-            double loss = AnnoyingAssCalculusEngine.loss(yPred, yTrue);
-            Matrix dldz = AnnoyingAssCalculusEngine.dldz(yPred, yTrue);
-            Matrix dzdw = AnnoyingAssCalculusEngine.dzdw(yPred, yTrue);
-            dense.weights = AnnoyingAssCalculusEngine.updateWeights(dense.weights, 0.0001, dldz, dzdw);
-            System.out.println(denseOutput);
-            System.out.println("Loss: " + loss);
-        }
-
-
-
+        System.out.println("Loss: " + loss);
+        System.out.println("Output: " + activationOutput + "\n");
     }
 }
