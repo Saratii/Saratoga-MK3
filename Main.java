@@ -60,7 +60,28 @@ public class Main {
         DenseLayer dense = new DenseLayer(3, inputs);
         dense.weights = weights;
         dense.biases = biases;
-        System.out.println(dense.forward());
+        
+        
+        
+       
+
+
+        Matrix yTrue = new Matrix(3, 1);
+        yTrue.matrix = new Double[]{1.0, 0.0, 0.0};
+    
+        
+        for(int i = 0; i < 10; i++){
+            Matrix denseOutput = dense.forward();
+            Matrix yPred = dense.softmax();
+            double loss = AnnoyingAssCalculusEngine.loss(yPred, yTrue);
+            Matrix dldz = AnnoyingAssCalculusEngine.dldz(yPred, yTrue);
+            Matrix dzdw = AnnoyingAssCalculusEngine.dzdw(yPred, yTrue);
+            dense.weights = AnnoyingAssCalculusEngine.updateWeights(dense.weights, 0.0001, dldz, dzdw);
+            System.out.println(denseOutput);
+            System.out.println("Loss: " + loss);
+        }
+
+
 
     }
 }
