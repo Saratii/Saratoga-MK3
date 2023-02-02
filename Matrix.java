@@ -45,72 +45,7 @@ public class Matrix {
             matrix[i] = (double) ((i % cols == 0) ? -1 : (i % cols == cols - 1) ? 1 : 0);
         }
     }
-    public void seedHorizontal(){ //fills 1d array with random values 0 - 1
-        matrix[0] = 1.0;
-        matrix[1] = 1.0;
-        matrix[2] = 1.0;
-        matrix[3] = 0.0;
-        matrix[4] = 0.0;
-        matrix[5] = 0.0;
-        matrix[6] = -1.0;
-        matrix[7] = -1.0;
-        matrix[8] = -1.0;
-    }
-    public void seedSobel(){ //fills 1d array with random values 0 - 1
-        matrix[0] = 1.0;
-        matrix[1] = 0.0;
-        matrix[2] = -1.0;
-        matrix[3] = 2.0;
-        matrix[4] = 0.0;
-        matrix[5] = -2.0;
-        matrix[6] = 1.0;
-        matrix[7] = 0.0;
-        matrix[8] = -1.0;
-    }
-    public void seedScharr(){ //fills 1d array with random values 0 - 1
-        matrix[0] = 3.0;
-        matrix[1] = 0.0;
-        matrix[2] = -3.0;
-        matrix[3] = 5.0;
-        matrix[4] = 0.0;
-        matrix[5] = -5.0;
-        matrix[6] = 3.0;
-        matrix[7] = 0.0;
-        matrix[8] = -3.0;
-    }
-   
-    public void seedSharpen(){ //fills 1d array with random values 0 - 1
-        if(size != 25){
-            System.out.println("wrong kernal size");
-        }
-        for(int i = 0; i < size; i++){
-            matrix[i] = 0.0;
-        }
-        matrix[7] = -1.0;
-        matrix[11] = -1.0;
-        matrix[12] = 5.0;
-        matrix[13] = -1.0;
-        matrix[17] = -1.0; 
-    }
-    public void seedZeros(){
-        for(int i = 0; i < size; i++){
-            matrix[i] = 0.0;
-        }
-    }
-    public void seedGrey(){
-        if(size != 3){
-            System.out.println("wrong kernal size");
-            for(int i = 0; i < size; i++){
-                matrix[i] = 0.0;
-            }
-            matrix[0] = 1.0;
-            matrix[2] = -1.0;
-            matrix[3] = 2.0;
-            matrix[5] = -2.0;
-            matrix[6] = 1.0;
-            matrix[8] = -1.0;
-        }
-    }
+ 
     public void imageToMatrix(BufferedImage image) throws IOException{
         int width = image.getWidth();
         int height = image.getHeight();

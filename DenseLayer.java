@@ -11,7 +11,7 @@ public class DenseLayer {
         this.inputs = inputs;
         outputs = new Matrix(NUM_NODES, 1);
         this.NUM_NODES = NUM_NODES;
-        Matrix biases = new Matrix(NUM_NODES, 1);
+        biases = new Matrix(NUM_NODES, 1);
         biases.seed();
     }
     public Matrix forward(){
@@ -25,16 +25,11 @@ public class DenseLayer {
         inputs = outputs;
         return outputs;
     }
-    public Matrix softmax(){
-        Matrix results = new Matrix(inputs.size, 1);
-        double sum = 0;
-        for( int i = 0; i < inputs.size; i++){
-            results.matrix[i] = Math.exp(inputs.matrix[i]);
-            sum += results.matrix[i];
+    public static Matrix backwards(Matrix dvalues, Matrix weights){
+        Matrix dweights = new Matrix(dvalues.rows, dvalues.cols);
+        for(int i = 0; i < dweights.size; i++){
+            dweights.matrix[i] = dvalues.matrix[i] * weights.matrix[i];
         }
-        for(int i = 0; i < results.size; i++){
-            results.matrix[i] /= sum;
-        }
-        return results;
+        return dweights;
     }
 }
