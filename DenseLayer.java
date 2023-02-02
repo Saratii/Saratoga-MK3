@@ -22,6 +22,19 @@ public class DenseLayer {
             }
             outputs.matrix[i] = sum;
         }
+        inputs = outputs;
         return outputs;
+    }
+    public Matrix softmax(){
+        Matrix results = new Matrix(inputs.size, 1);
+        double sum = 0;
+        for( int i = 0; i < inputs.size; i++){
+            results.matrix[i] = Math.exp(inputs.matrix[i]);
+            sum += results.matrix[i];
+        }
+        for(int i = 0; i < results.size; i++){
+            results.matrix[i] /= sum;
+        }
+        return results;
     }
 }
