@@ -1,3 +1,4 @@
+package src;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -14,7 +15,7 @@ public class Matrix {
     public Double[] matrix;
     int rows;
     int cols;
-    int size;
+    public int size;
     public Matrix(int rows, int cols){
         this.rows = rows;
         this.cols = cols;
@@ -38,11 +39,6 @@ public class Matrix {
     public void testSeed(){ //fills 1d array with random values 0 - 1
         for(int i = 0; i < size; i++){
             matrix[i] = (double) i/10;
-        }
-    }
-    public void seedVertical(){ //fills 1d array with random values 0 - 1
-        for(int i = 0; i < size; i++){
-            matrix[i] = (double) ((i % cols == 0) ? -1 : (i % cols == cols - 1) ? 1 : 0);
         }
     }
  
@@ -148,5 +144,18 @@ public class Matrix {
     }
     public int convert(int x, int y){
         return y * cols + x;
+    }
+
+    public Matrix multiply(Matrix matrixB) {
+        Matrix result = new Matrix(rows, matrixB.cols);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < matrixB.cols; j++) {
+                result.matrix[i*matrixB.cols + j] = 0.0;
+                for (int k = 0; k < cols; k++) {
+                    result.matrix[i * matrixB.cols + j] += matrix[i * cols + k] * matrixB.matrix[k * matrixB.cols + j];
+                }
+            }
+        }
+        return result;
     }
 }
