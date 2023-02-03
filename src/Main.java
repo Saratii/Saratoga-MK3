@@ -1,3 +1,4 @@
+package src;
 import java.io.File;
 import java.io.IOException;
 import java.awt.image.BufferedImage;
@@ -5,6 +6,7 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 public class Main {
+    public static final double ALPHA = 0.001;
     public static void main(String[] args) throws IOException {
 
         // int NODES_IN_DENSE = 4;
@@ -47,18 +49,24 @@ public class Main {
 
         // FeatureMap map = new FeatureMap(featureSets[0].rows, featureSetImages);
 
-
-
-        Matrix inputs = new Matrix(1, 5);
-        Matrix actual = new Matrix(1, 3);
-        actual.matrix = new Double[]{0.0, 1.0, 0.0};
-        inputs.matrix = new Double[]{1.0, -2.0, 3.0, -4.0, 5.0};
-        DenseLayer dense = new DenseLayer(3, inputs);
-        Matrix denseOutput = dense.forward();
-        Matrix activationOutput = Softmax.forward(denseOutput);
-        double loss = Loss.calcLoss(activationOutput, actual);
         
-        System.out.println("Loss: " + loss);
-        System.out.println("Output: " + activationOutput + "\n");
+
+        Matrix inputs = new Matrix(4, 1);
+        Matrix actual = new Matrix(3, 1);
+        actual.matrix = new Double[]{0.0, 1.0, 0.0};
+        inputs.matrix = new Double[]{1.0, 2.0, 3.0, 2.5};
+        DenseLayer dense = new DenseLayer(3, 4);
+        Softmax soft = new Softmax();
+        
+        for(int i = 0 ; i<1000; i++){
+            Matrix denseOutput = dense.forward(inputs);
+            Matrix activationOutput = soft.forward(denseOutput);
+            double lossAmount = Loss.calcLoss(activationOutput, actual);
+            System.out.println("Loss: " + lossAmount);
+            System.out.println("Output: " + activationOutput + "\n");
+            Matrix lossDerivatives = Loss.backward(activationOutput, actual);
+            Matrix softDerivatives = soft.backward(lossDerivatives);
+            Matrix denseDerivatives = dense.backwards(softDerivatives);
+        }
     }
 }
