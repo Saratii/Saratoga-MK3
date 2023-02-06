@@ -1,16 +1,20 @@
 package src;
 public class ReLU {
-    public static Matrix forward(Matrix values){
+    Matrix layerOutput;
+    public Matrix forward(Matrix values){
         Matrix result = new Matrix(values.rows, values.cols);
         for(int i = 0; i < values.size; i++){
             result.matrix[i] = (values.matrix[i] > 0) ? values.matrix[i] : 0.0;
         }
-    return result;
+        layerOutput = result;
+        return result;
     }
-    public static Matrix backward(Matrix dvalues){
-        Matrix result = new Matrix(dvalues.rows, dvalues.cols);
+    public Matrix backward(Matrix dvalues){
+        Matrix result = new Matrix(dvalues.size, dvalues.size);
         for(int i = 0; i < dvalues.size; i++){
-            result.matrix[i] = (dvalues.matrix[i] > 0) ? 1.0: 0.0;
+            for(int j = 0; j < dvalues.size; j++){
+                result.matrix[j*dvalues.size + i] = layerOutput.matrix[i] * ((i == j ? 1 : 0) - layerOutput.matrix[j]);
+            }
         }
         return result;
     }
