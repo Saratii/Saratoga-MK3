@@ -47,9 +47,10 @@ public class Matrix {
         }
     }
  
-    public void imageToMatrix(BufferedImage image) throws IOException{
+    public Matrix imageToMatrix(BufferedImage image) throws IOException{
         int width = image.getWidth();
         int height = image.getHeight();
+        Matrix result = new Matrix(height, width);
         for(int x = 0; x < width; x++){
             for(int y = 0; y < height; y++){
                 int p = image.getRGB(x, y);
@@ -60,9 +61,10 @@ public class Matrix {
                 int avg = (r + g + b) / 3;
                 p = (a<<24) | (avg<<16) | (avg<<8) | avg;
                 image.setRGB(x, y, p);
-                matrix[convert(x, y)] = (double) (r + g + b) / 3;
+                result.matrix[convert(x, y)] = ((double) (r + g + b) / 3) / 127.5 + 1;
             }
         }
+        return result;
     }
     public BufferedImage makeSquare(BufferedImage image){
         if(rows > cols){
@@ -80,7 +82,14 @@ public class Matrix {
         BufferedImage image = new BufferedImage(rows, cols, BufferedImage.TYPE_INT_RGB);
         for(int x = 0; x < cols; x++){
             for(int y = 0; y < rows; y++){
-                Color grey = new Color(matrix[y * cols + x].intValue(), matrix[y * cols + x].intValue(), matrix[y * cols + x].intValue());
+                Double value = matrix[y*cols+x];
+                value = (value + 1) * 127.5;
+                if(value > 255){
+                    value = 255.0;
+                }
+                
+                System.out.println(matrix[y*cols+x]);
+                Color grey = new Color(value.intValue(), value.intValue(), value.intValue());
                 int rgb = grey.getRGB();
                 image.setRGB(x, y, rgb);
             }
@@ -121,8 +130,7 @@ public class Matrix {
     }
     public void ReLU(){
         for(int i = 0; i < size; i++){
-            matrix[i] = (matrix[i] < 255) ? ((matrix[i] > 0) ? matrix[i] : 0) : 255;
-            // matrix[i] = (matrix[i] / (255 / 105.0)) + 150;
+            matrix[i] = (matrix[i] < 0) ? 0.0: matrix[i];
         }
     }
     public void maxPool(int kernalSize){
