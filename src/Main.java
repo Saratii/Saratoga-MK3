@@ -43,18 +43,16 @@ public class Main {
         
        
 
-        FeatureMap map = new FeatureMap(featureSets[0].rows, featureSetImages);
+        // FeatureMap map = new FeatureMap(featureSets[0].rows, featureSetImages);
 
         
 
-        Matrix inputs = new Matrix(400, 1);
+        Matrix inputs = new Matrix(4000000, 1);
         inputs.seedPositive(); 
 
         Matrix expected = new Matrix(5, 1);
         expected.matrix = new Double[]{0.0, 0.0, 0.0, 1.0, 0.0};
 
-        Train.train(cnnOutput, expected);
-        
-
+        Train.train(inputs, expected); //ok ty thats all :)
     }
 }
