@@ -47,7 +47,7 @@ public class Main {
 
         
 
-        Matrix inputs = new Matrix(4000000, 1);
+        Matrix inputs = new Matrix(400000, 1);
         inputs.seedPositive(); 
 
         Matrix expected = new Matrix(5, 1);
