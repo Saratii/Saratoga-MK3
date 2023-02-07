@@ -87,8 +87,6 @@ public class Matrix {
                 if(value > 255){
                     value = 255.0;
                 }
-                
-                System.out.println(matrix[y*cols+x]);
                 Color grey = new Color(value.intValue(), value.intValue(), value.intValue());
                 int rgb = grey.getRGB();
                 image.setRGB(x, y, rgb);
