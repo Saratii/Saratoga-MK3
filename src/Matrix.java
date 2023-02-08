@@ -23,12 +23,13 @@ public class Matrix {
         this.matrix = new Double[size];
     }
     @Override
-    public String toString() { // returns a string version of the array for viewing
-        String s = "[";
-        for(int i = 0; i < size - 1; i++){
-            s = s + (matrix[i] + ", ");
+    public String toString() {
+        StringBuilder s = new StringBuilder("[");
+        for (int i = 0; i < size - 1; i++) {
+            s.append(matrix[i]).append(", ");
         }
-        return s + matrix[size - 1] + "]";
+        s.append(matrix[size - 1]).append("]");
+        return s.toString();
     }
     public void seed(){ //fills 1d array with random values 0 - 1
         
@@ -46,34 +47,37 @@ public class Matrix {
             matrix[i] = (double) i/10;
         }
     }
- 
-    public Matrix imageToMatrix(BufferedImage image) throws IOException{
+    public void normalizePixels(){
+        for(int i = 0; i < size; i++){
+            matrix[i] = (matrix[i] - 128) / 128;
+        }
+    }public void reverseNormalizePixels(){
+        for(int i = 0; i < size; i++){
+            matrix[i] = matrix[i] * 128 + 128;
+        }
+    }
+    public static Matrix imageToMatrix(BufferedImage image) throws IOException{
         int width = image.getWidth();
         int height = image.getHeight();
         Matrix result = new Matrix(height, width);
         for(int x = 0; x < width; x++){
             for(int y = 0; y < height; y++){
-                int p = image.getRGB(x, y);
-                int a = (p>>24)&0xff;
-                int r = (p>>16)&0xff;
-                int g = (p>>8)&0xff;
-                int b = p&0xff;
-                int avg = (r + g + b) / 3;
-                p = (a<<24) | (avg<<16) | (avg<<8) | avg;
-                image.setRGB(x, y, p);
-                result.matrix[convert(x, y)] = ((double) (r + g + b) / 3) / 127.5 + 1;
+                int rgb = image.getRGB(x, y);
+                int r = (rgb >> 16) & 0xff;
+                int g = (rgb >> 8) & 0xff;
+                int b = rgb & 0xff;
+                double gray = 0.2989 * r + 0.5870 * g + 0.1140 * b;
+                result.matrix[y* width + x] = gray;
             }
         }
         return result;
     }
-    public BufferedImage makeSquare(BufferedImage image){
-        if(rows > cols){
-            BufferedImage im = image.getSubimage(0, rows/2 - cols/2, cols, cols);
-            rows = cols;
+    public static BufferedImage makeSquare(BufferedImage image){
+        if(image.getHeight() > image.getWidth()){
+            BufferedImage im = image.getSubimage(0, image.getHeight()/2 - image.getWidth()/2, image.getWidth(), image.getWidth());
             return im;
         } else{
-            BufferedImage im = image.getSubimage(cols/2 - rows/2, 0, rows, rows);
-            cols = rows;
+            BufferedImage im = image.getSubimage(image.getWidth()/2 - image.getHeight()/2, 0, image.getHeight(), image.getHeight());
             return im;
         }
         
@@ -83,16 +87,39 @@ public class Matrix {
         for(int x = 0; x < cols; x++){
             for(int y = 0; y < rows; y++){
                 Double value = matrix[y*cols+x];
-                value = (value + 1) * 127.5;
-                if(value > 255){
-                    value = 255.0;
-                }
                 Color grey = new Color(value.intValue(), value.intValue(), value.intValue());
                 int rgb = grey.getRGB();
                 image.setRGB(x, y, rgb);
             }
         }
         return image;
+    }
+    public double maxValue(){
+        double max = Double.NEGATIVE_INFINITY;
+        for(double value : matrix){
+            if(value > max){
+                max = value;
+            }
+        }
+        return max;
+    }
+    public double minValue(){
+        double min = Double.POSITIVE_INFINITY;
+        for(double value : matrix){
+            if(value < min){
+                min = value;
+            }
+        }
+        return min;
+    }
+    public static Matrix flatten(Matrix[] input){
+        Matrix result = new Matrix(input.length * input[0].size, 1);
+        for(int i = 0; i < input.length; i++){
+            for(int j = 0; j < input[0].size; j++){
+                result.matrix[i * input[0].size + j] = input[i].matrix[j];
+            }
+        }
+        return result;
     }
     public Matrix convolution(Matrix kernal){
         Matrix resultant = new Matrix(rows - kernal.rows + 1, cols - kernal.cols + 1);
