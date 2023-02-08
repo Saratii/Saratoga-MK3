@@ -1,4 +1,5 @@
 package src;
+import java.awt.image.BufferedImage;
 public class Train {
     public static void train(Matrix inputs, Matrix expected){
         DenseLayer dense1 = new DenseLayer(8, inputs.size);
@@ -27,5 +28,4 @@ public class Train {
         }
         System.out.println("In " + i + " iterations");
     }
-
 }
