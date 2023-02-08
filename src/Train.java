@@ -1,5 +1,4 @@
 package src;
-import java.awt.image.BufferedImage;
 public class Train {
     public static void train(Matrix inputs, Matrix expected){
         DenseLayer dense1 = new DenseLayer(8, inputs.size);
@@ -8,7 +7,7 @@ public class Train {
         Softmax soft2 = new Softmax();
         double lossAmount = 10;
         int i = 0;
-        while(lossAmount > 0.01){
+        while(lossAmount > 0.1){
             Matrix dense1Output = dense1.forward(inputs);
             Matrix reluOutput = relu.forward(dense1Output);
             Matrix dense2Output = dense2.forward(reluOutput);
@@ -17,13 +16,13 @@ public class Train {
             System.out.println("Softmax output: " + activationOutput);
 
             lossAmount = Loss.calcLoss(activationOutput, expected);
-            System.out.println("Loss: " + lossAmount);
-            System.out.println("Output: " + activationOutput + "\n");
+            System.out.println("Loss: " + lossAmount + "\n");
+            
             Matrix lossDerivatives = Loss.backward(activationOutput, expected);
             Matrix soft2Derivatives = soft2.backward(lossDerivatives);
             Matrix dense2Derivatives = dense2.backwards(soft2Derivatives);
             Matrix reluDerivatives = relu.backward(dense2Derivatives);
-            Matrix dense1Derivatives = dense1.backwards(reluDerivatives);
+            dense1.backwards(reluDerivatives);
             i++;
         }
         System.out.println("In " + i + " iterations");
