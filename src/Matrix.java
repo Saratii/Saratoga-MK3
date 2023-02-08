@@ -31,8 +31,7 @@ public class Matrix {
         s.append(matrix[size - 1]).append("]");
         return s.toString();
     }
-    public void seed(){ //fills 1d array with random values 0 - 1
-        
+    public void seed(){ //fills 1d array with random values -1 to 1
         for(int i = 0; i < size; i++){
             matrix[i] = r.nextDouble() * 2 - 1;
         }
@@ -40,6 +39,11 @@ public class Matrix {
     public void seedPositive(){
         for(int i = 0; i < size; i++){
             matrix[i] = r.nextDouble();
+        }
+    }
+    public void seedZeros(){
+        for(int i = 0; i < size; i++){
+            matrix[i] = 0.0;
         }
     }
     public void testSeed(){ //fills 1d array with random values 0 - 1

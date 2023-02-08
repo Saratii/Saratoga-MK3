@@ -7,8 +7,8 @@ public class Softmax{
     public Matrix forward(Matrix inputs){
         Matrix result = new Matrix(inputs.size, 1);
         for(int i = 0; i < inputs.size; i++){
-            double denom = Stream.of(inputs.matrix).map(Math::exp).reduce(0.0, Double::sum);
-            result.matrix[i] = Math.exp(inputs.matrix[i]) / denom;
+            double sum = Stream.of(inputs.matrix).map(Math::exp).reduce(0.0, Double::sum);
+            result.matrix[i] = Math.exp(inputs.matrix[i]) / sum;
            
         }
         layerOutput = result;

@@ -11,7 +11,7 @@ public class DenseLayer {
         outputs = new Matrix(NUM_NODES, 1);
         this.NUM_NODES = NUM_NODES;
         biases = new Matrix(NUM_NODES, 1);
-        biases.seed();
+        biases.seedZeros();
     }
     public Matrix forward(Matrix inputs){
         this.inputs = inputs;
