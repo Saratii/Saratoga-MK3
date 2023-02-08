@@ -37,15 +37,10 @@ public class Main {
         Matrix denseInput = Matrix.flatten(relu2Output); //17*17*100 x 1 = 28900
         System.out.println(denseInput.size);
 
-        
-        // convOutput.maxPool(10);
-        // convOutput.ReLU();
-        // Matrix inputs = new Matrix(400000, 1);
-        // inputs.seedPositive(); 
+      
+        Matrix expected = new Matrix(5, 1);
+        expected.matrix = new Double[]{0.0, 1.0, 0.0, 0.0, 0.0};
 
-        // Matrix expected = new Matrix(5, 1);
-        // expected.matrix = new Double[]{0.0, 0.0, 0.0, 1.0, 0.0};
-
-        // Train.train(inputs, expected);
+        Train.train(denseInput, expected);
     }
 }
