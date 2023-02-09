@@ -40,7 +40,7 @@ public class Main {
       
         Matrix expected = new Matrix(5, 1);
         expected.matrix = new Double[]{0.0, 1.0, 0.0, 0.0, 0.0};
-
+       
         Train.train(denseInput, expected);
     }
 }
