@@ -7,7 +7,7 @@ public class DenseLayer {
     public Matrix biases;
     public DenseLayer(int NUM_NODES, int NUM_INPUTS) {
         weights = new Matrix(NUM_INPUTS * NUM_NODES, 1);
-        weights.seed();
+        weights.seedGaussian();
         outputs = new Matrix(NUM_NODES, 1);
         this.NUM_NODES = NUM_NODES;
         biases = new Matrix(NUM_NODES, 1);

@@ -60,6 +60,11 @@ public class Matrix {
             matrix[i] = matrix[i] * 128 + 128;
         }
     }
+    public void seedGaussian(){
+        for(int i = 0; i < size; i++){
+            matrix[i] = r.nextGaussian();
+        }
+    }
     public static Matrix imageToMatrix(BufferedImage image) throws IOException{
         int width = image.getWidth();
         int height = image.getHeight();
