@@ -121,6 +121,13 @@ public class Matrix {
         }
         return min;
     }
+    public double sum(){
+        double sum = 0;
+        for(int i = 0; i < size; i++){
+            sum += matrix[i];
+        }
+        return sum;
+    }
     public static Matrix flatten(Matrix[] input){
         Matrix result = new Matrix(input.length * input[0].size, 1);
         for(int i = 0; i < input.length; i++){
