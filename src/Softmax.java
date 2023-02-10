@@ -1,14 +1,17 @@
 package src;
 
-import java.util.stream.Stream;
-
 public class Softmax{
     Matrix layerOutput;
     public Matrix forward(Matrix inputs){
         Matrix result = new Matrix(inputs.size, 1);
         for(int i = 0; i < inputs.size; i++){
-            double sum = Stream.of(inputs.matrix).map(Math::exp).reduce(0.0, Double::sum);
-            result.matrix[i] = Math.exp(inputs.matrix[i]) / sum;
+            double shiftConstant = inputs.maxValue();
+            double sum = 0.0;
+            for(int j = 0; j < inputs.size; j++){
+                sum+= Math.exp(inputs.matrix[j] - shiftConstant);
+            }
+           
+            result.matrix[i] = Math.exp(inputs.matrix[i] - shiftConstant) / sum;
            
         }
         layerOutput = result;
