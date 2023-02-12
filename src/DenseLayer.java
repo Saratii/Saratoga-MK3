@@ -5,9 +5,9 @@ public class DenseLayer {
     Matrix outputs;
     int NUM_NODES;
     public Matrix biases;
-    public DenseLayer(int NUM_NODES, int NUM_INPUTS) {
-        weights = new Matrix(NUM_INPUTS * NUM_NODES, 1);
-        weights.seedGaussian();
+    public DenseLayer(int NUM_INPUTS, int NUM_NODES) {
+        weights = new Matrix(NUM_INPUTS, NUM_NODES);
+        weights.seedUniform();
         outputs = new Matrix(NUM_NODES, 1);
         this.NUM_NODES = NUM_NODES;
         biases = new Matrix(NUM_NODES, 1);

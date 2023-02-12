@@ -2,8 +2,9 @@ package src;
 public class Loss {
     public static double calcLoss(Matrix yPred, Matrix yTrue) {
         double sum = 0;
+        double eps = 1E-15;
         for(int i = 0; i < yPred.size; i++){
-            sum += Math.log(yPred.matrix[i]) * yTrue.matrix[i];
+            sum += Math.log(yPred.matrix[i] + eps) * yTrue.matrix[i];
         }
         return -sum;
     }
