@@ -25,10 +25,10 @@ public class Matrix {
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder("[");
-        for (int i = 0; i < size - 1; i++) {
-            s.append(matrix[i]).append(", ");
+        for (int i = 0; i < size; i++) {
+            s.append(String.format("%.4f", matrix[i])).append(", ");
         }
-        s.append(matrix[size - 1]).append("]");
+        s.append("]");
         return s.toString();
     }
     public void seed(){ //fills 1d array with random values -1 to 1
@@ -63,6 +63,12 @@ public class Matrix {
     public void seedGaussian(){
         for(int i = 0; i < size; i++){
             matrix[i] = r.nextGaussian();
+        }
+    }
+    public void seedUniform(){
+        double bound = 1 / Math.sqrt(rows);
+        for(int i = 0; i < size; i++){
+            matrix[i] = (r.nextDouble() - 0.5) * 2 * bound;
         }
     }
     public static Matrix imageToMatrix(BufferedImage image) throws IOException{

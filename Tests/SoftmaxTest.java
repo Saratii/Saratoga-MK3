@@ -31,5 +31,6 @@ public class SoftmaxTest {
         Matrix actualDerivativeMatrix = soft.backward(previousDerivatives);
         double[] actualDerivatives = Stream.of(actualDerivativeMatrix.matrix).mapToDouble(Double::doubleValue).toArray();
         assertArrayEquals(actualDerivatives, expectedDerivatives, 0.001);
+    
     }
 }

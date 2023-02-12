@@ -35,13 +35,12 @@ public class Main {
         Matrix[] relu2Output = relu2.forward(conv2Output); //17*17 x 100 x 1 range(small ish numbers 0:5 ish)
 
         Matrix denseInput = Matrix.flatten(relu2Output); //17*17*100 x 1 = 28900
-        System.out.println(denseInput.size);
-
       
         Matrix expected = new Matrix(5, 1);
         expected.matrix = new Double[]{0.0, 1.0, 0.0, 0.0, 0.0};
-        Matrix testInput = new Matrix(1000, 1);
-        testInput.seed();
-        Train.train(testInput, expected);
+        // Matrix testInput = new Matrix(10, 1);
+        // testInput.seed();
+        Train.train(denseInput, expected);
+        
     }
 }
