@@ -38,9 +38,12 @@ public class Main {
       
         Matrix expected = new Matrix(5, 1);
         expected.matrix = new Double[]{0.0, 1.0, 0.0, 0.0, 0.0};
-        // Matrix testInput = new Matrix(10, 1);
-        // testInput.seed();
-        Train.train(denseInput, expected);
+        Matrix testInput = new Matrix(4000000, 1);
+        testInput.seed();
+        DenseLayer dense = new DenseLayer(400000, 2048);
+        Softmax soft = new Softmax();
+        soft.forward(dense.forward(testInput));
+        // Train.train(denseInput, expected);
         
     }
 }
