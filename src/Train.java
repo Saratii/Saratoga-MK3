@@ -1,7 +1,7 @@
 package src;
 public class Train {
     public static void train(Matrix inputs, Matrix expected){
-        DenseLayer dense1 = new DenseLayer(inputs.size, 20);
+        DenseLayer dense1 = new DenseLayer(inputs.size, 4096);
         DenseLayer dense2 = new DenseLayer(dense1.NUM_NODES, expected.size);
         ReLU relu = new ReLU();
         Softmax soft2 = new Softmax();
