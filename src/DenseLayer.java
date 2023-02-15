@@ -1,5 +1,5 @@
 package src;
-public class DenseLayer {
+public class DenseLayer extends Layer{
     public Matrix weights;
     Matrix inputs;
     Matrix outputs;
@@ -25,7 +25,7 @@ public class DenseLayer {
         inputs = outputs;
         return outputs;
     }
-    public Matrix backwards(Matrix previousDerivatives){
+    public Matrix backward(Matrix previousDerivatives){
         for(int i = 0; i < previousDerivatives.size; i++){
             biases.matrix[i] -= previousDerivatives.matrix[i] * Main.ALPHA;
         }
