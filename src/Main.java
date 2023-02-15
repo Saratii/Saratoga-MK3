@@ -2,11 +2,10 @@ package src;
 import java.io.File;
 import java.io.IOException;
 import java.awt.image.BufferedImage;
-
 import javax.imageio.ImageIO;
 
 public class Main {
-    public static final double ALPHA = 0.001;
+    public static double ALPHA;
     public static void main(String[] args) throws IOException {
         BufferedImage image = ImageIO.read(new File("images/bird.png"));
         image = Matrix.makeSquare(image); //625x625 range(0:255)
@@ -38,12 +37,24 @@ public class Main {
       
         Matrix expected = new Matrix(5, 1);
         expected.matrix = new Double[]{0.0, 1.0, 0.0, 0.0, 0.0};
-        Matrix testInput = new Matrix(4000000, 1);
+        Matrix testInput = new Matrix(40000, 1);
         testInput.seed();
-        DenseLayer dense = new DenseLayer(400000, 2048);
-        Softmax soft = new Softmax();
-        soft.forward(dense.forward(testInput));
-        // Train.train(denseInput, expected);
+       
+        Model model = new Model();
+        model.layers.add(new DenseLayer(testInput.size, 96));
+        model.layers.add(new ReLU());
+        model.layers.add(new DenseLayer(96, 5));
+        model.layers.add(new Softmax());
         
+        ALPHA = 0.001;
+        double loss = Double.POSITIVE_INFINITY;
+        int i = 0;
+        while(loss > 0.01){
+            loss = model.forward(denseInput, expected);
+            model.backward();
+            System.out.println(loss);  //suck my dick bih
+            i++;
+        }
+        System.out.println("Completed in " + i + " epochs");
     }
 }

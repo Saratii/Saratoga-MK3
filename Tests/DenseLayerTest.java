@@ -35,7 +35,7 @@ public class DenseLayerTest {
         dense.forward(input);
         Matrix dvalues = new Matrix(1, 1);
         dvalues.matrix = new Double[]{1.0};
-        Matrix actualDerivativeMatrix = dense.backwards(dvalues);
+        Matrix actualDerivativeMatrix = dense.backward(dvalues);
         double[] expectedWeights = new double[]{-3 - 1 * Main.ALPHA, -1 - -2 * Main.ALPHA, 2 - 3 * Main.ALPHA};
         double[] expectedBiases = new double[]{1 - 1 * Main.ALPHA};
         double[] expectedDerivatives = new double[]{-3.0, -1.0, 2.0};

@@ -1,6 +1,6 @@
 package src;
 
-public class Softmax{
+public class Softmax extends Layer{
     Matrix layerOutput;
     public Matrix forward(Matrix inputs){
         Matrix result = new Matrix(inputs.size, 1);

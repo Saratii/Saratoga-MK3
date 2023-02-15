@@ -1,6 +1,6 @@
 package src;
 public class Loss {
-    public static double calcLoss(Matrix yPred, Matrix yTrue) {
+    public static double forward(Matrix yPred, Matrix yTrue) {
         double sum = 0;
         double eps = 1E-15;
         for(int i = 0; i < yPred.size; i++){

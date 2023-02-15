@@ -1,5 +1,5 @@
 package src;
-public class ReLU {
+public class ReLU extends Layer{
     Matrix values;
     public Matrix forward(Matrix values){
         Matrix result = new Matrix(values.rows, values.cols);
