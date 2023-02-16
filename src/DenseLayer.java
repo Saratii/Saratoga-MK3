@@ -6,35 +6,35 @@ public class DenseLayer extends Layer{
     int NUM_NODES;
     public Matrix biases;
     public DenseLayer(int NUM_INPUTS, int NUM_NODES) {
-        weights = new Matrix(NUM_INPUTS, NUM_NODES);
+        weights = new Matrix(1, NUM_INPUTS, NUM_NODES);
         weights.seedUniform();
-        outputs = new Matrix(NUM_NODES, 1);
+        outputs = new Matrix(1, NUM_NODES, 1);
         this.NUM_NODES = NUM_NODES;
-        biases = new Matrix(NUM_NODES, 1);
+        biases = new Matrix(1, NUM_NODES, 1);
         biases.seedZeros();
     }
     public Matrix forward(Matrix inputs){
         this.inputs = inputs;
         for(int i = 0; i < NUM_NODES; i++){
-            double sum = biases.matrix[i];
-            for(int j = 0; j < inputs.size; j++){
-                sum += inputs.matrix[j] * weights.matrix[i * inputs.size + j];
+            double sum = biases.matrix[0][i];
+            for(int j = 0; j < inputs.rows * inputs.cols; j++){
+                sum += inputs.matrix[0][j] * weights.matrix[0][i * inputs.rows * inputs.cols + j];
             }
-            outputs.matrix[i] = sum;
+            outputs.matrix[0][i] = sum;
         }
         inputs = outputs;
         return outputs;
     }
     public Matrix backward(Matrix previousDerivatives){
         for(int i = 0; i < previousDerivatives.size; i++){
-            biases.matrix[i] -= previousDerivatives.matrix[i] * Main.ALPHA;
+            biases.matrix[0][i] -= previousDerivatives.matrix[0][i] * Main.ALPHA;
         }
-        Matrix passedOnDerivatives = new Matrix(inputs.size, 1);
+        Matrix passedOnDerivatives = new Matrix(1, inputs.size, 1);
         for(int i = 0; i < inputs.size; i++){
-            passedOnDerivatives.matrix[i] = 0.0;
+            passedOnDerivatives.matrix[0][i] = 0.0;
             for(int j = 0; j < NUM_NODES; j++){
-                passedOnDerivatives.matrix[i] += previousDerivatives.matrix[j] * weights.matrix[j * inputs.size + i];
-                weights.matrix[j * inputs.size + i] -= previousDerivatives.matrix[j] * inputs.matrix[i] * Main.ALPHA;
+                passedOnDerivatives.matrix[0][i] += previousDerivatives.matrix[0][j] * weights.matrix[0][j * inputs.size + i];
+                weights.matrix[0][j * inputs.size + i] -= previousDerivatives.matrix[0][j] * inputs.matrix[0][i] * Main.ALPHA;
             }
         }
         return passedOnDerivatives;
