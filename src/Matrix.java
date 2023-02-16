@@ -12,69 +12,83 @@ import java.awt.*;
 public class Matrix {
     private static JFrame frame;
     private Random r = new Random();
-    public Double[] matrix;
+    public Double[][] matrix;
+    int z;
     int rows;
     int cols;
     public int size;
-    public Matrix(int rows, int cols){
+    public Matrix(int z, int rows, int cols){
         this.rows = rows;
         this.cols = cols;
-        this.size = rows * cols;
-        this.matrix = new Double[size];
+        this.z = z;
+        this.size = rows * cols * z;
+        this.matrix = new Double[z][rows*cols];
     }
     @Override
     public String toString() {
-        StringBuilder s = new StringBuilder("[");
-        for (int i = 0; i < size; i++) {
-            s.append(String.format("%.4f", matrix[i])).append(", ");
+        StringBuilder s = new StringBuilder("[");   
+        for(int j = 0; j < z; j++){
+            for(int i = 0; i < rows * cols; i++) {
+                s.append(String.format("%.4f", matrix[j][i])).append(", ");
+            }
         }
         s.append("]");
         return s.toString();
     }
     public void seed(){ //fills 1d array with random values -1 to 1
-        for(int i = 0; i < size; i++){
-            matrix[i] = r.nextDouble() * 2 - 1;
+        for(int j = 0; j < z; j++){
+            for(int i = 0; i < rows * cols; i++){
+                matrix[j][i] = r.nextDouble() * 2 - 1;
+            }
         }
     }
     public void seedPositive(){
-        for(int i = 0; i < size; i++){
-            matrix[i] = r.nextDouble();
+        for(int j = 0; j < z; j++){
+            for(int i = 0; i < rows * cols; i++){
+                matrix[j][i] = r.nextDouble();
+            }
         }
     }
     public void seedZeros(){
-        for(int i = 0; i < size; i++){
-            matrix[i] = 0.0;
+        for(int j = 0; j < z; j++){
+            for(int i = 0; i < rows * cols; i++){
+                matrix[j][i] = 0.0;
+            }
         }
     }
-    public void testSeed(){ //fills 1d array with random values 0 - 1
-        for(int i = 0; i < size; i++){
-            matrix[i] = (double) i/10;
-        }
-    }
+    
     public void normalizePixels(){
-        for(int i = 0; i < size; i++){
-            matrix[i] = (matrix[i] - 128) / 128;
+        for(int j = 0; j < z; j++){
+            for(int i = 0; i < rows * cols; i++){
+                matrix[j][i] = (matrix[j][i] - 128) / 128;
+            }
         }
     }public void reverseNormalizePixels(){
-        for(int i = 0; i < size; i++){
-            matrix[i] = matrix[i] * 128 + 128;
+        for(int j = 0; j < z; j++){
+            for(int i = 0; i < rows * cols; i++){
+                matrix[j][i] = matrix[j][i] * 128 + 128;
+            }
         }
     }
     public void seedGaussian(){
-        for(int i = 0; i < size; i++){
-            matrix[i] = r.nextGaussian();
+        for(int j = 0; j < z; j++){
+            for(int i = 0; i < rows * cols; i++){
+                matrix[j][i] = r.nextGaussian();
+            }
         }
     }
     public void seedUniform(){
         double bound = 1 / Math.sqrt(rows);
-        for(int i = 0; i < size; i++){
-            matrix[i] = (r.nextDouble() - 0.5) * 2 * bound;
+        for(int j = 0; j < z; j++){
+            for(int i = 0; i < rows * cols; i++){
+                matrix[j][i] = (r.nextDouble() - 0.5) * 2 * bound;
+            }
         }
     }
     public static Matrix imageToMatrix(BufferedImage image) throws IOException{
         int width = image.getWidth();
         int height = image.getHeight();
-        Matrix result = new Matrix(height, width);
+        Matrix result = new Matrix(1, height, width);
         for(int x = 0; x < width; x++){
             for(int y = 0; y < height; y++){
                 int rgb = image.getRGB(x, y);
@@ -82,7 +96,7 @@ public class Matrix {
                 int g = (rgb >> 8) & 0xff;
                 int b = rgb & 0xff;
                 double gray = 0.2989 * r + 0.5870 * g + 0.1140 * b;
-                result.matrix[y* width + x] = gray;
+                result.matrix[0][y* width + x] = gray;
             }
         }
         return result;
@@ -101,7 +115,7 @@ public class Matrix {
         BufferedImage image = new BufferedImage(rows, cols, BufferedImage.TYPE_INT_RGB);
         for(int x = 0; x < cols; x++){
             for(int y = 0; y < rows; y++){
-                Double value = matrix[y*cols+x];
+                Double value = matrix[0][y*cols+x];
                 Color grey = new Color(value.intValue(), value.intValue(), value.intValue());
                 int rgb = grey.getRGB();
                 image.setRGB(x, y, rgb);
@@ -109,50 +123,50 @@ public class Matrix {
         }
         return image;
     }
-    public double maxValue(){
+    public static double maxValue(Double[] inputs){
         double max = Double.NEGATIVE_INFINITY;
-        for(double value : matrix){
+        for(double value : inputs){
             if(value > max){
                 max = value;
             }
         }
         return max;
     }
-    public double minValue(){
+    public static double minValue(Double[] inputs){
         double min = Double.POSITIVE_INFINITY;
-        for(double value : matrix){
+        for(double value : inputs){
             if(value < min){
                 min = value;
             }
         }
         return min;
     }
-    public double sum(){
+    public static double sum(Double[] inputs){
         double sum = 0;
-        for(int i = 0; i < size; i++){
-            sum += matrix[i];
+        for(int i = 0; i < inputs.length; i++){
+            sum += inputs[i];
         }
         return sum;
     }
-    public static Matrix flatten(Matrix[] input){
-        Matrix result = new Matrix(input.length * input[0].size, 1);
-        for(int i = 0; i < input.length; i++){
-            for(int j = 0; j < input[0].size; j++){
-                result.matrix[i * input[0].size + j] = input[i].matrix[j];
+    public static Matrix flatten(Matrix input){
+        Matrix result = new Matrix(1, input.z * input.cols * input.rows, 1);
+        for(int i = 0; i < input.z; i++){
+            for(int j = 0; j < input.rows * input.cols; j++){
+                result.matrix[0][i * input.rows * input.cols + j] = input.matrix[i][j];
             }
         }
         return result;
     }
     public Matrix convolution(Matrix kernal){
-        Matrix resultant = new Matrix(rows - kernal.rows + 1, cols - kernal.cols + 1);
+        Matrix resultant = new Matrix(1, rows - kernal.rows + 1, cols - kernal.cols + 1);
         for(int i = 0; i < resultant.size; i++){
-            Matrix subby = new Matrix(kernal.rows, kernal.cols);
+            Matrix subby = new Matrix(1, kernal.rows, kernal.cols);
             for( int j = 0; j < subby.rows; j++){
                 for( int k = 0; k < subby.cols; k++){
-                    subby.matrix[j * subby.cols + k] = matrix[i / resultant.cols * cols + i % resultant.cols + j * cols + k];
+                    subby.matrix[0][j * subby.cols + k] = matrix[0][i / resultant.cols * cols + i % resultant.cols + j * cols + k];
                 }
             }
-            resultant.matrix[i] = subby.dotProduct(kernal);
+            resultant.matrix[0][i] = subby.dotProduct(kernal);
         }
         return resultant; 
     }
@@ -171,48 +185,48 @@ public class Matrix {
     public double dotProduct(Matrix matrixB){
         double sum = 0;
         for(int i = 0; i < size; i++){
-            sum += matrix[i] * matrixB.matrix[i];
+            sum += matrix[0][i] * matrixB.matrix[0][i];
         }
         return sum;
     }
     public void ReLU(){
         for(int i = 0; i < size; i++){
-            matrix[i] = (matrix[i] < 0) ? 0.0: matrix[i];
+            matrix[0][i] = (matrix[0][i] < 0) ? 0.0: matrix[0][i];
         }
     }
-    public void maxPool(int kernalSize){
+    public Matrix maxPool(int kernalSize){
         int resultSize = (int) Math.ceil((float) rows / (float) kernalSize);
-        Matrix result = new Matrix(resultSize, resultSize);
-
-        for(int i = 0; i < rows; i += kernalSize){
-            for(int j = 0; j < cols; j += kernalSize){
-                double maxVal = matrix[convert(i, j)];
-                for(int k = 0; k < kernalSize && i + k < rows; k++){
-                    for(int h = 0; h < kernalSize && j + h < cols; h++){
-                        if(matrix[convert(i + k, j + h)] > maxVal){
-                            maxVal = matrix[convert(i + k, j + h)];
-                        }
-                    } 
+        Matrix result = new Matrix(z, resultSize, resultSize);
+        int index = 0;
+        for(Double[] d: matrix){
+            for(int i = 0; i < rows; i += kernalSize){
+                for(int j = 0; j < cols; j += kernalSize){
+                    double maxVal = d[convert(i, j)];
+                    for(int k = 0; k < kernalSize && i + k < rows; k++){
+                        for(int h = 0; h < kernalSize && j + h < cols; h++){
+                            if(d[convert(i + k, j + h)] > maxVal){
+                                maxVal =d[convert(i + k, j + h)];
+                            }
+                        } 
+                    }
+                    result.matrix[index][result.convert(i / kernalSize, j / kernalSize)] = maxVal;
                 }
-                result.matrix[result.convert(i / kernalSize, j / kernalSize)] = maxVal;
             }
+            index++;
         }
-        size = result.size;
-        cols = result.cols;
-        rows = result.rows;
-        matrix = result.matrix;
+        return result;
     }
     public int convert(int x, int y){
         return y * cols + x;
     }
 
     public Matrix multiply(Matrix matrixB) {
-        Matrix result = new Matrix(rows, matrixB.cols);
+        Matrix result = new Matrix(1, rows, matrixB.cols);
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < matrixB.cols; j++) {
-                result.matrix[i*matrixB.cols + j] = 0.0;
+                result.matrix[0][i*matrixB.cols + j] = 0.0;
                 for (int k = 0; k < cols; k++) {
-                    result.matrix[i * matrixB.cols + j] += matrix[i * cols + k] * matrixB.matrix[k * matrixB.cols + j];
+                    result.matrix[0][i * matrixB.cols + j] += matrix[0][i * cols + k] * matrixB.matrix[0][k * matrixB.cols + j];
                 }
             }
         }
