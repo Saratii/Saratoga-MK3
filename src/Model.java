@@ -7,7 +7,7 @@ public class Model {
     Matrix expected;
     public double forward(Matrix inputs, Matrix expected){
         for(int i = 0; i < layers.size(); i++){
-            inputs = layers.get(i).forward(inputs); //bite me with your liberal static shit
+            inputs = layers.get(i).forward(inputs);
         }
         double l = Loss.forward(inputs, expected);
         System.out.println("Softmax output: " + inputs);
@@ -18,7 +18,7 @@ public class Model {
     }
     public void backward(){
         Matrix gradients = Loss.backward(inputs, expected);
-        for(int i = 1; i < layers.size() + 1; i++){
+        for(int i = 1;  layers.get(layers.size() - i).getClass() != new Flatten().getClass(); i++){
             gradients = layers.get(layers.size() - i).backward(gradients);
         }
     }
