@@ -148,15 +148,7 @@ public class Matrix {
         }
         return sum;
     }
-    public static Matrix flatten(Matrix input){
-        Matrix result = new Matrix(1, input.z * input.cols * input.rows, 1);
-        for(int i = 0; i < input.z; i++){
-            for(int j = 0; j < input.rows * input.cols; j++){
-                result.matrix[0][i * input.rows * input.cols + j] = input.matrix[i][j];
-            }
-        }
-        return result;
-    }
+    
     public Matrix convolution(Matrix kernal){
         Matrix resultant = new Matrix(1, rows - kernal.rows + 1, cols - kernal.cols + 1);
         for(int i = 0; i < resultant.size; i++){
@@ -194,28 +186,7 @@ public class Matrix {
             matrix[0][i] = (matrix[0][i] < 0) ? 0.0: matrix[0][i];
         }
     }
-    public Matrix maxPool(int kernalSize){
-        int resultSize = (int) Math.ceil((float) rows / (float) kernalSize);
-        Matrix result = new Matrix(z, resultSize, resultSize);
-        int index = 0;
-        for(Double[] d: matrix){
-            for(int i = 0; i < rows; i += kernalSize){
-                for(int j = 0; j < cols; j += kernalSize){
-                    double maxVal = d[convert(i, j)];
-                    for(int k = 0; k < kernalSize && i + k < rows; k++){
-                        for(int h = 0; h < kernalSize && j + h < cols; h++){
-                            if(d[convert(i + k, j + h)] > maxVal){
-                                maxVal =d[convert(i + k, j + h)];
-                            }
-                        } 
-                    }
-                    result.matrix[index][result.convert(i / kernalSize, j / kernalSize)] = maxVal;
-                }
-            }
-            index++;
-        }
-        return result;
-    }
+    
     public int convert(int x, int y){
         return y * cols + x;
     }
@@ -231,5 +202,8 @@ public class Matrix {
             }
         }
         return result;
+    }
+    public String getSize(){
+        return "[" + z + ", " + rows + ", " + cols + "] " + size;
     }
 }

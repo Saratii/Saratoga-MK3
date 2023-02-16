@@ -4,16 +4,20 @@ public class DenseLayer extends Layer{
     Matrix inputs;
     Matrix outputs;
     int NUM_NODES;
+    Boolean initialized = false;
     public Matrix biases;
-    public DenseLayer(int NUM_INPUTS, int NUM_NODES) {
-        weights = new Matrix(1, NUM_INPUTS, NUM_NODES);
-        weights.seedUniform();
-        outputs = new Matrix(1, NUM_NODES, 1);
+    public DenseLayer(int NUM_NODES) {
         this.NUM_NODES = NUM_NODES;
-        biases = new Matrix(1, NUM_NODES, 1);
-        biases.seedZeros();
     }
     public Matrix forward(Matrix inputs){
+        if(!initialized){
+            biases = new Matrix(1, NUM_NODES, 1);
+            biases.seedZeros();
+            weights = new Matrix(1, inputs.size, NUM_NODES);
+            weights.seedUniform();
+            outputs = new Matrix(1, NUM_NODES, 1);
+            initialized = true;
+        }
         this.inputs = inputs;
         for(int i = 0; i < NUM_NODES; i++){
             double sum = biases.matrix[0][i];
