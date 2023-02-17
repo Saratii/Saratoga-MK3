@@ -18,7 +18,7 @@ public class Model {
     }
     public void backward(){
         Matrix gradients = Loss.backward(inputs, expected);
-        for(int i = 1;  layers.get(layers.size() - i).getClass() != new Flatten().getClass(); i++){
+        for(int i = 1; !(layers.get(layers.size() - i) instanceof Flatten); i++){
             gradients = layers.get(layers.size() - i).backward(gradients);
         }
     }
