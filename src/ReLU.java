@@ -13,8 +13,9 @@ public class ReLU extends Layer{
     }
     public Matrix backward(Matrix dvalues){
         Matrix result = new Matrix(1, dvalues.rows * dvalues.cols, 1);
-        for(int i = 0; i < dvalues.size; i++){
-            result.matrix[0][i] = (values.matrix[0][i] > 0) ? dvalues.matrix[0][i] : 0.0;
+        
+        for(int i = 0; i < dvalues.rows * dvalues.cols; i++){
+            result.matrix[0][i] = (values.matrix[i/(values.rows * values.cols)][i%(values.rows * values.cols)] > 0) ? dvalues.matrix[0][i] : 0.0;
         }
         return result;
     }
