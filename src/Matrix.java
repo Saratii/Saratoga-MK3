@@ -150,15 +150,37 @@ public class Matrix {
     }
     
     public Matrix convolution(Matrix kernal){
-        Matrix resultant = new Matrix(1, rows - kernal.rows + 1, cols - kernal.cols + 1);
-        for(int i = 0; i < resultant.size; i++){
-            Matrix subby = new Matrix(1, kernal.rows, kernal.cols);
-            for( int j = 0; j < subby.rows; j++){
-                for( int k = 0; k < subby.cols; k++){
-                    subby.matrix[0][j * subby.cols + k] = matrix[0][i / resultant.cols * cols + i % resultant.cols + j * cols + k];
+        Matrix resultant = new Matrix(z, rows - kernal.rows + 1, cols - kernal.cols + 1);
+        for(int h = 0; h < z; h++){
+            for(int i = 0; i < resultant.rows * resultant.cols; i++){
+                Matrix subby = new Matrix(1, kernal.rows, kernal.cols);
+                for( int j = 0; j < subby.rows; j++){
+                    for( int k = 0; k < subby.cols; k++){
+                        subby.matrix[0][j * subby.cols + k] = matrix[h][i / resultant.cols * cols + i % resultant.cols + j * cols + k];
+                    }
+                }
+                resultant.matrix[h][i] = subby.dotProduct(kernal);
+            }
+        }
+        return resultant; 
+    }
+    
+    public Matrix bigConvolution(Matrix kernal){
+        Matrix resultant = new Matrix(z, rows + kernal.rows - 1, cols + kernal.cols - 1);
+        for(int h = 0; h < z; h++){
+            for(int i = 0; i < resultant.rows; i++){
+                for(int j = 0; j < resultant.cols; j++){
+                    Matrix subby = new Matrix(1, kernal.rows, kernal.cols);
+                    for(int ii = i; ii < i+ kernal.rows; ii++){
+                        for(int jj = j; jj < j + kernal.rows; jj++){
+                            int row = ii - kernal.rows + 1;
+                            int col = jj - kernal.cols + 1;
+                            subby.matrix[0][subby.convert(ii - i, jj - j)] = (row >= 0 ? row < rows ? col >= 0 ? col < cols ? matrix[h][convert(row, col)] : 0.0 : 0.0 : 0.0 : 0.0);
+                        }
+                    }
+                    resultant.matrix[h][resultant.convert(i, j)] = subby.dotProduct(kernal);
                 }
             }
-            resultant.matrix[0][i] = subby.dotProduct(kernal);
         }
         return resultant; 
     }
@@ -202,6 +224,17 @@ public class Matrix {
             }
         }
         return result;
+    }
+    public void reverse(){
+        for(int i = 0; i < z; i++){
+            int left = 0;
+            int right = matrix[i].length - 1;
+            double temp = matrix[i][left];
+            matrix[i][left] = matrix[i][right];
+            matrix[i][right] = temp;
+            left++;
+            right--;
+        }
     }
     public String getSize(){
         return "[" + z + ", " + rows + ", " + cols + "] " + size;
