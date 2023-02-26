@@ -12,10 +12,11 @@ public class ReLU extends Layer{
         return result;
     }
     public Matrix backward(Matrix dvalues){
-        Matrix result = new Matrix(1, dvalues.rows * dvalues.cols, 1);
-        
-        for(int i = 0; i < dvalues.rows * dvalues.cols; i++){
-            result.matrix[0][i] = (values.matrix[i/(values.rows * values.cols)][i%(values.rows * values.cols)] > 0) ? dvalues.matrix[0][i] : 0.0;
+        Matrix result = new Matrix(dvalues.z, dvalues.rows, dvalues.cols);
+        for(int j = 0; j < dvalues.z; j++){
+            for(int i = 0; i < dvalues.rows * dvalues.cols; i++){
+                result.matrix[j][i] = (values.matrix[j][i] > 0) ? dvalues.matrix[j][i] : 0.0;
+            }
         }
         return result;
     }

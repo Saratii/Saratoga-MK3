@@ -166,8 +166,8 @@ public class Matrix {
     }
     
     public Matrix bigConvolution(Matrix kernal){
-        Matrix resultant = new Matrix(z, rows + kernal.rows - 1, cols + kernal.cols - 1);
-        for(int h = 0; h < z; h++){
+        Matrix resultant = new Matrix(z * kernal.z, rows + kernal.rows - 1, cols + kernal.cols - 1);
+        for(int h = 0; h < z * kernal.z; h++){
             for(int i = 0; i < resultant.rows; i++){
                 for(int j = 0; j < resultant.cols; j++){
                     Matrix subby = new Matrix(1, kernal.rows, kernal.cols);
@@ -175,7 +175,7 @@ public class Matrix {
                         for(int jj = j; jj < j + kernal.rows; jj++){
                             int row = ii - kernal.rows + 1;
                             int col = jj - kernal.cols + 1;
-                            subby.matrix[0][subby.convert(ii - i, jj - j)] = (row >= 0 ? row < rows ? col >= 0 ? col < cols ? matrix[h][convert(row, col)] : 0.0 : 0.0 : 0.0 : 0.0);
+                            subby.matrix[0][subby.convert(ii - i, jj - j)] = (row >= 0 ? row < rows ? col >= 0 ? col < cols ? matrix[h % z][convert(row, col)] : 0.0 : 0.0 : 0.0 : 0.0);
                         }
                     }
                     resultant.matrix[h][resultant.convert(i, j)] = subby.dotProduct(kernal);
