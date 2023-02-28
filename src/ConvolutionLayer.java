@@ -38,7 +38,7 @@ public class ConvolutionLayer extends Layer{
             Matrix dldx = temp.bigConvolution(previousGradients);
             for(int h = 0; h < dldx.z; h++){
                 for(int k = 0; k < dldx.rows * dldx.cols; k++){
-                    result.matrix[h % kernals.length][k] = dldx.matrix[h][k];
+                    result.matrix[h % result.z][k] = dldx.matrix[h][k];
                 }
             }
             for(int j = 0; j < kernals[i].size; j++){

@@ -29,11 +29,11 @@ public class Matrix {
         StringBuilder s = new StringBuilder("[");   
         for(int j = 0; j < z; j++){
             for(int i = 0; i < rows * cols; i++) {
-                s.append(String.format("%.4f", matrix[j][i])).append(", ");
+                s.append(String.format("%.4f, ", matrix[j][i]));
             }
         }
-        s.append("]");
-        return s.toString();
+        s.deleteCharAt(s.length()-1).deleteCharAt(s.length()-1);
+        return s.append("]").toString();
     }
     public void seed(){ //fills 1d array with random values -1 to 1
         for(int j = 0; j < z; j++){
