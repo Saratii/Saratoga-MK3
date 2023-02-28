@@ -3,15 +3,15 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
-//i dont just randomly delete stuff cause it annoyed me naur
+
 public class Main {
-    public static double ALPHA = 0.01;
+    public static double ALPHA = 0.1;
     public static void main(String[] args) throws IOException {
         BufferedImage image = ImageIO.read(new File("images/bird.png"));
         image = Matrix.makeSquare(image); //625x625 range(0:255)
         Matrix imageMatrix = Matrix.imageToMatrix(image); //(625*625 x 1) range(0:255)
         imageMatrix.normalizePixels(); //(625*625 x 1) range(-1:1)
-        MaxPool makeFaster = new MaxPool(9);
+        MaxPool makeFaster = new MaxPool(70);
         imageMatrix = makeFaster.forward(imageMatrix);
         Matrix expected = new Matrix(1, 5, 1);
         expected.matrix = new Double[][]{{0.0, 1.0, 0.0, 0.0, 0.0}};

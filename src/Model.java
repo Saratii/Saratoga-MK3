@@ -5,12 +5,16 @@ public class Model {
     ArrayList<Layer> layers = new ArrayList<>();
     Matrix inputs;
     Matrix expected;
+    long startTime;
     public double forward(Matrix inputs, Matrix expected){
+        System.out.println("\n");
         for(int i = 0; i < layers.size(); i++){
+            startTime = System.currentTimeMillis();
             inputs = layers.get(i).forward(inputs);
+            System.out.println(String.format("Finished Forward %s in %d ms", layers.get(i),  System.currentTimeMillis() - startTime));
         }
         double l = Loss.forward(inputs, expected);
-        System.out.println("Softmax output: " + inputs);
+        System.out.println("\nSoftmax output: " + inputs);
         System.out.println("Loss: " + l + "\n");
         this.expected = expected;
         this.inputs = inputs;
@@ -18,8 +22,11 @@ public class Model {
     }
     public void backward(){
         Matrix gradients = Loss.backward(inputs, expected);
-        for(int i = 1; i < layers.size(); i++){
-            gradients = layers.get(layers.size() - i).backward(gradients);
+        for(int i = 0; i < layers.size(); i++){
+            startTime = System.currentTimeMillis();
+            System.out.println(layers.size() - 1 - i);
+            gradients = layers.get(layers.size() - 1 - i).backward(gradients);
+            System.out.println(String.format("Finished Backward %s in %d ms", layers.get(layers.size() - 1 - i),  System.currentTimeMillis() - startTime));
         }
     }
 }
