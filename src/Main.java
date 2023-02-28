@@ -11,7 +11,7 @@ public class Main {
         image = Matrix.makeSquare(image); //625x625 range(0:255)
         Matrix imageMatrix = Matrix.imageToMatrix(image); //(625*625 x 1) range(0:255)
         imageMatrix.normalizePixels(); //(625*625 x 1) range(-1:1)
-        MaxPool makeFaster = new MaxPool(70);
+        MaxPool makeFaster = new MaxPool(11);
         imageMatrix = makeFaster.forward(imageMatrix);
         Matrix expected = new Matrix(1, 5, 1);
         expected.matrix = new Double[][]{{0.0, 1.0, 0.0, 0.0, 0.0}};
@@ -35,7 +35,7 @@ public class Main {
         int i = 0;
         while(loss > 0.01){
             loss = model.forward(imageMatrix, expected);
-            model.backward(); //ti sounds like a vacuum cleanre
+            model.backward();
 
             i++;
         }
