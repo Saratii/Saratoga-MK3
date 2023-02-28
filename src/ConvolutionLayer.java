@@ -31,7 +31,7 @@ public class ConvolutionLayer extends Layer{
     }
     public Matrix backward(Matrix previousGradients){ //dLdO = previousGradients
         Matrix dldf = input.convolution(previousGradients);
-        Matrix result = new Matrix( previousGradients.z / kernals.length, input.rows, input.cols);
+        Matrix result = new Matrix(previousGradients.z / kernals.length, input.rows, input.cols);
         for(int i = 0; i < kernals.length; i++){
             Matrix temp = kernals[i];
             temp.reverse();

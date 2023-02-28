@@ -24,9 +24,8 @@ public class Model {
         Matrix gradients = Loss.backward(inputs, expected);
         for(int i = 0; i < layers.size(); i++){
             startTime = System.currentTimeMillis();
-            System.out.println(layers.size() - 1 - i);
             gradients = layers.get(layers.size() - 1 - i).backward(gradients);
             System.out.println(String.format("Finished Backward %s in %d ms", layers.get(layers.size() - 1 - i),  System.currentTimeMillis() - startTime));
         }
     }
-}
+} //just a sec 
