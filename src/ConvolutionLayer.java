@@ -6,7 +6,7 @@ public class ConvolutionLayer extends Layer{
     int STRIDE;
     int KERNAL_SIZE;
     public Matrix[] kernals;
-    boolean initialized = false;
+    public boolean initialized = false;
     public ConvolutionLayer(int NUM_FEATURE_SETS, int STRIDE, int KERNAL_SIZE){
         this.NUM_FEATURE_SETS = NUM_FEATURE_SETS;
         this.STRIDE = STRIDE;
