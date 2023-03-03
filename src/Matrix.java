@@ -150,16 +150,35 @@ public class Matrix {
     }
     
     public Matrix convolution(Matrix kernal){
+        // Matrix resultant = new Matrix(z * kernal.z, rows - kernal.rows + 1, cols - kernal.cols + 1);
+        // for(int h = 0; h < resultant.z; h++){
+        //     for(int i = 0; i < resultant.rows * resultant.cols; i++){
+        //         Matrix subby = new Matrix(1, kernal.rows, kernal.cols);
+        //         for( int j = 0; j < subby.rows; j++){
+        //             for( int k = 0; k < subby.cols; k++){
+        //                 subby.matrix[0][j * subby.cols + k] = matrix[h % z][i / resultant.cols * cols + i % resultant.cols + j * cols + k];
+        //             }
+        //         }
+        //         resultant.matrix[h][i] = subby.dotProduct(kernal);
+        //     }
+        // }
         Matrix resultant = new Matrix(z * kernal.z, rows - kernal.rows + 1, cols - kernal.cols + 1);
-        for(int h = 0; h < resultant.z; h++){
-            for(int i = 0; i < resultant.rows * resultant.cols; i++){
-                Matrix subby = new Matrix(1, kernal.rows, kernal.cols);
-                for( int j = 0; j < subby.rows; j++){
-                    for( int k = 0; k < subby.cols; k++){
-                        subby.matrix[0][j * subby.cols + k] = matrix[h % z][i / resultant.cols * cols + i % resultant.cols + j * cols + k];
+        int thisJ, thisK, iz, imz, i, j, k, jj, kk;
+        for(i = 0; i < resultant.z; i++){
+            iz = i/z;
+            imz = i % z;
+            for(j = 0; j < resultant.rows; j++){
+                for(k = 0; k < resultant.cols; k++){
+                    double dotProd = 0;
+                    for(jj = 0; jj < kernal.rows; jj++){
+                        thisJ = j + jj;
+                        for(kk = 0; kk < kernal.cols; kk++){
+                            thisK = k + kk;
+                            dotProd += kernal.matrix[iz][kernal.convert(jj, kk)] * matrix[imz][convert(thisJ, thisK)];
+                        }
                     }
+                    resultant.matrix[i][resultant.convert(j, k)] = dotProd;
                 }
-                resultant.matrix[h][i] = subby.dotProduct(kernal);
             }
         }
         return resultant; 
@@ -167,22 +186,35 @@ public class Matrix {
     
     public Matrix bigConvolution(Matrix kernal){
         Matrix resultant = new Matrix(z * kernal.z, rows + kernal.rows - 1, cols + kernal.cols - 1);
-        for(int h = 0; h < z * kernal.z; h++){
-            for(int i = 0; i < resultant.rows; i++){
-                for(int j = 0; j < resultant.cols; j++){
-                    Matrix subby = new Matrix(1, kernal.rows, kernal.cols);
-                    for(int ii = i; ii < i+ kernal.rows; ii++){
-                        for(int jj = j; jj < j + kernal.rows; jj++){
-                            int row = ii - kernal.rows + 1;
-                            int col = jj - kernal.cols + 1;
-                            subby.matrix[0][subby.convert(ii - i, jj - j)] = (row >= 0 ? row < rows ? col >= 0 ? col < cols ? matrix[h % z][convert(row, col)] : 0.0 : 0.0 : 0.0 : 0.0);
+        int thisJ, thisK, iz, imz, i, j, k, jj, kk;
+        for(i = 0 ; i < resultant.z; i++){
+            iz = i/z;
+            imz = i % z;
+            for(j = 0; j < resultant.rows; j++){
+                for(k = 0; k < resultant.cols; k++){
+                    double dotProd = 0;
+                    for(jj = 0; jj < kernal.rows; jj++){
+                        thisJ = j + jj - kernal.rows + 1;
+                        if(thisJ < 0){
+                            continue;
+                        } else if(thisJ >= rows){
+                            break;
+                        }
+                        for(kk = 0; kk < kernal.cols; kk++){
+                            thisK = k + kk - kernal.cols + 1;
+                            if(thisK < 0){
+                                continue;
+                            } else if(thisK >= cols){
+                                break;
+                            }
+                            dotProd += matrix[imz][convert(thisJ, thisK)] * kernal.matrix[iz][kernal.convert(jj, kk)];
                         }
                     }
-                    resultant.matrix[h][resultant.convert(i, j)] = subby.dotProduct(kernal);
+                    resultant.matrix[i][resultant.convert(j, k)] = dotProd;
                 }
             }
         }
-        return resultant; 
+        return resultant;
     }
     public void display(BufferedImage image){
         // if(frame==null){

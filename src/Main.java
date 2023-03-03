@@ -5,14 +5,15 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 public class Main {
-    public static double ALPHA = 0.1;
+    public static double ALPHA = 0.001;
     public static void main(String[] args) throws IOException {
         BufferedImage image = ImageIO.read(new File("images/bird.png"));
         image = Matrix.makeSquare(image); //625x625 range(0:255)
         Matrix imageMatrix = Matrix.imageToMatrix(image); //(625*625 x 1) range(0:255)
-        imageMatrix.normalizePixels(); //(625*625 x 1) range(-1:1)
-        MaxPool makeFaster = new MaxPool(11);
-        imageMatrix = makeFaster.forward(imageMatrix);
+        imageMatrix.normalizePixels(); //(625*625 x 1) range(-1:1) 
+        MaxPool makeFater = new MaxPool(11);
+        imageMatrix = makeFater.forward(imageMatrix);
+      
         Matrix expected = new Matrix(1, 5, 1);
         expected.matrix = new Double[][]{{0.0, 1.0, 0.0, 0.0, 0.0}};
         Matrix testInput = new Matrix(1, 28900, 1);
@@ -33,10 +34,10 @@ public class Main {
 
         double loss = Double.POSITIVE_INFINITY;
         int i = 0;
+        model.profiling = true;
         while(loss > 0.01){
             loss = model.forward(imageMatrix, expected);
             model.backward();
-
             i++;
         }
         System.out.println("Completed in " + i + " epochs");
