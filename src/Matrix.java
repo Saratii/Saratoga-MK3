@@ -150,18 +150,6 @@ public class Matrix {
     }
     
     public Matrix convolution(Matrix kernal){
-        // Matrix resultant = new Matrix(z * kernal.z, rows - kernal.rows + 1, cols - kernal.cols + 1);
-        // for(int h = 0; h < resultant.z; h++){
-        //     for(int i = 0; i < resultant.rows * resultant.cols; i++){
-        //         Matrix subby = new Matrix(1, kernal.rows, kernal.cols);
-        //         for( int j = 0; j < subby.rows; j++){
-        //             for( int k = 0; k < subby.cols; k++){
-        //                 subby.matrix[0][j * subby.cols + k] = matrix[h % z][i / resultant.cols * cols + i % resultant.cols + j * cols + k];
-        //             }
-        //         }
-        //         resultant.matrix[h][i] = subby.dotProduct(kernal);
-        //     }
-        // }
         Matrix resultant = new Matrix(z * kernal.z, rows - kernal.rows + 1, cols - kernal.cols + 1);
         int thisJ, thisK, iz, imz, i, j, k, jj, kk;
         for(i = 0; i < resultant.z; i++){
@@ -172,9 +160,11 @@ public class Matrix {
                     double dotProd = 0;
                     for(jj = 0; jj < kernal.rows; jj++){
                         thisJ = j + jj;
+                        int rowIndex = thisJ * cols;
+                        int kernalRowIndex = jj * kernal.cols;
                         for(kk = 0; kk < kernal.cols; kk++){
                             thisK = k + kk;
-                            dotProd += kernal.matrix[iz][kernal.convert(jj, kk)] * matrix[imz][convert(thisJ, thisK)];
+                            dotProd += matrix[imz][rowIndex + thisK] * kernal.matrix[iz][kernalRowIndex + kk];
                         }
                     }
                     resultant.matrix[i][resultant.convert(j, k)] = dotProd;
@@ -191,26 +181,23 @@ public class Matrix {
             iz = i/z;
             imz = i % z;
             for(j = 0; j < resultant.rows; j++){
+                int jjStart = Math.max(0, kernal.rows - j - 1);
+                int jjEnd = Math.min(kernal.rows, rows - j + kernal.rows - 1);
+                int resultantRowIndex = j * resultant.cols;
                 for(k = 0; k < resultant.cols; k++){
+                    int kkStart = Math.max(0, kernal.cols - k - 1);
+                    int kkEnd = Math.min(kernal.cols, cols - k + kernal.cols - 1);
                     double dotProd = 0;
-                    for(jj = 0; jj < kernal.rows; jj++){
+                    for(jj = jjStart; jj < jjEnd; jj++){
                         thisJ = j + jj - kernal.rows + 1;
-                        if(thisJ < 0){
-                            continue;
-                        } else if(thisJ >= rows){
-                            break;
-                        }
-                        for(kk = 0; kk < kernal.cols; kk++){
+                        int rowIndex = thisJ * cols;
+                        int kernalRowIndex = jj * kernal.cols;
+                        for(kk = kkStart; kk < kkEnd; kk++){
                             thisK = k + kk - kernal.cols + 1;
-                            if(thisK < 0){
-                                continue;
-                            } else if(thisK >= cols){
-                                break;
-                            }
-                            dotProd += matrix[imz][convert(thisJ, thisK)] * kernal.matrix[iz][kernal.convert(jj, kk)];
+                            dotProd += matrix[imz][rowIndex + thisK] * kernal.matrix[iz][kernalRowIndex + kk];
                         }
                     }
-                    resultant.matrix[i][resultant.convert(j, k)] = dotProd;
+                    resultant.matrix[i][resultantRowIndex + k] = dotProd;
                 }
             }
         }
