@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 public class Main {
-    public static double ALPHA = 0.1;
+    public static double ALPHA = 0.001;
     public static int BATCHSIZE;
     public static void main(String[] args) throws IOException {
         BufferedImage image = ImageIO.read(new File("images/bird.png")); //

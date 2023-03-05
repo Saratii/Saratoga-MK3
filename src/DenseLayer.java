@@ -35,22 +35,25 @@ public class DenseLayer extends Layer{
         return outputs;
     }
     public Matrix backward(Matrix previousDerivatives){
+        if(firstBatch){
+            batchBiasGradients = new Matrix(1, NUM_NODES, 1);
+            batchWeightGradients = new Matrix(1, NUM_NODES, inputs.size);
+            batchWeightGradients.seedZeros();
+            firstBatch = false;
+        }
         Matrix passedOnDerivatives = new Matrix(1, inputs.size, 1);
         for(int i = 0; i < inputs.size; i++){
-            passedOnDerivatives.matrix[0][i] = 0.0;
+            passedOnDerivatives.matrix[0][i] = 0.0; /
             for(int j = 0; j < NUM_NODES; j++){
                 passedOnDerivatives.matrix[0][i] += previousDerivatives.matrix[0][j] * weights.matrix[0][j * inputs.size + i];
+                batchWeightGradients.matrix[0][j * inputs.size + i] += previousDerivatives.matrix[0][j] * inputs.matrix[0][i];
                 //weights.matrix[0][j * inputs.size + i] -= previousDerivatives.matrix[0][j] * inputs.matrix[0][i] * Main.ALPHA;
             }
         }
-        Matrix tempy = previousDerivatives.multiply(inputs);
-        if(firstBatch){
-            batchBiasGradients = new Matrix(1, NUM_NODES, 1);
-            batchWeightGradients = new Matrix(1, tempy.rows, tempy.cols);
-            firstBatch = false;
-        }
+        // Matrix tempy = previousDerivatives.multiply(inputs);
+        
         batchBiasGradients.add(previousDerivatives);
-        batchWeightGradients.add(tempy);
+        // batchWeightGradients.add(tempy);
 
         return passedOnDerivatives;
     }
