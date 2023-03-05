@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 
 public class Main {
     public static double ALPHA = 0.001;
+    public static Matrix[] batch;
     public static void main(String[] args) throws IOException {
         BufferedImage image = ImageIO.read(new File("images/bird.png"));
         image = Matrix.makeSquare(image); //625x625 range(0:255)
@@ -33,14 +34,22 @@ public class Main {
         model.layers.add(new Softmax());
 
         double loss = Double.POSITIVE_INFINITY;
-        int i = 0;
-        model.profiling = true;
+        int epoch = 0;
+        batch = new Matrix[]{imageMatrix};
+        Matrix[] batchExpected = new Matrix[]{expected};
+        // model.profiling = true;
         while(loss > 0.01){
-            loss = model.forward(imageMatrix, expected);
-            model.backward();
-            i++;
+            for(int i = 0; i < batch.length; i++){
+                loss = model.forward(batch[i], batchExpected[i]);
+                model.backward();
+            }
+            
+            for(Layer layer: model.layers){
+                layer.updateParams();
+            }
+            epoch++;
         }
-        System.out.println("Completed in " + i + " epochs");
+        System.out.println("Completed in " + epoch + " epochs");
           //ima smack you with my pimp cane
     }
-}
+} 
