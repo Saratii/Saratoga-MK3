@@ -5,6 +5,7 @@ public class ConvolutionLayer extends Layer{
     int NUM_FEATURE_SETS;
     int STRIDE;
     int KERNAL_SIZE;
+    private Matrix[] kernalGradient;
     public Matrix[] kernals;
     public boolean initialized = false;
     public ConvolutionLayer(int NUM_FEATURE_SETS, int STRIDE, int KERNAL_SIZE){
@@ -17,9 +18,12 @@ public class ConvolutionLayer extends Layer{
         this.input = input;
         if(!initialized){
             this.kernals = new Matrix[NUM_FEATURE_SETS];
+            kernalGradient = new Matrix[NUM_FEATURE_SETS];
             for(int i = 0; i < kernals.length; i++){
                 kernals[i] = new Matrix(1, KERNAL_SIZE, KERNAL_SIZE); 
+                kernalGradient[i] = new Matrix(1, KERNAL_SIZE, KERNAL_SIZE);
                 kernals[i].seed();
+                kernalGradient[i].seedZeros();
             }
             initialized = true;
         }
@@ -43,9 +47,16 @@ public class ConvolutionLayer extends Layer{
                 }
             }
             for(int j = 0; j < kernals[i].size; j++){
-                kernals[i].matrix[0][j] = kernals[i].matrix[0][j] - dldf.matrix[i][j] * Main.ALPHA;
+                kernalGradient[i].matrix[0][j] += dldf.matrix[i][j];
             }
         }
         return result;
+    }
+    public void updateParams(){
+        for(int i = 0; i < kernalGradient.length; i++){
+            for(int j = 0; j < kernalGradient[i].size; j++){
+                kernals[i].matrix[0][j] -= kernalGradient[i].matrix[0][j] * Main.ALPHA / Main.batch.length;
+            }
+        }
     }
 }
