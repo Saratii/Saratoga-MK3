@@ -34,4 +34,7 @@ public class Softmax extends Layer{
         
         return result.multiply(dvalues);
     }
+    public void updateParams(){
+        
+    }
 }

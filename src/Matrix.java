@@ -258,4 +258,14 @@ public class Matrix {
     public String getSize(){
         return "[" + z + ", " + rows + ", " + cols + "] " + size;
     }
+    public void add(Matrix b){
+        if(matrix[0][0] == null){
+            seedZeros();
+        }
+        for(int i = 0; i < z; i++){
+            for(int j = 0; j < rows * cols; j++){
+                matrix[i][j] += b.matrix[i][j];
+            }
+        }
+    }
 }

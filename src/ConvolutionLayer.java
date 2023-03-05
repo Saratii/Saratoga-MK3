@@ -7,6 +7,7 @@ public class ConvolutionLayer extends Layer{
     int KERNAL_SIZE;
     public Matrix[] kernals;
     public boolean initialized = false;
+    Matrix batchGradients;
     public ConvolutionLayer(int NUM_FEATURE_SETS, int STRIDE, int KERNAL_SIZE){
         this.NUM_FEATURE_SETS = NUM_FEATURE_SETS;
         this.STRIDE = STRIDE;
@@ -31,6 +32,13 @@ public class ConvolutionLayer extends Layer{
     }
     public Matrix backward(Matrix previousGradients){ //dLdO = previousGradients
         Matrix dldf = input.convolution(previousGradients);
+        if(firstBatch){
+            batchGradients = new Matrix(dldf.z, dldf.rows, dldf.cols);
+            batchGradients.matrix = dldf.matrix;
+            firstBatch = false;
+        } else {
+            batchGradients.add(dldf);
+        }
         Matrix result = new Matrix(previousGradients.z / kernals.length, input.rows, input.cols);
         for(int i = 0; i < kernals.length; i++){
             Matrix temp = kernals[i];
@@ -42,10 +50,15 @@ public class ConvolutionLayer extends Layer{
                     result.matrix[a][k] = dldx.matrix[h][k];
                 }
             }
-            for(int j = 0; j < kernals[i].size; j++){
-                kernals[i].matrix[0][j] = kernals[i].matrix[0][j] - dldf.matrix[i][j] * Main.ALPHA;
-            }
         }
         return result;
+    }
+    public void updateParams(){
+        for(int i = 0; i < kernals.length; i++){
+            for(int j = 0; j < kernals[i].size; j++){
+                kernals[i].matrix[0][j] = kernals[i].matrix[0][j] - batchGradients.matrix[i][j] * Main.ALPHA / Main.BATCHSIZE;
+            }
+        }
+        firstBatch = true;
     }
 }

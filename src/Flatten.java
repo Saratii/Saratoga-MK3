@@ -25,4 +25,7 @@ public class Flatten extends Layer{
         }
         return result;
     }
+    public void updateParams(){
+        
+    }
 }

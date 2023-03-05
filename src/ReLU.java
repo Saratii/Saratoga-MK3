@@ -20,4 +20,7 @@ public class ReLU extends Layer{
         }
         return result;
     }
+    public void updateParams(){
+        
+    }
 }

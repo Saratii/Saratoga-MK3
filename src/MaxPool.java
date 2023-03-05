@@ -54,6 +54,9 @@ public class MaxPool extends Layer{
         }
         return gradients;
     }
+    public void updateParams(){
+        
+    }
 }
 
 

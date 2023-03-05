@@ -1,5 +1,5 @@
 package src;
-public class Loss extends Layer{
+public class Loss{
     public static double forward(Matrix yPred, Matrix yTrue) {
         double sum = 0;
         double eps = 1E-15;
