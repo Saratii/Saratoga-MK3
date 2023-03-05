@@ -7,5 +7,8 @@ public class Layer {
     public Matrix backward(Matrix inputs){
         return inputs;
     }
+    public void updateParams(){
+        
+    }
    
 }
