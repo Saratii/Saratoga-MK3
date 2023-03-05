@@ -52,4 +52,4 @@ public class Main {
         System.out.println("Completed in " + epoch + " epochs");
           //ima smack you with my pimp cane
     }
-}
+} 
