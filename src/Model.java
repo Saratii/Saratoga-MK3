@@ -20,7 +20,6 @@ public class Model {
         }
         double l = Loss.forward(inputs, expected);
         System.out.println("\nSoftmax output: " + inputs);
-        System.out.println("Loss: " + l + "\n");
         this.expected = expected;
         this.inputs = inputs;
         return l;

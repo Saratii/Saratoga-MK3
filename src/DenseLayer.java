@@ -42,7 +42,6 @@ public class DenseLayer extends Layer{
             passedOnDerivatives.matrix[0][i] = 0.0;
             for(int j = 0; j < NUM_NODES; j++){
                 passedOnDerivatives.matrix[0][i] += previousDerivatives.matrix[0][j] * weights.matrix[0][j * inputs.size + i];
-                // weights.matrix[0][j * inputs.size + i] -= previousDerivatives.matrix[0][j] * inputs.matrix[0][i] * Main.ALPHA;
                 weightGradient.matrix[0][j * inputs.size + i] += previousDerivatives.matrix[0][j] * inputs.matrix[0][i];
             }
         }
