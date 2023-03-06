@@ -55,7 +55,7 @@ public class ConvolutionLayer extends Layer{
     public void updateParams(){
         for(int i = 0; i < kernalGradient.length; i++){
             for(int j = 0; j < kernalGradient[i].size; j++){
-                kernals[i].matrix[0][j] -= kernalGradient[i].matrix[0][j] * Main.ALPHA / Main.batch.length;
+                kernals[i].matrix[0][j] -= kernalGradient[i].matrix[0][j] * Main.ALPHA / Main.batchSize;
             }
         }
     }

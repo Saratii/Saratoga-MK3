@@ -49,10 +49,10 @@ public class DenseLayer extends Layer{
     }
     public void updateParams(){
         for(int i = 0; i < biasGradient.size; i++){
-            biases.matrix[0][i] -= biasGradient.matrix[0][i] * Main.ALPHA / Main.batch.length;
+            biases.matrix[0][i] -= biasGradient.matrix[0][i] * Main.ALPHA / Main.batchSize;
         }
         for(int i = 0; i < weightGradient.size; i++){
-            weights.matrix[0][i] -= weightGradient.matrix[0][i] * Main.ALPHA / Main.batch.length;
+            weights.matrix[0][i] -= weightGradient.matrix[0][i] * Main.ALPHA / Main.batchSize;
         }
     }
 } //i dont remember it going back and forth so much
