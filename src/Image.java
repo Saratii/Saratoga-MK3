@@ -2,18 +2,25 @@ package src;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.util.List;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import java.awt.FlowLayout;
 
 public class Image {
     Matrix imageData;
     Matrix label;
     String stringLabel;
     BufferedImage bufferedImage;
-    public Image(File file, String label) throws IOException{
-        this.bufferedImage = ImageIO.read(file);
+    public Image(Path path, String label) throws IOException{
+        this.bufferedImage = Matrix.resizeImage(Matrix.makeSquare(ImageIO.read(path.toFile())), 224, 224);
         this.imageData = Matrix.imageToMatrix(bufferedImage);
+        imageData.normalizePixels();
         this.label = new Matrix(1, 2, 1);
         this.stringLabel = label;
         if(label == "dolphin"){
@@ -22,14 +29,20 @@ public class Image {
             this.label.matrix = new Double[][]{{0.0, 1.0}};
         }
     }
-    public static Matrix[] shuffle(Matrix[] arr){
+    public static void shuffle(List<Image> arr){
         Random rnd = new Random();
-        for (int i = arr.length - 1; i > 0; i--) {
+        for (int i = arr.size() - 1; i > 0; i--) {
             int index = rnd.nextInt(i + 1);
-            Matrix temp = arr[index];
-            arr[index] = arr[i];
-            arr[i] = temp;
+            Image temp = arr.get(index);
+            arr.set(index, arr.get(i));
+            arr.set(i, temp);
         }
-        return arr;
+    }
+    public void show(){
+        JFrame frame = new JFrame();
+        frame.getContentPane().setLayout(new FlowLayout());
+        frame.getContentPane().add(new JLabel(new ImageIcon(bufferedImage)));
+        frame.pack();
+        frame.setVisible(true);
     }
 }
