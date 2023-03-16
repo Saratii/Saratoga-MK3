@@ -1,5 +1,8 @@
 package src;
 
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+
 public class Layer {
     public Matrix forward(Matrix inputs){
         return inputs;
@@ -9,6 +12,9 @@ public class Layer {
     }
     public void updateParams(){
         
+    }
+    public void write() throws FileNotFoundException, UnsupportedEncodingException{
+
     }
    
 }
