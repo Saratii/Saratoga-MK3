@@ -1,5 +1,10 @@
 package src;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.Random;
+
 public class ConvolutionLayer extends Layer{
     Matrix input;
     int NUM_FEATURE_SETS;
@@ -8,6 +13,7 @@ public class ConvolutionLayer extends Layer{
     private Matrix[] kernalGradient;
     public Matrix[] kernals;
     public boolean initialized = false;
+   
     public ConvolutionLayer(int NUM_FEATURE_SETS, int STRIDE, int KERNAL_SIZE){
         this.NUM_FEATURE_SETS = NUM_FEATURE_SETS;
         this.STRIDE = STRIDE;
@@ -58,5 +64,19 @@ public class ConvolutionLayer extends Layer{
                 kernals[i].matrix[0][j] -= kernalGradient[i].matrix[0][j] * Main.ALPHA / Main.batchSize;
             }
         }
+    }
+    public void write() throws FileNotFoundException, UnsupportedEncodingException{
+        Random r = new Random();
+        int k = r.nextInt(10000, 99999);
+        PrintWriter writer = new PrintWriter("logs/log-Conv.txt" + k, "UTF-8");
+        writer.println("Convolutional Layer");
+        writer.println("Total Parameters{" + (kernals.length * kernals[0].size) + "}");
+        writer.println("Number of Kernals{" + kernals.length + "}");
+        writer.println("Size of Kernals{" +  kernals[0].rows + ", " + kernals[0].cols + "} +\n");
+        for(Matrix kernal : kernals){
+            writer.println(kernal.toString());
+            writer.println("");
+        }
+        writer.close();
     }
 }

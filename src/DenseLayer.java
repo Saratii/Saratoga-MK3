@@ -1,4 +1,10 @@
 package src;
+
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.Random;
+
 public class DenseLayer extends Layer{
     public Matrix weights;
     Matrix inputs;
@@ -49,10 +55,22 @@ public class DenseLayer extends Layer{
     }
     public void updateParams(){
         for(int i = 0; i < biasGradient.size; i++){
-            biases.matrix[0][i] -= biasGradient.matrix[0][i] * Main.ALPHA / Main.batchSize;
+            biases.matrix[0][i] -= biasGradient.matrix[0][i] * Main.ALPHA;
         }
         for(int i = 0; i < weightGradient.size; i++){
-            weights.matrix[0][i] -= weightGradient.matrix[0][i] * Main.ALPHA / Main.batchSize;
+            weights.matrix[0][i] -= weightGradient.matrix[0][i] * Main.ALPHA;
         }
     }
-} //i dont remember it going back and forth so much
+    public void write() throws FileNotFoundException, UnsupportedEncodingException{
+        Random r = new Random();
+        int k = r.nextInt(10000, 99999);
+        PrintWriter writer = new PrintWriter("logs/log-Dense.txt" + k, "UTF-8");
+        writer.println("Dense Layer");
+        writer.println("Total Parameters{" + (weights.size + biases.size) + "}");
+        writer.println("Number of Nodes{" + NUM_NODES + "}\n");
+        writer.println(biases.toString());
+        writer.println("Number of weights{" + inputs.size + ", " + NUM_NODES + "}\n");
+        writer.println(weights.toString());
+        writer.close();
+    }
+}

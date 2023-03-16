@@ -1,4 +1,6 @@
 package src;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class Model {
@@ -31,6 +33,16 @@ public class Model {
             if(profiling){
                 System.out.println(String.format("Finished Backward %s in %d ms", layers.get(layers.size() - 1 - i),  System.currentTimeMillis() - startTime));
             }
+        }
+    }
+    public void updateParams(){
+        for(Layer layer: layers){
+            layer.updateParams();
+        }
+    }
+    public void write() throws FileNotFoundException, UnsupportedEncodingException{
+        for(Layer layer: layers){
+            layer.write();
         }
     }
 }

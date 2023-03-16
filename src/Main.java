@@ -1,16 +1,27 @@
 package src;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_CYAN = "\u001B[36m";
     public static double ALPHA = 0.001;
     public static double batchSize = 30;
     public static void main(String[] args) throws IOException {
-        
+        File folder = new File("logs");
+        if(folder.exists()) {
+            folder.delete();
+        }
+        folder.mkdirs();
+        folder.close();
+        PrintWriter writer = new PrintWriter("logs/log-graph", "UTF-8");
         List<Path> dolphinDirectory = Files.list(Path.of("Aminals/animals/dolphin")).toList();
         List<Path> antelopeDirectory = Files.list(Path.of("Aminals/animals/antelope")).toList();
         List<Image> images = new ArrayList<>();
@@ -29,38 +40,41 @@ public class Main {
         }
 
         Model model = new Model();
-        model.layers.add(new ConvolutionLayer(10, 1, 3));
+        model.layers.add(new ConvolutionLayer(5, 1, 3));
         model.layers.add(new ReLU());
         model.layers.add(new MaxPool(6));
-        model.layers.add(new ConvolutionLayer(10, 1, 3));
+        model.layers.add(new ConvolutionLayer(5, 1, 3));
         model.layers.add(new ReLU());
         model.layers.add(new MaxPool(6));
         model.layers.add(new Flatten());
-        model.layers.add(new DenseLayer(256));
+        model.layers.add(new DenseLayer(16));
         model.layers.add(new ReLU());
         model.layers.add(new DenseLayer(2));
         model.layers.add(new Softmax());
 
         int epoch = 0;
+        ALPHA /= batchSize;
         double avgLoss = Double.POSITIVE_INFINITY;
-        for(int i = 0; i < batches.length; i++){
-            while(avgLoss > 0.01){
-                avgLoss = 0;
+        // while(avgLoss > 0.1){
+        for(int p = 0; p < 2; p++){
+            avgLoss = 0;
+            for(int i = 0; i < batches.length; i++){
                 for(int j = 0; j < batches[i].length; j++){
                     avgLoss += model.forward(batches[i][j].imageData, batches[i][j].label);
                     model.backward();
                 }
-                avgLoss /= batches[i].length; 
-                for(Layer layer: model.layers){
-                    layer.updateParams();
-                }
-                epoch++;
-                System.out.println("Average Loss: " + avgLoss);
             }
-            avgLoss = Double.POSITIVE_INFINITY;
-            System.out.println("Completed in " + epoch + " epochs");
-            epoch = 0;
+            model.updateParams();
+            avgLoss /= (batches[0].length * batches.length);
+            
+            System.out.println(ANSI_GREEN +"Average Loss: " + avgLoss + ANSI_RESET);
+            writer.println(epoch + ", " + avgLoss);
+            epoch++;
+
         }
+        System.out.println(ANSI_CYAN + "Completed in " + epoch + " epochs" + ANSI_RESET);
+        writer.close();
+        model.write();
         // ima smack you with my pimp cane
         // goofy ahh
     }
