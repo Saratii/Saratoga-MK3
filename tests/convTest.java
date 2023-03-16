@@ -25,7 +25,26 @@ public class convTest {
         //[-0.7673,  0.2152,  0.0731
     }
     public static void main(String[] args){
-        test();
+        perf();
+    }
+    private static void perf(){
+        Matrix veryLarge = new Matrix(1, 2000, 2000);
+        veryLarge.seed();
+        Matrix kernal = new Matrix(1, 10, 10);
+        kernal.seed();
+        long time = System.currentTimeMillis();
+        Matrix somewhere = kernal.bigConvolution(veryLarge);
+        long time2 = System.currentTimeMillis(); //why is the second one always smaller
+        
+        long time3 = System.currentTimeMillis();
+        Matrix somewhere2 = kernal.bigConvolution2(veryLarge);
+        long time4 = System.currentTimeMillis();
+        if(!somewhere.equals(somewhere2)){
+            System.out.println("Erik did a fucky wucky");
+            return;
+        }
+        System.out.println("baseline: " + (time2 - time));
+        System.out.println("is more betterer?: " + (time4 - time3));
     }
 }
 /*

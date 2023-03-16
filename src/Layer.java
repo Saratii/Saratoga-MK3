@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 
 public class Layer {
+    long forwardTime = 0;
+    long backwardTime = 0;
     public Matrix forward(Matrix inputs){
         return inputs;
     }
@@ -16,5 +18,4 @@ public class Layer {
     public void write() throws FileNotFoundException, UnsupportedEncodingException{
 
     }
-   
 }

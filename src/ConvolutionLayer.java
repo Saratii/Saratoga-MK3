@@ -41,15 +41,14 @@ public class ConvolutionLayer extends Layer{
     }
     public Matrix backward(Matrix previousGradients){ //dLdO = previousGradients
         Matrix dldf = input.convolution(previousGradients);
-        Matrix result = new Matrix(previousGradients.z / kernals.length, input.rows, input.cols);
+        Matrix result = new Matrix(previousGradients.z * kernals.length, input.rows, input.cols);
         for(int i = 0; i < kernals.length; i++){
             Matrix temp = kernals[i];
-            temp.reverse();
+            temp.reverse(); //i just need to know how to fix this file not optimize anything
             Matrix dldx = temp.bigConvolution(previousGradients);
             for(int h = 0; h < dldx.z; h++){
-                int a = h % result.z;
                 for(int k = 0; k < dldx.rows * dldx.cols; k++){
-                    result.matrix[a][k] = dldx.matrix[h][k];
+                    result.matrix[i * previousGradients.z + h][k] = dldx.matrix[h][k];
                 }
             }
             for(int j = 0; j < kernals[i].size; j++){
@@ -72,7 +71,7 @@ public class ConvolutionLayer extends Layer{
         writer.println("Convolutional Layer");
         writer.println("Total Parameters{" + (kernals.length * kernals[0].size) + "}");
         writer.println("Number of Kernals{" + kernals.length + "}");
-        writer.println("Size of Kernals{" +  kernals[0].rows + ", " + kernals[0].cols + "} +\n");
+        writer.println("Size of Kernals{" +  kernals[0].rows + ", " + kernals[0].cols + "}\n");
         for(Matrix kernal : kernals){
             writer.println(kernal.toString());
             writer.println("");
