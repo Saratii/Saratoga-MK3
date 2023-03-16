@@ -17,10 +17,14 @@ public class Main {
     public static void main(String[] args) throws IOException {
         File folder = new File("logs");
         if(folder.exists()) {
-            folder.delete();
+            String[] entries = folder.list();
+            for(String s: entries){
+                File currentFile = new File(folder.getPath(), s);
+                currentFile.delete();
+            }
+        } else {
+            folder.mkdirs();
         }
-        folder.mkdirs();
-        folder.close();
         PrintWriter writer = new PrintWriter("logs/log-graph", "UTF-8");
         List<Path> dolphinDirectory = Files.list(Path.of("Aminals/animals/dolphin")).toList();
         List<Path> antelopeDirectory = Files.list(Path.of("Aminals/animals/antelope")).toList();
@@ -51,31 +55,34 @@ public class Main {
         model.layers.add(new ReLU());
         model.layers.add(new DenseLayer(2));
         model.layers.add(new Softmax());
-
+        model.profiling = true;
         int epoch = 0;
         ALPHA /= batchSize;
         double avgLoss = Double.POSITIVE_INFINITY;
         // while(avgLoss > 0.1){
-        for(int p = 0; p < 2; p++){
+        for(int p = 0; p < 10; p++){
             avgLoss = 0;
             for(int i = 0; i < batches.length; i++){
                 for(int j = 0; j < batches[i].length; j++){
                     avgLoss += model.forward(batches[i][j].imageData, batches[i][j].label);
                     model.backward();
                 }
+                model.updateParams();
             }
-            model.updateParams();
             avgLoss /= (batches[0].length * batches.length);
-            
             System.out.println(ANSI_GREEN +"Average Loss: " + avgLoss + ANSI_RESET);
             writer.println(epoch + ", " + avgLoss);
-            epoch++;
+            epoch++; //its not printing the average loss
 
-        }
+        } //its not printing
         System.out.println(ANSI_CYAN + "Completed in " + epoch + " epochs" + ANSI_RESET);
+        for(int i = 0; i < model.layers.size(); i++){
+            System.out.println("Forward: " + model.layers.get(i).forwardTime);
+            System.out.println("Backward: " + model.layers.get(i).backwardTime + "\n");
+        }
         writer.close();
         model.write();
         // ima smack you with my pimp cane
         // goofy ahh
     }
-} 
+}
