@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import src.ConvolutionLayer;
 import src.Matrix;
+import src.Model;
 
 public class convTest {
     
@@ -28,24 +29,14 @@ public class convTest {
         perf();
     }
     private static void perf(){
-        Matrix veryLarge = new Matrix(1, 2000, 2000);
-        veryLarge.seed();
-        Matrix kernal = new Matrix(1, 10, 10);
-        kernal.seed();
-        long time = System.currentTimeMillis();
-        Matrix somewhere = kernal.bigConvolution(veryLarge);
-        long time2 = System.currentTimeMillis(); //why is the second one always smaller
-        
-        long time3 = System.currentTimeMillis();
-        Matrix somewhere2 = kernal.bigConvolution2(veryLarge);
-        long time4 = System.currentTimeMillis();
-        if(!somewhere.equals(somewhere2)){
-            System.out.println("Erik did a fucky wucky");
-            return;
-        }
-        System.out.println("baseline: " + (time2 - time));
-        System.out.println("is more betterer?: " + (time4 - time3));
+        Model model = new Model();
+        model.layers.add(new ConvolutionLayer(3, 1, 2));
+        Matrix input = new Matrix(1, 3, 3);
+        input.matrix = new Double[][]{{1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0}};
+        Matrix expected = new Matrix(1, 1, 1);
+        model.forward(input, expected);
     }
+
 }
 /*
 conv(input)

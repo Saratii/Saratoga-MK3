@@ -46,12 +46,12 @@ public class Main {
         Model model = new Model();
         model.layers.add(new ConvolutionLayer(5, 1, 3));
         model.layers.add(new ReLU());
-        model.layers.add(new MaxPool(6));
-        model.layers.add(new ConvolutionLayer(5, 1, 3));
+        model.layers.add(new MaxPool(3));
+        model.layers.add(new ConvolutionLayer(15, 1, 3));
         model.layers.add(new ReLU());
-        model.layers.add(new MaxPool(6));
+        model.layers.add(new MaxPool(3));
         model.layers.add(new Flatten());
-        model.layers.add(new DenseLayer(16));
+        model.layers.add(new DenseLayer(32));
         model.layers.add(new ReLU());
         model.layers.add(new DenseLayer(2));
         model.layers.add(new Softmax());
@@ -59,8 +59,8 @@ public class Main {
         int epoch = 0;
         ALPHA /= batchSize;
         double avgLoss = Double.POSITIVE_INFINITY;
-        // while(avgLoss > 0.1){
-        for(int p = 0; p < 10; p++){
+        while(avgLoss > 0.1){
+        // for(int p = 0; p < 10; p++){
             avgLoss = 0;
             for(int i = 0; i < batches.length; i++){
                 for(int j = 0; j < batches[i].length; j++){
@@ -72,9 +72,9 @@ public class Main {
             avgLoss /= (batches[0].length * batches.length);
             System.out.println(ANSI_GREEN +"Average Loss: " + avgLoss + ANSI_RESET);
             writer.println(epoch + ", " + avgLoss);
-            epoch++; //its not printing the average loss
+            epoch++;
 
-        } //its not printing
+        }
         System.out.println(ANSI_CYAN + "Completed in " + epoch + " epochs" + ANSI_RESET);
         for(int i = 0; i < model.layers.size(); i++){
             System.out.println("Forward: " + model.layers.get(i).forwardTime);

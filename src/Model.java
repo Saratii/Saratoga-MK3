@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class Model {
-    ArrayList<Layer> layers = new ArrayList<>();
+    public ArrayList<Layer> layers = new ArrayList<>();
     Matrix inputs;
     Matrix expected;
     long startTime;
