@@ -148,7 +148,24 @@ public class Matrix {
         }
         return sum;
     }
-    
+    public static Double[] simpleCov(Double[] input, Double[] kernal){
+        int inputSize = (int)Math.sqrt(input.length);
+        int kernalSize = (int)Math.sqrt(kernal.length);
+        int resultSize = inputSize - kernalSize + 1;
+        Double[] result = new Double[resultSize * resultSize];
+        for (int y = 0; y < resultSize; y++) {
+            for (int x = 0; x < resultSize; x++) {
+                double sum = 0;
+                for (int j = 0; j < kernalSize; j++) {
+                    for (int i = 0; i < kernalSize; i++) {
+                        sum += input[(y + j) * inputSize + (x + i)] * kernal[j * kernalSize + i];
+                    }
+                }
+                result[y * resultSize + x] = sum;
+            }
+        }
+        return result;
+    }
     public Matrix convolution(Matrix kernal){
         Matrix resultant = new Matrix(z * kernal.z, rows - kernal.rows + 1, cols - kernal.cols + 1);
         int thisJ, thisK, iz, imz, i, j, k, jj, kk;
@@ -203,46 +220,7 @@ public class Matrix {
         }
         return resultant;
     }
-    public Matrix bigConvolution2(Matrix kernal){
-        int blockSize = 32;
-        Matrix resultant = new Matrix(z * kernal.z, rows + kernal.rows - 1, cols + kernal.cols - 1);
-        int thisJ, thisK, iz, imz, i, j, k, jj, kk;
-        for(i = 0 ; i < resultant.z; i++){ //ive already tried
-            iz = i/z;
-            imz = i % z;
-            for(j = 0; j < resultant.rows; j++){
-                int jjStart = Math.max(0, kernal.rows - j - 1);
-                int jjEnd = Math.min(kernal.rows, rows - j + kernal.rows - 1);
-                int resultantRowIndex = j * resultant.cols;
-                for(k = 0; k < resultant.cols; k++){
-                    int kkStart = Math.max(0, kernal.cols - k - 1);
-                    int kkEnd = Math.min(kernal.cols, cols - k + kernal.cols - 1);
-                    double dotProd = 0;
-                    for(int blockRowIndex = jjStart; blockRowIndex < jjEnd + blockSize - 1; blockRowIndex += blockSize){
-                        for(int blockColIndex = kkStart; blockColIndex < kkEnd + blockSize - 1; blockColIndex += blockSize){
-                            for(jj = blockRowIndex; jj < blockRowIndex + blockSize && jj < jjEnd; jj++){
-                                int rowIndex = (j + jj - kernal.rows + 1) * cols;
-                                for(kk = blockColIndex; kk < blockColIndex + blockSize && kk < kkEnd; kk++){
-                                    dotProd += matrix[imz][rowIndex + k + kk - kernal.cols + 1] * kernal.matrix[iz][jj*kernal.cols + kk];
-                                }
-                            }
-                        }
-                    }
-                    // for(jj = jjStart; jj < jjEnd; jj++){
-                    //     thisJ = j + jj - kernal.rows + 1;
-                    //     int rowIndex = thisJ * cols;
-                    //     int kernalRowIndex = jj * kernal.cols;
-                    //     for(kk = kkStart; kk < kkEnd; kk++){
-                    //         thisK = k + kk - kernal.cols + 1;
-                    //         dotProd += matrix[imz][rowIndex + thisK] * kernal.matrix[iz][kernalRowIndex + kk];
-                    //     }
-                    // }
-                    resultant.matrix[i][resultantRowIndex + k] = dotProd;
-                }
-            }
-        }
-        return resultant;
-    }
+    
     public void display(BufferedImage image){
         // if(frame==null){
             frame=new JFrame();
@@ -315,4 +293,17 @@ public class Matrix {
         }
         return true;
     }
+    public void add(Matrix b){
+        for(int i = 0; i < z; i++){
+            for(int j = 0; j < rows * cols; j++){
+                matrix[i][j] += b.matrix[i][j];
+            }
+        }
+    }
+    public static void seedZerosDouble(Double[] a){
+        for(int i = 0; i < a.length; i++){
+            a[i] = 0.0;
+        }
+    }
+    
 }
