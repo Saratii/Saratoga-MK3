@@ -64,7 +64,7 @@ public class DenseLayer extends Layer{
     public void write() throws FileNotFoundException, UnsupportedEncodingException{
         Random r = new Random();
         int k = r.nextInt(10000, 99999);
-        PrintWriter writer = new PrintWriter("logs/log-Dense.txt" + k, "UTF-8");
+        PrintWriter writer = new PrintWriter("logs/log-Dense" + k, "UTF-8");
         writer.println("Dense Layer");
         writer.println("Total Parameters{" + (weights.size + biases.size) + "}");
         writer.println("Number of Nodes{" + NUM_NODES + "}\n");

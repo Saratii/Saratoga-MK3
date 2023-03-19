@@ -12,7 +12,7 @@ public class Main {
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_CYAN = "\u001B[36m";
-    public static double ALPHA = 0.001;
+    public static double ALPHA = 0.0001;
     public static double batchSize = 30;
     public static void main(String[] args) throws IOException {
         File folder = new File("logs");
@@ -59,8 +59,7 @@ public class Main {
         int epoch = 0;
         ALPHA /= batchSize;
         double avgLoss = Double.POSITIVE_INFINITY;
-        while(avgLoss > 0.1){
-        // for(int p = 0; p < 10; p++){
+        for(int p = 0; p < 2000; p++){
             avgLoss = 0;
             for(int i = 0; i < batches.length; i++){
                 for(int j = 0; j < batches[i].length; j++){
