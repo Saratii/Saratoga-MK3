@@ -80,7 +80,7 @@ public class ConvolutionLayer extends Layer{
     public void write() throws FileNotFoundException, UnsupportedEncodingException{
         Random r = new Random();
         int k = r.nextInt(10000, 99999);
-        PrintWriter writer = new PrintWriter("logs/log-Conv.txt" + k, "UTF-8");
+        PrintWriter writer = new PrintWriter("logs/log-Conv" + k, "UTF-8");
         writer.println("Convolutional Layer");
         writer.println("Total Parameters{" + (kernals.length * kernals[0].size) + "}");
         writer.println("Number of Kernals{" + kernals.length + "}");
