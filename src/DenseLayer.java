@@ -66,6 +66,7 @@ public class DenseLayer extends Layer{
         writer.println(Main.model.layers.get(layerIndex));
         writer.println("Total Parameters{" + (weights.size + biases.size) + "}");
         writer.println("Number of Nodes{" + NUM_NODES + "}\n");
+        writer.println("Number of Inputs{" + (inputs.size) + "}");
         writer.println(biases.toString());
         writer.println("Number of weights{" + inputs.size + ", " + NUM_NODES + "}\n");
         writer.println(weights.toString());
