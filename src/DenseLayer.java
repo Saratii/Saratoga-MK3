@@ -61,11 +61,9 @@ public class DenseLayer extends Layer{
             weights.matrix[0][i] -= weightGradient.matrix[0][i] * Main.ALPHA;
         }
     }
-    public void write() throws FileNotFoundException, UnsupportedEncodingException{
-        Random r = new Random();
-        int k = r.nextInt(10000, 99999);
-        PrintWriter writer = new PrintWriter("logs/log-Dense" + k, "UTF-8");
-        writer.println("Dense Layer");
+    public void write(int layerIndex) throws FileNotFoundException, UnsupportedEncodingException{
+        PrintWriter writer = new PrintWriter("logs/log-" +  Main.model.layers.get(layerIndex), "UTF-8");
+        writer.println(Main.model.layers.get(layerIndex));
         writer.println("Total Parameters{" + (weights.size + biases.size) + "}");
         writer.println("Number of Nodes{" + NUM_NODES + "}\n");
         writer.println(biases.toString());

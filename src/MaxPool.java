@@ -1,5 +1,9 @@
 package src;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+
 public class MaxPool extends Layer{
     int kernalSize;
     int z;
@@ -53,6 +57,12 @@ public class MaxPool extends Layer{
             }
         }
         return gradients;
+    }
+    public void write(int layerIndex) throws FileNotFoundException, UnsupportedEncodingException{
+        PrintWriter writer = new PrintWriter("logs/log-" +  Main.model.layers.get(layerIndex), "UTF-8");
+        writer.println(Main.model.layers.get(layerIndex));
+        writer.println("Size of Kernals{" + kernalSize + "}");
+        writer.close();
     }
 }
 

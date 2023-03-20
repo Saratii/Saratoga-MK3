@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib import style
+from matplotlib import rcParams
+rcParams['toolbar'] = 'None'
 # Set the style to dark mode
 style.use('dark_background')
 
