@@ -15,7 +15,7 @@ public class Layer {
     public void updateParams(){
         
     }
-    public void write() throws FileNotFoundException, UnsupportedEncodingException{
+    public void write(int layerIndex) throws FileNotFoundException, UnsupportedEncodingException{
 
     }
 }

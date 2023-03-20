@@ -1,5 +1,9 @@
 package src;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+
 public class Flatten extends Layer{
     int z;
     int rows;
@@ -24,5 +28,10 @@ public class Flatten extends Layer{
             }
         }
         return result;
+    }
+    public void write(int layerIndex) throws FileNotFoundException, UnsupportedEncodingException{
+        PrintWriter writer = new PrintWriter("logs/log-" +  Main.model.layers.get(layerIndex), "UTF-8");
+        writer.println(Main.model.layers.get(layerIndex));
+        writer.close();
     }
 }

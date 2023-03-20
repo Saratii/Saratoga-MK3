@@ -1,7 +1,11 @@
 package src;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -14,7 +18,17 @@ public class Main {
     public static final String ANSI_CYAN = "\u001B[36m";
     public static double ALPHA = 0.0001;
     public static double batchSize = 30;
+    public static Model model;
     public static void main(String[] args) throws IOException {
+        List<Path> dolphinDirectory = Files.list(Path.of("Aminals/animals/dolphin")).toList();
+        List<Path> antelopeDirectory = Files.list(Path.of("Aminals/animals/antelope")).toList();
+        train();
+        Image im = new Image(dolphinDirectory.get(0), "dolphin");
+        // classify(im);
+        // ima smack you with my pimp cane
+        // goofy ahh
+    }
+    public static void train() throws IOException{
         File folder = new File("logs");
         if(folder.exists()) {
             String[] entries = folder.list();
@@ -42,24 +56,23 @@ public class Main {
                 batches[i][j] = images.get(i * batches.length + j);
             }
         }
-
-        Model model = new Model();
-        model.layers.add(new ConvolutionLayer(5, 1, 3));
+        model = new Model();
+        model.layers.add(new ConvolutionLayer(2, 1, 3));
         model.layers.add(new ReLU());
         model.layers.add(new MaxPool(3));
-        model.layers.add(new ConvolutionLayer(15, 1, 3));
+        model.layers.add(new ConvolutionLayer(2, 1, 3));
         model.layers.add(new ReLU());
         model.layers.add(new MaxPool(3));
         model.layers.add(new Flatten());
-        model.layers.add(new DenseLayer(32));
+        model.layers.add(new DenseLayer(8));
         model.layers.add(new ReLU());
         model.layers.add(new DenseLayer(2));
         model.layers.add(new Softmax());
-        model.profiling = true;
+        model.profiling = false;
         int epoch = 0;
         ALPHA /= batchSize;
         double avgLoss = Double.POSITIVE_INFINITY;
-        for(int p = 0; p < 2000; p++){
+        for(int p = 0; p < 200; p++){
             avgLoss = 0;
             for(int i = 0; i < batches.length; i++){
                 for(int j = 0; j < batches[i].length; j++){
@@ -75,13 +88,16 @@ public class Main {
 
         }
         System.out.println(ANSI_CYAN + "Completed in " + epoch + " epochs" + ANSI_RESET);
-        for(int i = 0; i < model.layers.size(); i++){
-            System.out.println("Forward: " + model.layers.get(i).forwardTime);
-            System.out.println("Backward: " + model.layers.get(i).backwardTime + "\n");
+        if(model.profiling){
+            for(int i = 0; i < model.layers.size(); i++){
+                System.out.println("Forward: " + model.layers.get(i).forwardTime);
+                System.out.println("Backward: " + model.layers.get(i).backwardTime + "\n");
+            }
         }
         writer.close();
         model.write();
-        // ima smack you with my pimp cane
-        // goofy ahh
+    }
+    public static void classify(Image im) throws FileNotFoundException, IOException{
+        Model model = build.buildModel();
     }
 }

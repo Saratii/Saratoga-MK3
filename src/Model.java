@@ -1,5 +1,6 @@
 package src;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
@@ -43,8 +44,11 @@ public class Model {
         }
     }
     public void write() throws FileNotFoundException, UnsupportedEncodingException{
-        for(Layer layer: layers){
-            layer.write();
+        PrintWriter writer = new PrintWriter("logs/log-architecture", "UTF-8");
+        for(int i = 0; i < layers.size(); i++){
+            layers.get(i).write(i);
+            writer.println(layers.get(i));
         }
+        writer.close();
     }
 }

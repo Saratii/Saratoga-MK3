@@ -77,13 +77,12 @@ public class ConvolutionLayer extends Layer{
             }
         }
     }
-    public void write() throws FileNotFoundException, UnsupportedEncodingException{
-        Random r = new Random();
-        int k = r.nextInt(10000, 99999);
-        PrintWriter writer = new PrintWriter("logs/log-Conv" + k, "UTF-8");
-        writer.println("Convolutional Layer");
+    public void write(int layerIndex) throws FileNotFoundException, UnsupportedEncodingException{
+        PrintWriter writer = new PrintWriter("logs/log-" +  Main.model.layers.get(layerIndex), "UTF-8");
+        writer.println(Main.model.layers.get(layerIndex));
         writer.println("Total Parameters{" + (kernals.length * kernals[0].size) + "}");
         writer.println("Number of Kernals{" + kernals.length + "}");
+        writer.println("Stride {" + STRIDE + "}");
         writer.println("Size of Kernals{" +  kernals[0].rows + ", " + kernals[0].cols + "}\n");
         for(Matrix kernal : kernals){
             writer.println(kernal.toString());

@@ -1,5 +1,9 @@
 package src;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+
 public class Softmax extends Layer{
     Matrix layerOutput;
     public Matrix forward(Matrix inputs){
@@ -25,13 +29,11 @@ public class Softmax extends Layer{
                 
             }
         }
-        /*why is it not this?
-        Matrix result = new Matrix(dvalues.size, 1);
-        for(int i = 0; i < dvalues.size; i++){
-            result.matrix[i] = layerOutput.matrix[i] - expectedValues[i];
-        }
-        */
-        
         return result.multiply(dvalues);
+    }
+    public void write(int layerIndex) throws FileNotFoundException, UnsupportedEncodingException{
+        PrintWriter writer = new PrintWriter("logs/log-" +  Main.model.layers.get(layerIndex), "UTF-8");
+        writer.println(Main.model.layers.get(layerIndex));
+        writer.close();
     }
 }
