@@ -17,7 +17,7 @@ public class Image {
     String stringLabel;
     BufferedImage bufferedImage;
     public Image(Path path, String label) throws IOException{
-        this.bufferedImage = Matrix.resizeImage(Matrix.makeSquare(ImageIO.read(path.toFile())), 26, 26);
+        this.bufferedImage = Matrix.resizeImage(Matrix.makeSquare(ImageIO.read(path.toFile())), 50, 50);
         this.imageData = Matrix.imageToMatrix(bufferedImage);
         imageData.normalizePixels();
         this.label = new Matrix(1, 2, 1);

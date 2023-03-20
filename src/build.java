@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,12 +21,15 @@ public class build {
                     int numKernals = 0;
                     int stride = 0;
                     int kernalSize = 0;
+                    Matrix[] kernals = new Matrix[0];
+                    int kernalIndex = 0;
                     try (BufferedReader configFile = new BufferedReader(new FileReader("logs/log-" + line))) {
                         while((line = configFile.readLine()) != null){
                             if(line.contains("Number of Kernals")){
                                 matcher = pattern.matcher(line);
                                 if (matcher.find()){
                                     numKernals = Integer.parseInt(matcher.group());
+                                    kernals = new Matrix[numKernals];
                                 }
                             } else if(line.contains("Stride")){
                                 matcher = pattern.matcher(line);
@@ -36,29 +40,59 @@ public class build {
                                 matcher = pattern.matcher(line);
                                 if (matcher.find()){
                                     kernalSize = Integer.parseInt(matcher.group());
-                                    break;
                                 }
+                            } else if(line.contains("[")){
+                                String s = line.replace("[", "").replace("]", "").replace(" ", "");
+                                String[] strings = s.split(",");
+                                Double[] doubleValues = Arrays.stream(strings).map(Double::valueOf).toArray(Double[]::new);
+                                Matrix kernal = new Matrix(1, (int)Math.sqrt(doubleValues.length), (int)Math.sqrt(doubleValues.length));
+                                kernal.matrix = new Double[][]{doubleValues};
+                                kernals[kernalIndex] = kernal;
+                                kernalIndex++;
                             }
                         }
                         ConvolutionLayer conv = new ConvolutionLayer(numKernals, stride, kernalSize);
                         conv.initialized = true;
+                        conv.kernals = kernals;
                         model.layers.add(conv);
                     }
                 } else if(layerName.equals("DenseLayer")){
                     int numNodes = 0;
+                    int numInputs;
+                    boolean biasFlag = true;
+                    Matrix weights = new Matrix(0, 0, 0);
+                    Matrix biases = new Matrix(0, 0 , 0);
                     try (BufferedReader configFile = new BufferedReader(new FileReader("logs/log-" + line))) {
                         while((line = configFile.readLine()) != null){
                             if(line.contains("Number of Nodes")){
                                 matcher = pattern.matcher(line);
                                 if (matcher.find()){
                                     numNodes = Integer.parseInt(matcher.group());
-                                    break;
+                                    biases = new Matrix(1, numNodes, 1);
                                 }
+                            } else if(line.contains("Number of Inputs")){
+                                matcher = pattern.matcher(line);
+                                if(matcher.find()){
+                                    numInputs = Integer.parseInt(matcher.group());
+                                    weights = new Matrix(1, numInputs, numNodes);
+                                }
+
+                            } else if(line.contains("[") && biasFlag == true){
+                                String s = line.replace("[", "").replace("]", "").replace(" ", "");
+                                String[] strings = s.split(",");
+                                biases.matrix[0] = Arrays.stream(strings).map(Double::valueOf).toArray(Double[]::new);
+                                biasFlag = false;
+                            } else if(line.contains("[") && biasFlag == false){
+                                String s = line.replace("[", "").replace("]", "").replace(" ", "");
+                                String[] strings = s.split(",");
+                                weights.matrix[0] = Arrays.stream(strings).map(Double::valueOf).toArray(Double[]::new);
                             }
                         }
                     }
                     DenseLayer dense = new DenseLayer(numNodes);
                     dense.initialized = true;
+                    dense.weights = weights;
+                    dense.biases = biases;
                     model.layers.add(dense);
                 } else if(layerName.equals("Flatten")){
                     model.layers.add(new Flatten());

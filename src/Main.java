@@ -1,11 +1,8 @@
 package src;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -24,7 +21,7 @@ public class Main {
         List<Path> antelopeDirectory = Files.list(Path.of("Aminals/animals/antelope")).toList();
         train();
         Image im = new Image(dolphinDirectory.get(0), "dolphin");
-        // classify(im);
+        classify(im);
         // ima smack you with my pimp cane
         // goofy ahh
     }
@@ -57,14 +54,14 @@ public class Main {
             }
         }
         model = new Model();
-        model.layers.add(new ConvolutionLayer(2, 1, 3));
+        model.layers.add(new ConvolutionLayer(15, 1, 3));
         model.layers.add(new ReLU());
         model.layers.add(new MaxPool(3));
-        model.layers.add(new ConvolutionLayer(2, 1, 3));
+        model.layers.add(new ConvolutionLayer(15, 1, 3));
         model.layers.add(new ReLU());
         model.layers.add(new MaxPool(3));
         model.layers.add(new Flatten());
-        model.layers.add(new DenseLayer(8));
+        model.layers.add(new DenseLayer(128));
         model.layers.add(new ReLU());
         model.layers.add(new DenseLayer(2));
         model.layers.add(new Softmax());
@@ -72,7 +69,8 @@ public class Main {
         int epoch = 0;
         ALPHA /= batchSize;
         double avgLoss = Double.POSITIVE_INFINITY;
-        for(int p = 0; p < 200; p++){
+        while(avgLoss > 0.01){
+        // for(int p = 0; p < 2; p++){
             avgLoss = 0;
             for(int i = 0; i < batches.length; i++){
                 for(int j = 0; j < batches[i].length; j++){
@@ -98,6 +96,7 @@ public class Main {
         model.write();
     }
     public static void classify(Image im) throws FileNotFoundException, IOException{
-        Model model = build.buildModel();
+        Model model2 = build.buildModel();
+        int j = 0;
     }
 }
