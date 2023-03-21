@@ -6,8 +6,9 @@ import java.io.UnsupportedEncodingException;
 
 public class Softmax extends Layer{
     Matrix layerOutput;
+    Matrix result;
     public Matrix forward(Matrix inputs){
-        Matrix result = new Matrix(1, inputs.size, 1);
+        result = new Matrix(1, inputs.size, 1);
         for(int i = 0; i < inputs.size; i++){
             double shiftConstant = Matrix.maxValue(inputs.matrix[0]);
             double sum = 0.0;
