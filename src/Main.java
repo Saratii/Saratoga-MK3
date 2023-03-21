@@ -19,9 +19,21 @@ public class Main {
     public static void main(String[] args) throws IOException {
         List<Path> dolphinDirectory = Files.list(Path.of("Aminals/animals/dolphin")).toList();
         List<Path> antelopeDirectory = Files.list(Path.of("Aminals/animals/antelope")).toList();
+        List<Path> testDolphins = Files.list(Path.of("images/testDolphins")).toList();
+        List<Path> testAntelopes = Files.list(Path.of("images/testAntelopes")).toList();
         // train();
-        Image im = new Image(dolphinDirectory.get(6), "dolphin");
-        classify(im);
+        
+        for(Path p: testDolphins){
+            Image im = new Image(p, "dolphin");
+            classify(im);
+            System.out.println("\n");
+        }
+        for(Path p: testAntelopes){
+            Image im = new Image(p, "antelope");
+            classify(im);
+            System.out.println("\n");
+        }
+       
         // ima smack you with my pimp cane
         // goofy ahh
     }
