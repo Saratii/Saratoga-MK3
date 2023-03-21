@@ -93,6 +93,8 @@ public class build {
                     dense.initialized = true;
                     dense.weights = weights;
                     dense.biases = biases;
+                    dense.outputs = new Matrix(1, numNodes, 1);
+
                     model.layers.add(dense);
                 } else if(layerName.equals("Flatten")){
                     model.layers.add(new Flatten());
