@@ -47,7 +47,7 @@ public class MaxPool extends Layer{
     }
     public Matrix backward(Matrix prevGradients){
         int i = 0;
-        for(int j = 0; j < gradients.z; j++){
+        for(int j = 0; j < gradients.z; j++){//why only iterate up to gradients.z when higher values are accepted
             for(int k = 0; k < gradients.rows * gradients.cols; k++){
                 gradients.matrix[j][k] *= prevGradients.matrix[j][prevGradients.convert(k / gradients.cols / kernalSize, (k%gradients.cols) / kernalSize)];
                 i++;

@@ -3,7 +3,6 @@ package src;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.Random;
 
 public class DenseLayer extends Layer{
     public Matrix weights;
