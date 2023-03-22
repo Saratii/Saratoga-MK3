@@ -3,7 +3,6 @@ package src;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.Random;
 
 public class ConvolutionLayer extends Layer{
     Matrix input;
@@ -73,7 +72,7 @@ public class ConvolutionLayer extends Layer{
     public void updateParams(){
         for(int i = 0; i < kernalGradient.length; i++){
             for(int j = 0; j < kernalGradient[i].size; j++){
-                kernals[i].matrix[0][j] -= kernalGradient[i].matrix[0][j] * Main.ALPHA / Main.batchSize;
+                kernals[i].matrix[0][j] -= kernalGradient[i].matrix[0][j] * Main.ALPHA;
             }
         }
     }

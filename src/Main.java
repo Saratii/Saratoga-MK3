@@ -13,6 +13,7 @@ public class Main {
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_PURPLE = "\033[0;35m";
     public static double ALPHA = 0.0001;
     public static double batchSize = 30;
     public static Model model;
@@ -21,18 +22,18 @@ public class Main {
         List<Path> antelopeDirectory = Files.list(Path.of("Aminals/animals/antelope")).toList();
         List<Path> testDolphins = Files.list(Path.of("images/testDolphins")).toList();
         List<Path> testAntelopes = Files.list(Path.of("images/testAntelopes")).toList();
-        // train();
+        train();
         
-        for(Path p: testDolphins){
-            Image im = new Image(p, "dolphin");
-            classify(im);
-            System.out.println("\n");
-        }
-        for(Path p: testAntelopes){
-            Image im = new Image(p, "antelope");
-            classify(im);
-            System.out.println("\n");
-        }
+        // for(Path p: testDolphins){
+        //     Image im = new Image(p, "dolphin");
+        //     classify(im);
+        //     System.out.println("\n");
+        // }
+        // for(Path p: testAntelopes){
+        //     Image im = new Image(p, "antelope");
+        //     classify(im);
+        //     System.out.println("\n");
+        // }
        
         // ima smack you with my pimp cane
         // goofy ahh
@@ -66,14 +67,14 @@ public class Main {
             }
         }
         model = new Model();
-        model.layers.add(new ConvolutionLayer(15, 1, 3));
+        model.layers.add(new ConvolutionLayer(2, 1, 2));
         model.layers.add(new ReLU());
-        model.layers.add(new MaxPool(3));
-        model.layers.add(new ConvolutionLayer(15, 1, 3));
+        model.layers.add(new MaxPool(2));
+        model.layers.add(new ConvolutionLayer(8, 1, 2));
         model.layers.add(new ReLU());
-        model.layers.add(new MaxPool(3));
+        model.layers.add(new ConvolutionLayer(2, 1, 2));
         model.layers.add(new Flatten());
-        model.layers.add(new DenseLayer(128));
+        model.layers.add(new DenseLayer(10));
         model.layers.add(new ReLU());
         model.layers.add(new DenseLayer(2));
         model.layers.add(new Softmax());
@@ -81,8 +82,9 @@ public class Main {
         int epoch = 0;
         ALPHA /= batchSize;
         double avgLoss = Double.POSITIVE_INFINITY;
-        while(avgLoss > 0.01){
-        // for(int p = 0; p < 2; p++){
+        long startTime = System.currentTimeMillis();
+        // while(avgLoss > 0.01){
+        for(int p = 0; p < 10; p++){
             avgLoss = 0;
             for(int i = 0; i < batches.length; i++){
                 for(int j = 0; j < batches[i].length; j++){
@@ -98,6 +100,7 @@ public class Main {
 
         }
         System.out.println(ANSI_CYAN + "Completed in " + epoch + " epochs" + ANSI_RESET);
+        System.out.println(ANSI_CYAN + "Average time per epoch: " + ((System.currentTimeMillis() - startTime) / epoch) + " ms" + ANSI_RESET);
         if(model.profiling){
             for(int i = 0; i < model.layers.size(); i++){
                 System.out.println("Forward: " + model.layers.get(i).forwardTime);
@@ -107,6 +110,7 @@ public class Main {
         writer.close();
         model.write();
     }
+    
     public static void classify(Image im) throws FileNotFoundException, IOException{
         Model model2 = build.buildModel();
         
@@ -114,6 +118,6 @@ public class Main {
         Softmax soft = (Softmax) model2.layers.get(model2.layers.size() - 1);
         System.out.println("Predicted: "  + soft.result);
         System.out.println("Actual: " + im.label);
-        int j = 0;
+
     }
 }
