@@ -72,7 +72,7 @@ public class Main {
         model.layers.add(new MaxPool(2));
         model.layers.add(new ConvolutionLayer(8, 1, 2));
         model.layers.add(new ReLU());
-        model.layers.add(new ConvolutionLayer(2, 1, 2));
+        model.layers.add(new MaxPool(2));
         model.layers.add(new Flatten());
         model.layers.add(new DenseLayer(10));
         model.layers.add(new ReLU());
