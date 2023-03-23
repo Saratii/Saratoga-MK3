@@ -22,18 +22,18 @@ public class Main {
         List<Path> antelopeDirectory = Files.list(Path.of("Aminals/animals/antelope")).toList();
         List<Path> testDolphins = Files.list(Path.of("images/testDolphins")).toList();
         List<Path> testAntelopes = Files.list(Path.of("images/testAntelopes")).toList();
-        train();
+        // train();
         
-        // for(Path p: testDolphins){
-        //     Image im = new Image(p, "dolphin");
-        //     classify(im);
-        //     System.out.println("\n");
-        // }
-        // for(Path p: testAntelopes){
-        //     Image im = new Image(p, "antelope");
-        //     classify(im);
-        //     System.out.println("\n");
-        // }
+        for(Path p: testDolphins){
+            Image im = new Image(p, "dolphin");
+            classify(im);
+            System.out.println("\n");
+        }
+        for(Path p: testAntelopes){
+            Image im = new Image(p, "antelope");
+            classify(im);
+            System.out.println("\n");
+        }
        
         // ima smack you with my pimp cane
         // goofy ahh
@@ -70,11 +70,11 @@ public class Main {
         model.layers.add(new ConvolutionLayer(2, 1, 2));
         model.layers.add(new ReLU());
         model.layers.add(new MaxPool(2));
-        model.layers.add(new ConvolutionLayer(8, 1, 2));
+        model.layers.add(new ConvolutionLayer(4, 1, 2));
         model.layers.add(new ReLU());
         model.layers.add(new MaxPool(2));
         model.layers.add(new Flatten());
-        model.layers.add(new DenseLayer(10));
+        model.layers.add(new DenseLayer(64));
         model.layers.add(new ReLU());
         model.layers.add(new DenseLayer(2));
         model.layers.add(new Softmax());
@@ -83,8 +83,8 @@ public class Main {
         ALPHA /= batchSize;
         double avgLoss = Double.POSITIVE_INFINITY;
         long startTime = System.currentTimeMillis();
-        // while(avgLoss > 0.01){
-        for(int p = 0; p < 10; p++){
+        while(avgLoss > 0.01){
+        // for(int p = 0; p < 200; p++){
             avgLoss = 0;
             for(int i = 0; i < batches.length; i++){
                 for(int j = 0; j < batches[i].length; j++){
@@ -118,6 +118,5 @@ public class Main {
         Softmax soft = (Softmax) model2.layers.get(model2.layers.size() - 1);
         System.out.println("Predicted: "  + soft.result);
         System.out.println("Actual: " + im.label);
-
     }
 }

@@ -49,14 +49,15 @@ public class ConvolutionLayer extends Layer{
     }
     public Matrix backward(Matrix previousGradients){ //dLdO = previousGradients
         Matrix dldf = input.convolution(previousGradients);
-        Matrix result = new Matrix(previousGradients.z * kernals.length, input.rows, input.cols);
+        Matrix result = new Matrix(input.z, input.rows, input.cols);
+        result.seedZeros();
         for(int i = 0; i < kernals.length; i++){
             Matrix temp = kernals[i];
-            temp.reverse(); //i just need to know how to fix this file not optimize anything
-            Matrix dldx = temp.bigConvolution(previousGradients);
-            for(int h = 0; h < dldx.z; h++){
+            temp.reverse(); 
+            Matrix dldx = temp.doubleBigConvolution(previousGradients.matrix[i], previousGradients.rows, previousGradients.cols);
+            for(int h = 0; h < result.z; h++){
                 for(int k = 0; k < dldx.rows * dldx.cols; k++){
-                    result.matrix[i * previousGradients.z + h][k] = dldx.matrix[h][k];
+                    result.matrix[h][k] += dldx.matrix[0][k];
                 }
             }
             for(int j = 0; j < kernals[i].size; j++){

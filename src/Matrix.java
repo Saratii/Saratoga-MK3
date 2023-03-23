@@ -220,6 +220,35 @@ public class Matrix {
         }
         return resultant;
     }
+    public Matrix doubleBigConvolution(Double[] kernal, int kernalRows, int kernalCols){
+        Matrix resultant = new Matrix(z, rows + kernalRows - 1, cols + kernalCols - 1);
+        int thisJ, thisK, iz, imz, i, j, k, jj, kk;
+        for(i = 0 ; i < resultant.z; i++){
+            iz = i/z;
+            imz = i % z;
+            for(j = 0; j < resultant.rows; j++){
+                int jjStart = Math.max(0, kernalRows - j - 1);
+                int jjEnd = Math.min(kernalRows, rows - j + kernalRows - 1);
+                int resultantRowIndex = j * resultant.cols;
+                for(k = 0; k < resultant.cols; k++){
+                    int kkStart = Math.max(0, kernalCols - k - 1);
+                    int kkEnd = Math.min(kernalCols, cols - k + kernalCols - 1);
+                    double dotProd = 0;
+                    for(jj = jjStart; jj < jjEnd; jj++){
+                        thisJ = j + jj - kernalRows + 1;
+                        int rowIndex = thisJ * cols;
+                        int kernalRowIndex = jj * kernalCols;
+                        for(kk = kkStart; kk < kkEnd; kk++){
+                            thisK = k + kk - kernalCols + 1;
+                            dotProd += matrix[imz][rowIndex + thisK] * kernal[kernalRowIndex + kk];
+                        }
+                    }
+                    resultant.matrix[i][resultantRowIndex + k] = dotProd;
+                }
+            }
+        }
+        return resultant;
+    }
     
     public void display(BufferedImage image){
         // if(frame==null){
