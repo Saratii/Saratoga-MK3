@@ -32,10 +32,6 @@ public class ConvolutionLayer extends Layer{
             }
             initialized = true;
         }
-        // Matrix result = new Matrix(NUM_FEATURE_SETS * input.z, input.rows - KERNAL_SIZE + 1, input.cols - KERNAL_SIZE + 1);
-        // for(int i = 0 ; i < result.matrix.length; i++){
-        //     result.matrix[i] = input.convolution(kernals[i % kernals.length]).matrix[0];
-        // }
         Matrix result = new Matrix(NUM_FEATURE_SETS, input.rows - KERNAL_SIZE + 1, input.cols - KERNAL_SIZE + 1);
         result.seedZeros();
         for(int j = 0; j < NUM_FEATURE_SETS; j++){
