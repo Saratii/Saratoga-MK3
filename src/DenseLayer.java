@@ -3,6 +3,7 @@ package src;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 public class DenseLayer extends Layer{
     public Matrix weights;
@@ -36,6 +37,11 @@ public class DenseLayer extends Layer{
                 sum += inputs.matrix[0][j] * weights.matrix[0][i * inputs.rows * inputs.cols + j];
             }
             outputs.matrix[0][i] = sum;
+            if(Double.isNaN(outputs.matrix[0][i])){
+                System.out.println("mommu did a fucky wucky");
+                Arrays.toString(inputs.matrix[0]);
+                Arrays.toString(weights.matrix[0]);
+            }
         }
         inputs = outputs;
         return outputs;
@@ -48,6 +54,11 @@ public class DenseLayer extends Layer{
             for(int j = 0; j < NUM_NODES; j++){
                 passedOnDerivatives.matrix[0][i] += previousDerivatives.matrix[0][j] * weights.matrix[0][j * inputs.size + i];
                 weightGradient.matrix[0][j * inputs.size + i] += previousDerivatives.matrix[0][j] * inputs.matrix[0][i];
+                if(Double.isNaN(weightGradient.matrix[0][j * inputs.size + i])){
+                    System.out.println("mommu did a fucky wucky");
+                    Arrays.toString(inputs.matrix[0]);
+                    Arrays.toString(previousDerivatives.matrix[0]);
+                }
             }
         }
         return passedOnDerivatives;

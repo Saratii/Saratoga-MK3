@@ -3,6 +3,7 @@ package src;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 public class Softmax extends Layer{
     Matrix layerOutput;
@@ -17,7 +18,10 @@ public class Softmax extends Layer{
             }
            
             result.matrix[0][i] = Math.exp(inputs.matrix[0][i] - shiftConstant) / sum;
-           
+            if(Double.isNaN(result.matrix[0][i])){
+                System.out.println("mommu did a fucky wucky");
+                Arrays.toString(inputs.matrix[0]);
+            }
         }
         layerOutput = result;
         return result;
@@ -27,6 +31,10 @@ public class Softmax extends Layer{
         for(int i = 0; i < dvalues.size; i++){
             for(int j = 0; j < dvalues.size; j++){
                 result.matrix[0][j*dvalues.size + i] = layerOutput.matrix[0][i] * ((i == j ? 1 : 0) - layerOutput.matrix[0][j]);
+                if(Double.isNaN(result.matrix[0][j*dvalues.size + i])){
+                    System.out.println("mommu did a fucky wucky");
+                    Arrays.toString(layerOutput.matrix[0]);
+                }
                 
             }
         }
