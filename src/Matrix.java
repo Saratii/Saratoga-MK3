@@ -13,9 +13,9 @@ public class Matrix {
     private static JFrame frame;
     private Random r = new Random();
     public Double[][] matrix;
-    int z;
-    int rows;
-    int cols;
+    public int z;
+    public int rows;
+    public int cols;
     public int size;
     public Matrix(int z, int rows, int cols){
         this.rows = rows;
