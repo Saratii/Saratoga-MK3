@@ -1,0 +1,10 @@
+src.ConvolutionLayer@2a40cd94
+Total Parameters{8}
+Number of Kernals{2}
+Stride {1}
+Size of Kernals{2, 2}
+
+[-0.5933, -0.2180, 0.2754, -0.2656]
+
+[0.8395, -0.4950, 0.2480, 0.7574]
+

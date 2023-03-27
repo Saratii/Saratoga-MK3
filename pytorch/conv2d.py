@@ -1,5 +1,14 @@
 import torch.nn as nn
 import torch
-conv = nn.Conv2d(1, 1, 2, stride=1)
-input = torch.randn(1, 4, 4)
+torch.manual_seed(0) 
+
+conv = nn.Conv2d(3, 2, 2)
+input = torch.randn(3, 10, 10)
+print("input")
+print(input)
+print("bias")
+print(conv.bias)
+print("weight")
+print(conv.weight)
+print("output")
 print(conv(input))
