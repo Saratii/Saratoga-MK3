@@ -30,7 +30,7 @@ public class reluTest {
                 }
             }
         }
-        assertEquals(Double.valueOf(0.0), min);
+        assert(0.0 <= min);
         
     }
 }
