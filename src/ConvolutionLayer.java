@@ -17,10 +17,6 @@ public class ConvolutionLayer extends Layer{
         this.NUM_FEATURE_SETS = NUM_FEATURE_SETS;
         this.STRIDE = STRIDE;
         this.KERNAL_SIZE = KERNAL_SIZE;
-    }
-    
-    public Matrix forward(Matrix input){
-        this.input = input;
         if(!initialized){
             this.kernals = new Matrix[NUM_FEATURE_SETS];
             kernalGradient = new Matrix[NUM_FEATURE_SETS];
@@ -32,6 +28,11 @@ public class ConvolutionLayer extends Layer{
             }
             initialized = true;
         }
+    }
+    
+    public Matrix forward(Matrix input){
+        this.input = input;
+        
         Matrix result = new Matrix(NUM_FEATURE_SETS, input.rows - KERNAL_SIZE + 1, input.cols - KERNAL_SIZE + 1);
         result.seedZeros();
         for(int j = 0; j < NUM_FEATURE_SETS; j++){
