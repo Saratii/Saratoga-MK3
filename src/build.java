@@ -21,6 +21,8 @@ public class build {
                     int numKernals = 0;
                     int stride = 0;
                     int kernalSize = 0;
+                    int inputChannels = 0;
+                    int outputChannels = 0;
                     Matrix[] kernals = new Matrix[0];
                     int kernalIndex = 0;
                     try (BufferedReader configFile = new BufferedReader(new FileReader("logs/log-" + line))) {
@@ -41,6 +43,16 @@ public class build {
                                 if (matcher.find()){
                                     kernalSize = Integer.parseInt(matcher.group());
                                 }
+                            } else if(line.contains("Number of Input Channels")){
+                                matcher = pattern.matcher(line);
+                                if (matcher.find()){
+                                    inputChannels = Integer.parseInt(matcher.group());
+                                }
+                            } else if(line.contains("Number of Output Channels")){
+                                matcher = pattern.matcher(line);
+                                if (matcher.find()){
+                                    outputChannels = Integer.parseInt(matcher.group());
+                                }
                             } else if(line.contains("[")){
                                 String s = line.replace("[", "").replace("]", "").replace(" ", "");
                                 String[] strings = s.split(",");
@@ -51,7 +63,7 @@ public class build {
                                 kernalIndex++;
                             }
                         }
-                        ConvolutionLayer conv = new ConvolutionLayer(numKernals, stride, kernalSize);
+                        ConvolutionLayer conv = new ConvolutionLayer(inputChannels, outputChannels, stride, kernalSize);
                         conv.initialized = true;
                         conv.kernals = kernals;
                         model.layers.add(conv);

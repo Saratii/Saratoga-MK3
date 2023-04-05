@@ -12,3 +12,10 @@ print("weight")
 print(conv.weight)
 print("output")
 print(conv(input))
+
+#input: 3,10,10
+#bias: 1x2
+#weight: 2x3x2x2
+#output: 2x9x9
+
+#input channels, output channels, size of kernal

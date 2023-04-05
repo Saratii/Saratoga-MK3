@@ -67,10 +67,10 @@ public class Main {
             }
         }
         model = new Model();
-        model.layers.add(new ConvolutionLayer(2, 1, 2));
+        model.layers.add(new ConvolutionLayer(1, 2, 1, 2));
         model.layers.add(new ReLU());
         model.layers.add(new MaxPool(2));
-        model.layers.add(new ConvolutionLayer(4, 1, 2));
+        model.layers.add(new ConvolutionLayer(2, 4, 1, 2));
         model.layers.add(new ReLU());
         model.layers.add(new MaxPool(2));
         model.layers.add(new Flatten());
