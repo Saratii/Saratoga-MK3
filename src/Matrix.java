@@ -30,6 +30,7 @@ public class Matrix {
         for(int j = 0; j < z; j++){
             s.append("[");
             for(int i = 0; i < rows * cols; i++) {
+                Double d = matrix[0][137];
                 s.append(String.format("%.4f, ", matrix[j][i]));
             }
             s.append("]\n");
