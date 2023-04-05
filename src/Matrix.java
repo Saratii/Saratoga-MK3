@@ -28,9 +28,11 @@ public class Matrix {
     public String toString() {
         StringBuilder s = new StringBuilder("[");   
         for(int j = 0; j < z; j++){
+            s.append("[");
             for(int i = 0; i < rows * cols; i++) {
                 s.append(String.format("%.4f, ", matrix[j][i]));
             }
+            s.append("]\n");
         }
         s.deleteCharAt(s.length()-1).deleteCharAt(s.length()-1);
         return s.append("]").toString();
