@@ -18,42 +18,51 @@ public class build {
             while((line = buildFile.readLine()) != null){
                 String layerName = line.substring(line.lastIndexOf('.') + 1, line.indexOf('@'));
                 if(layerName.equals("ConvolutionLayer")){
+                    boolean biasFlag = true;
                     int numKernals = 0;
                     int stride = 0;
                     int kernalSize = 0;
                     int inputChannels = 0;
                     int outputChannels = 0;
                     Matrix[] kernals = new Matrix[0];
+                    Matrix biases = new Matrix(0, 0, 0);
                     int kernalIndex = 0;
-                    try (BufferedReader configFile = new BufferedReader(new FileReader("logs/log-" + line))) {
+                    try(BufferedReader configFile = new BufferedReader(new FileReader("logs/log-" + line))) {
                         while((line = configFile.readLine()) != null){
                             if(line.contains("Number of Kernals")){
                                 matcher = pattern.matcher(line);
-                                if (matcher.find()){
+                                if(matcher.find()){
                                     numKernals = Integer.parseInt(matcher.group());
                                     kernals = new Matrix[numKernals];
                                 }
                             } else if(line.contains("Stride")){
                                 matcher = pattern.matcher(line);
-                                if (matcher.find()){
+                                if(matcher.find()){
                                     stride = Integer.parseInt(matcher.group());
                                 }
                             } else if(line.contains("Size of Kernals")){
                                 matcher = pattern.matcher(line);
-                                if (matcher.find()){
+                                if(matcher.find()){
                                     kernalSize = Integer.parseInt(matcher.group());
                                 }
                             } else if(line.contains("Number of Input Channels")){
                                 matcher = pattern.matcher(line);
-                                if (matcher.find()){
+                                if(matcher.find()){
                                     inputChannels = Integer.parseInt(matcher.group());
                                 }
                             } else if(line.contains("Number of Output Channels")){
                                 matcher = pattern.matcher(line);
-                                if (matcher.find()){
+                                if(matcher.find()){
                                     outputChannels = Integer.parseInt(matcher.group());
                                 }
-                            } else if(line.contains("[")){
+                            } else if(line.contains("[") && biasFlag == true){
+                                String s = line.replace("[", "").replace("]", "").replace(" ", "");
+                                String[] strings = s.split(",");
+                                Double[] doubleValues = Arrays.stream(strings).map(Double::valueOf).toArray(Double[]::new);
+                                biases = new Matrix(1, doubleValues.length, 1);
+                                biases.matrix[0] = doubleValues;
+                                biasFlag = false;
+                            } else if(line.contains("[") && biasFlag == false){
                                 String s = line.replace("[", "").replace("]", "").replace(" ", "");
                                 String[] strings = s.split(",");
                                 Double[] doubleValues = Arrays.stream(strings).map(Double::valueOf).toArray(Double[]::new);
@@ -66,6 +75,7 @@ public class build {
                         ConvolutionLayer conv = new ConvolutionLayer(inputChannels, outputChannels, stride, kernalSize);
                         conv.initialized = true;
                         conv.kernals = kernals;
+                        conv.biases = biases;
                         model.layers.add(conv);
                     }
                 } else if(layerName.equals("DenseLayer")){
@@ -88,7 +98,6 @@ public class build {
                                     numInputs = Integer.parseInt(matcher.group());
                                     weights = new Matrix(1, numInputs, numNodes);
                                 }
-
                             } else if(line.contains("[") && biasFlag == true){
                                 String s = line.replace("[", "").replace("]", "").replace(" ", "");
                                 String[] strings = s.split(",");
