@@ -21,12 +21,12 @@ public class Main {
     static Image[][] batches;
     static int batchIndexForThread;
     static int imageIndexForThread;
-    final static int numThreads = 1;
-    static int threadCounter = 0;
+    final static int numThreads = 2;
     static int chunkSize = 0;
     static int remainingData = 0;
+    static Double[] threadLossSums;
     public static void main(String[] args) throws IOException {
-        List<List<Image>> data = setupData(20, 0.0);
+        List<List<Image>> data = setupData(20, 0.2);
         List<Image> trainingData = data.get(0);
         List<Image> testingData = data.get(1);
         Boolean train = true;
@@ -63,7 +63,6 @@ public class Main {
         }
         PrintWriter writer = new PrintWriter("logs/log-graph", "UTF-8");
         
-        
         batches = new Image[trainingData.size() / batchSize][batchSize];
         for(int i = 0; i < batches.length; i++){
             for(int j = 0; j < batches[0].length; j++){
@@ -90,21 +89,18 @@ public class Main {
         ALPHA /= batchSize;
         
         long startTime = System.currentTimeMillis();
-
-        
         Thread[] threads = new Thread[numThreads];
-         // num_threads
-       
-
-        while(avgLoss > 0.01 && epoch < 5){
+        threadLossSums = new Double[numThreads];
+        while(avgLoss > 0.01 && epoch < 10){
             avgLoss = 0;
             for(int i = 0; i < batches.length; i++){
                 chunkSize = Math.floorDiv(batches[i].length, numThreads); // floor division
                 remainingData = batches[i].length % numThreads; // remainder
                 batchIndexForThread = i;
-                for(threadCounter = 0; threadCounter < numThreads; threadCounter++) {
-                    threads[threadCounter] = new Thread(() -> trainImages());
-                    threads[threadCounter].start();
+                for(int j = 0; j < numThreads; j++) {
+                    final int t = j;
+                    threads[j] = new Thread(() -> trainImages(t));
+                    threads[j].start();
                 }
                 for (int j = 0; j < numThreads; j++) {
                     try {
@@ -112,6 +108,9 @@ public class Main {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                }
+                for(Double loss: threadLossSums){
+                    avgLoss+=loss;
                 }
                 model.updateParams();
             }
@@ -131,11 +130,14 @@ public class Main {
         writer.close();
         model.write();
     }
-    public static void trainImages(){
-        for(int i = threadCounter * chunkSize + Math.min(threadCounter, remainingData); i < (threadCounter + 1) * chunkSize + Math.min(i + 1, remainingData) - 1; i++){
-            avgLoss += model.forward(batches[batchIndexForThread][i].imageData, batches[batchIndexForThread][i].label);
+    public static void trainImages(int threadIndex){
+        double loss = 0;
+        for(int i = threadIndex * chunkSize + Math.min(threadIndex, remainingData); i < (threadIndex + 1) * chunkSize + Math.min(i + 1, remainingData) - 1; i++){
+            loss += model.forward(batches[batchIndexForThread][i].imageData, batches[batchIndexForThread][i].label);
             model.backward();
         }
+        threadLossSums[threadIndex] = loss;
+
     }
     public static Matrix classify(Image im, Model model) throws FileNotFoundException, IOException{
         model.forward(im.imageData, im.label);

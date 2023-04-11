@@ -3,7 +3,9 @@ package src;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class DenseLayer extends Layer{
     public Matrix weights;
@@ -12,17 +14,13 @@ public class DenseLayer extends Layer{
     int NUM_NODES;
     Boolean initialized = false;
     public Matrix biases;
-    private Matrix biasGradient;
-    private Matrix weightGradient;
+    List<Matrix> weightGradientsPerThread = new ArrayList<>();
+    List<Matrix> biasGradientsPerThread = new ArrayList<>();
     public DenseLayer(int NUM_NODES) {
         this.NUM_NODES = NUM_NODES;
     }
     public Matrix forward(Matrix inputs){
         if(!initialized){
-            weightGradient = new Matrix(1, inputs.size, NUM_NODES);
-            weightGradient.seedZeros();
-            biasGradient = new Matrix(1, NUM_NODES, 1);
-            biasGradient.seedZeros();
             biases = new Matrix(1, NUM_NODES, 1);
             biases.seedZeros();
             weights = new Matrix(1, inputs.size, NUM_NODES);
@@ -37,39 +35,35 @@ public class DenseLayer extends Layer{
                 sum += inputs.matrix[0][j] * weights.matrix[0][i * inputs.rows * inputs.cols + j];
             }
             outputs.matrix[0][i] = sum;
-            if(Double.isNaN(outputs.matrix[0][i])){
-                Arrays.toString(inputs.matrix[0]);
-                Arrays.toString(weights.matrix[0]);
-            }
         }
         inputs = outputs;
         return outputs;
     }
     public Matrix backward(Matrix previousDerivatives){
-        biasGradient = previousDerivatives;
+        biasGradientsPerThread.add(previousDerivatives);
+        Matrix weightGradient = new Matrix(1, inputs.size, NUM_NODES);
         Matrix passedOnDerivatives = new Matrix(1, inputs.size, 1);
         for(int i = 0; i < inputs.size; i++){
             passedOnDerivatives.matrix[0][i] = 0.0;
             for(int j = 0; j < NUM_NODES; j++){
                 passedOnDerivatives.matrix[0][i] += previousDerivatives.matrix[0][j] * weights.matrix[0][j * inputs.size + i];
-                weightGradient.matrix[0][j * inputs.size + i] += previousDerivatives.matrix[0][j] * inputs.matrix[0][i];
-                if(Double.isNaN(weightGradient.matrix[0][j * inputs.size + i])){
-                    Arrays.toString(inputs.matrix[0]);
-                    Arrays.toString(previousDerivatives.matrix[0]);
-                }
+                weightGradient.matrix[0][j * inputs.size + i] = previousDerivatives.matrix[0][j] * inputs.matrix[0][i];
             }
         }
+        weightGradientsPerThread.add(weightGradient);
         return passedOnDerivatives;
     }
     public void updateParams(){
-        for(int i = 0; i < biasGradient.size; i++){
-            biases.matrix[0][i] -= biasGradient.matrix[0][i] * Main.ALPHA;
+        for(int j = 0; j < biasGradientsPerThread.size(); j++){
+            for(int i = 0; i < biasGradientsPerThread.get(j).size; i++){
+                biases.matrix[0][i] -= biasGradientsPerThread.get(j).matrix[0][i] * Main.ALPHA;
+            }
         }
-        for(int i = 0; i < weightGradient.size; i++){
-            weights.matrix[0][i] -= weightGradient.matrix[0][i] * Main.ALPHA;
+        for(int j = 0; j < weightGradientsPerThread.size(); j++){
+            for(int i = 0; i < weightGradientsPerThread.get(j).size; i++){
+                weights.matrix[0][i] -= weightGradientsPerThread.get(j).matrix[0][i] * Main.ALPHA;
+            }
         }
-        biasGradient.seedZeros();
-        weightGradient.seedZeros();
     }
     public void write(int layerIndex) throws FileNotFoundException, UnsupportedEncodingException{
         PrintWriter writer = new PrintWriter("logs/log-" +  Main.model.layers.get(layerIndex), "UTF-8");

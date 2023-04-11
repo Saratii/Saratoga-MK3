@@ -1,41 +1,24 @@
 package tests;
 
 public class UngaBungaParallelizer {
-    public void ungaBungaParallel() {
-        // Number of threads to use
-        int numThreads = 4;
-
-        // Create an array to hold the threads
-        Thread[] threads = new Thread[numThreads];
-
-        // Define the parameter for ungaBunga()
-        String parameter = "Hello from thread";
-
-        // Start the threads
-        for (int i = 0; i < numThreads; i++) {
-            final int threadIndex = i; // final variable for lambda expression
-            threads[i] = new Thread(() -> ungaBunga(parameter, threadIndex));
+    static long sum;
+    public static void main(String[] args) throws InterruptedException {
+        Thread[] threads = new Thread[10];
+        sum = 0;
+        sum = 0;
+        for(int i = 0; i < 10; i++) {
+            threads[i] = new Thread(() -> {
+                for(int j = 0; j < 100_000_000; j++) {
+                    sum++;
+                }
+            });
             threads[i].start();
         }
-
-        // Wait for all threads to complete
-        for (int i = 0; i < numThreads; i++) {
-            try {
-                threads[i].join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        for(int i = 0; i < 10; i++) {
+            threads[i].join();
         }
-    }
+        System.out.println(sum);
 
-    public void ungaBunga(String parameter, int threadIndex) {
-        // Code to perform the ungaBunga() function with the given parameter and thread index
-        // This will be executed concurrently in multiple threads
-        System.out.println(parameter + " " + threadIndex + ": " + Thread.currentThread().getName());
-    }
-
-    public static void main(String[] args) {
-        UngaBungaParallelizer parallelizer = new UngaBungaParallelizer();
-        parallelizer.ungaBungaParallel();
     }
 }
+
