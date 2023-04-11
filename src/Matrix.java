@@ -25,15 +25,22 @@ public class Matrix {
         this.matrix = new Double[z][rows*cols];
     }
     @Override
-    public String toString() {
-        StringBuilder s = new StringBuilder("[");   
+    public String toString(){
+        return toString(true);
+    }
+    public String toString(Boolean rounding) {
+        StringBuilder s = new StringBuilder("[");
         for(int j = 0; j < z; j++){
             s.append("[");
             for(int i = 0; i < rows * cols; i++) {
-                Double d = matrix[0][137];
-                s.append(String.format("%.4f, ", matrix[j][i]));
+                if(rounding){
+                    s.append(String.format("%.4f, ", matrix[j][i]));
+                } else {
+                    s.append(matrix[j][i] + ", ");
+                }
             }
-            s.append("]\n");
+            s.deleteCharAt(s.length()-1).deleteCharAt(s.length()-1);
+            s.append("], ");
         }
         s.deleteCharAt(s.length()-1).deleteCharAt(s.length()-1);
         return s.append("]").toString();
@@ -294,16 +301,16 @@ public class Matrix {
         }
         return result;
     }
-    public void reverse(){
+    public Matrix reverse(){
+        Matrix result = new Matrix(z, rows, cols);
         for(int i = 0; i < z; i++){
-            int left = 0;
-            int right = matrix[i].length - 1;
-            double temp = matrix[i][left];
-            matrix[i][left] = matrix[i][right];
-            matrix[i][right] = temp;
-            left++;
-            right--;
+            for(int j = 0; j < rows; j++){
+                for(int k = 0; k < cols; k++){
+                    result.matrix[i][result.convert(rows - j - 1, cols - k - 1)] = matrix[i][result.convert(j, k)];
+                }
+            }
         }
+        return result;
     }
     public String getSize(){
         return "[" + z + ", " + rows + ", " + cols + "] " + size;

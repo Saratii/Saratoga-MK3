@@ -27,20 +27,6 @@ public class conv2dTest {
         }
         return output;
     }
-    // @Test
-    // public void convOperationTest(){
-    //     Matrix a = new Matrix(1, 10, 10);
-    //     a.seed();
-    //     Matrix b = new Matrix(1, 2, 2);
-    //     b.seed();
-    //     Matrix c = a.convolution(b);
-    //     double[][] d = conv2dAllahAkbar(a.matrix[0], a.rows, a.cols, b.matrix[0], b.rows, b.cols);
-    //     for(int i = 0; i < c.cols; i++){
-    //         for(int j = 0; j < c.rows ; j++){
-    //             assert(Math.abs(d[i][j] - c.matrix[0][i * c.cols + j]) < 0.000001);
-    //         }
-    //     }
-    // }
     @Test
     public void convTest() {
         ConvolutionLayer conv = new ConvolutionLayer(3, 2, 1, 2);

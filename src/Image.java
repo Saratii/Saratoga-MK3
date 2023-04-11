@@ -17,14 +17,14 @@ public class Image {
     String stringLabel;
     BufferedImage bufferedImage;
     public Image(Path path, String label) throws IOException{
-        this.bufferedImage = Matrix.resizeImage(Matrix.makeSquare(ImageIO.read(path.toFile())), 26, 26);
+        this.bufferedImage = Matrix.resizeImage(Matrix.makeSquare(ImageIO.read(path.toFile())), 30, 30);
         this.imageData = Matrix.imageToMatrix(bufferedImage);
         imageData.normalizePixels();
         this.label = new Matrix(1, 2, 1);
         this.stringLabel = label;
-        if(label == "dolphin"){
+        if(label == "dog"){
             this.label.matrix = new Double[][]{{1.0, 0.0}};
-        } else if(label == "antelope"){
+        } else if(label == "elefante"){
             this.label.matrix = new Double[][]{{0.0, 1.0}};
         }
     }
