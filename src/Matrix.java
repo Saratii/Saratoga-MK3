@@ -11,7 +11,7 @@ import java.awt.*;
 
 public class Matrix {
     private static JFrame frame;
-    private Random r = new Random();
+    private Random r = new Random(0);
     public Double[][] matrix;
     public int z;
     public int rows;

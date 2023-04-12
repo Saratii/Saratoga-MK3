@@ -40,9 +40,9 @@ public class Softmax extends Layer{
         }
         return result.multiply(dvalues);
     }
-    public void write(int layerIndex) throws FileNotFoundException, UnsupportedEncodingException{
-        PrintWriter writer = new PrintWriter("logs/log-" +  Main.model.layers.get(layerIndex), "UTF-8");
-        writer.println(Main.model.layers.get(layerIndex));
+    public void write(int layerIndex, Model model) throws FileNotFoundException, UnsupportedEncodingException{
+        PrintWriter writer = new PrintWriter("logs/log-" +  model.layers.get(layerIndex), "UTF-8");
+        writer.println(model.layers.get(layerIndex));
         writer.close();
     }
 }
