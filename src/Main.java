@@ -14,24 +14,29 @@ public class Main {
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_PURPLE = "\033[0;35m";
-    public static double ALPHA = 0.001;
-    public static double batchSize = 30;
-    public static Model model;
+    public static final double ALPHA = 0.001;
+    public static final double batchSize = 30;
+    public static final int imagesUsedPerClass = 400;
+    public static final double percentageTested = 0.2;
+    public static final Boolean train = true;
+    public static final Boolean forceTest = true;
+    
     public static void main(String[] args) throws IOException {
-        List<List<Image>> data = setupData(800, 0.2);
+        List<List<Image>> data = setupData(imagesUsedPerClass, percentageTested);
         List<Image> trainingData = data.get(0);
         List<Image> testingData = data.get(1);
-        Boolean train = true;
+        Model model;
         if(train){
-            train(trainingData, 60);
+            model = train(trainingData, 10);
         } else {
-            Model builtModel  = build.buildModel();
+            model = build.buildModel();
+        }
+        if(forceTest){
             int numRight = 0;
             for(Image image: testingData){
-                Matrix result = classify(image, builtModel);
+                Matrix result = classify(image, model);
                 System.out.println("Predicted: " + result);
-                System.out.println("Expected: " + image.label);
-                System.out.println("\n");
+                System.out.println("Expected: " + image.label + "\n");
                 if((result.matrix[0][0] < result.matrix[0][1]) == (image.label.matrix[0][0] < image.label.matrix[0][1])){
                     numRight++;
                 }
@@ -42,7 +47,7 @@ public class Main {
         // ima smack you with my pimp cane
         // goofy ahh
     }
-    public static void train(List<Image> trainingData, int batchSize) throws IOException{
+    public static Model train(List<Image> trainingData, int batchSize) throws IOException{
         File folder = new File("logs");
         if(folder.exists()) { 
             String[] entries = folder.list();
@@ -54,16 +59,18 @@ public class Main {
             folder.mkdirs(); 
         }
         PrintWriter writer = new PrintWriter("logs/log-graph", "UTF-8");
-        
-        
-        Image[][] batches = new Image[trainingData.size() / batchSize][batchSize];
-        for(int i = 0; i < batches.length; i++){
-            for(int j = 0; j < batches[0].length; j++){
-                batches[i][j] = trainingData.get(i * batches.length + j);
-            }
-        }
     
-        model = new Model();
+        Image[][] batches = new Image[Math.ceilDiv(trainingData.size(),batchSize)][batchSize];
+        for(int i = 0; i < batches.length; i++){
+            for(int j = 0; j < batches[i].length; j++){
+                if(trainingData.size() <= i * batches[0].length + j){
+                    break;
+                }
+                batches[i][j] = trainingData.get(i * batches[0].length + j);
+            }
+        } 
+    
+        Model model = new Model();
         model.layers.add(new ConvolutionLayer(1, 12, 1, 3));
         model.layers.add(new ReLU());
         model.layers.add(new MaxPool(3));
@@ -78,12 +85,11 @@ public class Main {
         model.layers.add(new DenseLayer(2));
         model.layers.add(new Softmax());
         model.profiling = false;
+
         int epoch = 0;
-        ALPHA /= batchSize;
         double avgLoss = Double.POSITIVE_INFINITY;
         long startTime = System.currentTimeMillis();
-        while(avgLoss > 0.01 && epoch < 500){
-        // for(int p = 0; p < 20; p++){
+        while(avgLoss > 0.01 && epoch < 5){
             avgLoss = 0;
             for(int i = 0; i < batches.length; i++){
                 for(int j = 0; j < batches[i].length; j++){
@@ -106,7 +112,8 @@ public class Main {
             }
         }
         writer.close();
-        model.write();
+        model.write(model);
+        return model;
     }
     public static Matrix classify(Image im, Model model) throws FileNotFoundException, IOException{
         model.forward(im.imageData, im.label);

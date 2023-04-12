@@ -92,9 +92,9 @@ public class ConvolutionLayer extends Layer{
             kernalGradient[k].seedZeros();
         }
     }
-    public void write(int layerIndex) throws FileNotFoundException, UnsupportedEncodingException{
-        PrintWriter writer = new PrintWriter("logs/log-" +  Main.model.layers.get(layerIndex), "UTF-8");
-        writer.println(Main.model.layers.get(layerIndex));
+    public void write(int layerIndex, Model model) throws FileNotFoundException, UnsupportedEncodingException{
+        PrintWriter writer = new PrintWriter("logs/log-" + model.layers.get(layerIndex), "UTF-8");
+        writer.println(model.layers.get(layerIndex));
         writer.println("Total Parameters{" + (kernals.length * kernals[0].size) + "}");
         writer.println("Number of Kernals{" + kernals.length + "}");
         writer.println("Stride {" + STRIDE + "}");
@@ -107,7 +107,6 @@ public class ConvolutionLayer extends Layer{
         for(Matrix kernal : kernals){
             writer.println(kernal.toString(false)); 
         }
-        
         writer.close();
     }
     

@@ -29,9 +29,9 @@ public class Image {
         }
     }
     public static void shuffle(List<Image> arr){
-        Random rnd = new Random();
+        Random r = new Random(0);
         for (int i = arr.size() - 1; i > 0; i--) {
-            int index = rnd.nextInt(i + 1);
+            int index = r.nextInt(i + 1);
             Image temp = arr.get(index);
             arr.set(index, arr.get(i));
             arr.set(i, temp);
