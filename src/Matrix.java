@@ -11,7 +11,7 @@ import java.awt.*;
 
 public class Matrix {
     private static JFrame frame;
-    private Random r = new Random();
+    private Random r = new Random(0);
     public Double[][] matrix;
     public int z;
     public int rows;
@@ -232,9 +232,8 @@ public class Matrix {
     }
     public Matrix doubleBigConvolution(Double[] kernal, int kernalRows, int kernalCols){
         Matrix resultant = new Matrix(z, rows + kernalRows - 1, cols + kernalCols - 1);
-        int thisJ, thisK, iz, imz, i, j, k, jj, kk;
+        int thisJ, thisK, imz, i, j, k, jj, kk;
         for(i = 0 ; i < resultant.z; i++){
-            iz = i/z;
             imz = i % z;
             for(j = 0; j < resultant.rows; j++){
                 int jjStart = Math.max(0, kernalRows - j - 1);

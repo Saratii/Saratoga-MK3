@@ -14,32 +14,28 @@ public class Main {
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_PURPLE = "\033[0;35m";
-    public static double ALPHA = 0.001;
-    public static double batchSize = 30;
-    public static Model model;
-    static double avgLoss = Double.POSITIVE_INFINITY;
-    static Image[][] batches;
-    static int batchIndexForThread;
-    static int imageIndexForThread;
-    final static int numThreads = 2;
-    static int chunkSize = 0;
-    static int remainingData = 0;
-    static Double[] threadLossSums;
+    public static final double ALPHA = 0.1;
+    public static final double batchSize = 30;
+    public static final int numThreads = 1;
     public static void main(String[] args) throws IOException {
-        List<List<Image>> data = setupData(20, 0.2);
+        List<List<Image>> data = setupData(80, 0.2);
         List<Image> trainingData = data.get(0);
         List<Image> testingData = data.get(1);
+
+        Boolean forceTest = true;
         Boolean train = true;
+        Model model;
         if(train){
-            train(trainingData, 10);
+            model = train(trainingData, 10);
         } else {
-            Model builtModel  = build.buildModel();
+            model = build.buildModel();
+        }
+        if(forceTest){
             int numRight = 0;
             for(Image image: testingData){
-                Matrix result = classify(image, builtModel);
+                Matrix result = classify(image, model);
                 System.out.println("Predicted: " + result);
-                System.out.println("Expected: " + image.label);
-                System.out.println("\n");
+                System.out.println("Expected: " + image.label + "\n");
                 if((result.matrix[0][0] < result.matrix[0][1]) == (image.label.matrix[0][0] < image.label.matrix[0][1])){
                     numRight++;
                 }
@@ -50,7 +46,8 @@ public class Main {
         // ima smack you with my pimp cane
         // goofy ahh
     }
-    public static void train(List<Image> trainingData, int batchSize) throws IOException{
+    public static Model train(List<Image> trainingData, int batchSize) throws IOException{
+        double avgLoss = Double.POSITIVE_INFINITY;
         File folder = new File("logs");
         if(folder.exists()) { 
             String[] entries = folder.list();
@@ -62,44 +59,44 @@ public class Main {
             folder.mkdirs(); 
         }
         PrintWriter writer = new PrintWriter("logs/log-graph", "UTF-8");
-        
-        batches = new Image[trainingData.size() / batchSize][batchSize];
+        Image[][] batches = new Image[Math.ceilDiv(trainingData.size(),batchSize)][batchSize];
         for(int i = 0; i < batches.length; i++){
-            for(int j = 0; j < batches[0].length; j++){
+            for(int j = 0; j < batches[i].length; j++){
+                if(trainingData.size() <= i * batches[0].length + j){
+                    break;
+                }
                 batches[i][j] = trainingData.get(i * batches[0].length + j);
             }
-        }
+        } 
     
-        model = new Model();
-        model.layers.add(new ConvolutionLayer(1, 12, 1, 3));
-        model.layers.add(new ReLU());
-        model.layers.add(new MaxPool(3));
-        model.layers.add(new ConvolutionLayer(12, 12, 1, 3));
-        model.layers.add(new ReLU());
-        model.layers.add(new MaxPool(3));
-        model.layers.add(new Flatten());
-        model.layers.add(new DenseLayer(128));
+        Model model = new Model();
+        model.layers.add(new ConvolutionLayer(1, 12, 1, 3)); //1.30.30 -> 12.28.28
+        model.layers.add(new ReLU()); //12.28.28 -> 12.28.28
+        model.layers.add(new MaxPool(3)); //12.28.28 -> 12.10.10
+        model.layers.add(new ConvolutionLayer(12, 12, 1, 3)); //12.10.10 -> 12.8.8
+        model.layers.add(new ReLU()); //12.8.8 -> 12.8.8
+        model.layers.add(new MaxPool(3)); //12.8.8 -> 12.3.3
+        model.layers.add(new Flatten()); //12.3.3 -> 1.108.1
+        model.layers.add(new DenseLayer(108, 128));
         model.layers.add(new ReLU()); 
-        model.layers.add(new DenseLayer(128));
+        model.layers.add(new DenseLayer(128, 128));
         model.layers.add(new ReLU());
-        model.layers.add(new DenseLayer(2));
+        model.layers.add(new DenseLayer(128, 2));
         model.layers.add(new Softmax());
         model.profiling = false;
+
         int epoch = 0;
-        ALPHA /= batchSize;
-        
-        long startTime = System.currentTimeMillis();
+        final long startTime = System.currentTimeMillis();
         Thread[] threads = new Thread[numThreads];
-        threadLossSums = new Double[numThreads];
-        while(avgLoss > 0.01 && epoch < 10){
+        Double[]threadLossSums = new Double[numThreads];
+        
+        while(avgLoss > 0.01 && epoch < 100){
             avgLoss = 0;
             for(int i = 0; i < batches.length; i++){
-                chunkSize = Math.floorDiv(batches[i].length, numThreads); // floor division
-                remainingData = batches[i].length % numThreads; // remainder
-                batchIndexForThread = i;
+                final int batchIndexForThread = i;
                 for(int j = 0; j < numThreads; j++) {
                     final int t = j;
-                    threads[j] = new Thread(() -> trainImages(t));
+                    threads[j] = new Thread(() -> trainImages(t, model, batches, batchIndexForThread, threadLossSums));
                     threads[j].start();
                 }
                 for (int j = 0; j < numThreads; j++) {
@@ -114,7 +111,7 @@ public class Main {
                 }
                 model.updateParams();
             }
-            avgLoss /= (batches[0].length * batches.length);
+            avgLoss /= (trainingData.size());
             System.out.println(ANSI_GREEN + "Epoch: " + epoch + " Average Loss: " + avgLoss + ANSI_RESET);
             writer.println(epoch + ", " + avgLoss);
             epoch++;
@@ -129,20 +126,23 @@ public class Main {
         }
         writer.close();
         model.write();
+        return model;
     }
-    public static void trainImages(int threadIndex){
+    public static void trainImages(int threadIndex, Model model, Image[][] batches, int batchIndexForThread, Double[] threadLossSums){
         double loss = 0;
-        for(int i = threadIndex * chunkSize + Math.min(threadIndex, remainingData); i < (threadIndex + 1) * chunkSize + Math.min(i + 1, remainingData) - 1; i++){
-            loss += model.forward(batches[batchIndexForThread][i].imageData, batches[batchIndexForThread][i].label);
-            model.backward();
+        for(int i = threadIndex; i < batches[batchIndexForThread].length; i+=numThreads){
+            if(batches[batchIndexForThread][i] == null){
+                break;
+            }
+            loss += model.forward(batches[batchIndexForThread][i].imageData, batches[batchIndexForThread][i].label, threadIndex);
+            model.backward(threadIndex);
         }
         threadLossSums[threadIndex] = loss;
-
     }
     public static Matrix classify(Image im, Model model) throws FileNotFoundException, IOException{
-        model.forward(im.imageData, im.label);
+        model.forward(im.imageData, im.label, 0);
         Softmax soft = (Softmax) model.layers.get(model.layers.size() - 1);
-        return soft.result;
+        return soft.layerOutput[0];
     }
     public static List<List<Image>> setupData(int imagesPerClass, double percentageTested) throws IOException{
         List<Path> dogDirectory = Files.list(Path.of("Animals/dog")).limit(imagesPerClass).toList();
@@ -173,4 +173,4 @@ public class Main {
         return data;
     }
 }
-
+//is this worth continuing or should i revert git

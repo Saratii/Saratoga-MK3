@@ -7,38 +7,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConvolutionLayer extends Layer{
-    Matrix input;
+    Matrix[] input;
     int NUM_IN_CHANNELS;
     int NUM_OUT_CHANNELS;
     int STRIDE;
     int KERNAL_SIZE;
-    List<Matrix> biasGradientsPerThread = new ArrayList<>();
-    List<Matrix[]> weightGradientsPerThread = new ArrayList<>();
+    List<Matrix> biasGradientsPerThread;
+    List<Matrix[]> weightGradientsPerThread;
     public Matrix[] kernals;
     public Matrix biases;
     public boolean initialized = false;
 
     public ConvolutionLayer(int NUM_IN_CHANNELS, int NUM_OUT_CHANNELS, int STRIDE, int KERNAL_SIZE){
+        biasGradientsPerThread = new ArrayList<>();
+        weightGradientsPerThread = new ArrayList<>();
         this.NUM_IN_CHANNELS = NUM_IN_CHANNELS;
         this.NUM_OUT_CHANNELS = NUM_OUT_CHANNELS;
         this.STRIDE = STRIDE;
         this.KERNAL_SIZE = KERNAL_SIZE;
-        if(!initialized){
-            kernals = new Matrix[NUM_IN_CHANNELS * NUM_OUT_CHANNELS];
-            
-            biases = new Matrix(1, NUM_OUT_CHANNELS, 1);
-            biases.seedZeros();
-            
-            for(int i = 0; i < kernals.length; i++){
-                kernals[i] = new Matrix(1, KERNAL_SIZE, KERNAL_SIZE); 
-                kernals[i].seed();
-            }
-            initialized = true;
+        kernals = new Matrix[NUM_IN_CHANNELS * NUM_OUT_CHANNELS];
+        biases = new Matrix(1, NUM_OUT_CHANNELS, 1);
+        biases.seedZeros();
+        for(int i = 0; i < kernals.length; i++){
+            kernals[i] = new Matrix(1, KERNAL_SIZE, KERNAL_SIZE); 
+            kernals[i].seed();
         }
+        input = new Matrix[Main.numThreads];
     }
-    
-    public Matrix forward(Matrix input){
-        this.input = input;
+    @Override
+    public Matrix forward(Matrix input, int threadIndex){
+        this.input[threadIndex] = input;
         Matrix result = new Matrix(NUM_OUT_CHANNELS, input.rows - KERNAL_SIZE + 1, input.cols - KERNAL_SIZE + 1);
         result.seedZeros();
         for(int j = 0; j < NUM_OUT_CHANNELS; j++){
@@ -53,10 +51,11 @@ public class ConvolutionLayer extends Layer{
             }
         }
         return result;
-    } //gimme call stack
-    public Matrix backward(Matrix previousGradients){ //dLdO = previousGradients
-        Matrix dldf = input.convolution(previousGradients);
-        Matrix result = new Matrix(input.z, input.rows, input.cols);
+    }
+    @Override
+    public Matrix backward(Matrix previousGradients, int threadIndex){ //dLdO = previousGradients
+        Matrix dldf = input[threadIndex].convolution(previousGradients);
+        Matrix result = new Matrix(input[threadIndex].z, input[threadIndex].rows, input[threadIndex].cols);
         Matrix biasGradient = new Matrix(1, NUM_OUT_CHANNELS, 1);
         Matrix[] kernalGradient = new Matrix[NUM_IN_CHANNELS * NUM_OUT_CHANNELS];
         for(int i = 0; i < kernals.length; i++){
@@ -83,6 +82,7 @@ public class ConvolutionLayer extends Layer{
         biasGradientsPerThread.add(biasGradient);
         return result;
     }
+    @Override
     public void updateParams(){
         for(int k = 0; k < weightGradientsPerThread.size(); k++){
             for(int i = 0; i < weightGradientsPerThread.get(k).length; i++){
@@ -96,10 +96,13 @@ public class ConvolutionLayer extends Layer{
                 biases.matrix[0][j] -= biasGradientsPerThread.get(i).matrix[0][j] * Main.ALPHA;
             }
         }
+        biasGradientsPerThread = new ArrayList<>();
+        weightGradientsPerThread = new ArrayList<>();
     }
-    public void write(int layerIndex) throws FileNotFoundException, UnsupportedEncodingException{
-        PrintWriter writer = new PrintWriter("logs/log-" +  Main.model.layers.get(layerIndex), "UTF-8");
-        writer.println(Main.model.layers.get(layerIndex));
+    @Override
+    public void write(int layerIndex, Model model) throws FileNotFoundException, UnsupportedEncodingException{
+        PrintWriter writer = new PrintWriter("logs/log-" +  model.layers.get(layerIndex), "UTF-8");
+        writer.println(model.layers.get(layerIndex));
         writer.println("Total Parameters{" + (kernals.length * kernals[0].size) + "}");
         writer.println("Number of Kernals{" + kernals.length + "}");
         writer.println("Stride {" + STRIDE + "}");

@@ -6,20 +6,14 @@ import java.io.UnsupportedEncodingException;
 
 public class MaxPool extends Layer{
     int kernalSize;
-    int z;
-    int rows;
-    int cols;
-    Matrix input;
-    Matrix gradients;
+    Matrix[] gradients;
     public MaxPool(int kernalSize){
         this.kernalSize = kernalSize;
+        gradients = new Matrix[Main.numThreads];
     }
-    public Matrix forward(Matrix input){
-        this.z = input.z;
-        this.rows = input.rows;
-        this.cols = input.cols;
-        this.input = input;
-        gradients = new Matrix(input.z, input.rows, input.cols);
+    @Override
+    public Matrix forward(Matrix input, int threadIndex){
+        gradients[threadIndex] = new Matrix(input.z, input.rows, input.cols);
         int resultSize = (int) Math.ceil((float) input.rows / (float) kernalSize);
         Matrix result = new Matrix(input.z, resultSize, resultSize);
         for(int l = 0; l < input.z; l++){
@@ -35,32 +29,34 @@ public class MaxPool extends Layer{
                                 maxK = k;
                                 maxH = h;
                             }
-                            gradients.matrix[l][input.convert(i + k, j + h)] = 0.0;
+                            gradients[threadIndex].matrix[l][input.convert(i + k, j + h)] = 0.0;
                         } 
                     }
                     result.matrix[l][result.convert(i / kernalSize, j / kernalSize)] = maxVal;
-                    gradients.matrix[l][input.convert(i + maxK, j + maxH)] = 1.0;
+                    gradients[threadIndex].matrix[l][input.convert(i + maxK, j + maxH)] = 1.0;
                 }
             }
         }
         return result;
     }
-    public Matrix backward(Matrix prevGradients){
+    @Override
+    public Matrix backward(Matrix prevGradients, int threadIndex){
         int i = 0;
-        for(int j = 0; j < gradients.z; j++){//why only iterate up to gradients.z when higher values are accepted
-            for(int k = 0; k < gradients.rows * gradients.cols; k++){
-                gradients.matrix[j][k] *= prevGradients.matrix[j][prevGradients.convert(k / gradients.cols / kernalSize, (k%gradients.cols) / kernalSize)];
+        for(int j = 0; j < gradients[threadIndex].z; j++){
+            for(int k = 0; k < gradients[threadIndex].rows * gradients[threadIndex].cols; k++){
+                gradients[threadIndex].matrix[j][k] *= prevGradients.matrix[j][prevGradients.convert(k / gradients[threadIndex].cols / kernalSize, (k % gradients[threadIndex].cols) / kernalSize)];
                 i++;
                 if(i == kernalSize){
                     i = 0;
                 }
             }
         }
-        return gradients;
+        return gradients[threadIndex];
     }
-    public void write(int layerIndex) throws FileNotFoundException, UnsupportedEncodingException{
-        PrintWriter writer = new PrintWriter("logs/log-" +  Main.model.layers.get(layerIndex), "UTF-8");
-        writer.println(Main.model.layers.get(layerIndex));
+    @Override
+    public void write(int layerIndex, Model model) throws FileNotFoundException, UnsupportedEncodingException{
+        PrintWriter writer = new PrintWriter("logs/log-" +  model.layers.get(layerIndex), "UTF-8");
+        writer.println(model.layers.get(layerIndex));
         writer.println("Size of Kernals{" + kernalSize + "}");
         writer.close();
     }

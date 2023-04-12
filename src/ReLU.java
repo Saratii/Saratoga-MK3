@@ -6,7 +6,8 @@ import java.io.UnsupportedEncodingException;
 
 public class ReLU extends Layer{
     Matrix values;
-    public Matrix forward(Matrix values){
+    @Override
+    public Matrix forward(Matrix values, int threadIndex){
         Matrix result = new Matrix(values.z, values.rows, values.cols);
         for(int j = 0; j < values.z; j++){
             for(int i = 0; i < values.rows * values.cols; i++){
@@ -16,7 +17,8 @@ public class ReLU extends Layer{
         this.values = result;
         return result;
     }
-    public Matrix backward(Matrix dvalues){
+    @Override
+    public Matrix backward(Matrix dvalues, int threadIndex){
         Matrix result = new Matrix(dvalues.z, dvalues.rows, dvalues.cols);
         for(int j = 0; j < dvalues.z; j++){
             for(int i = 0; i < dvalues.rows * dvalues.cols; i++){
@@ -25,9 +27,10 @@ public class ReLU extends Layer{
         }
         return result;
     }
-    public void write(int layerIndex) throws FileNotFoundException, UnsupportedEncodingException{
-        PrintWriter writer = new PrintWriter("logs/log-" +  Main.model.layers.get(layerIndex), "UTF-8");
-        writer.println(Main.model.layers.get(layerIndex));
+    @Override
+    public void write(int layerIndex, Model model) throws FileNotFoundException, UnsupportedEncodingException{
+        PrintWriter writer = new PrintWriter("logs/log-" + model.layers.get(layerIndex), "UTF-8");
+        writer.println(model.layers.get(layerIndex));
         writer.close();
     }
 }

@@ -1,0 +1,13 @@
+src.ConvolutionLayer@2a17b7b6
+src.ReLU@4f063c0a
+src.MaxPool@1e6d1014
+src.ConvolutionLayer@76707e36
+src.ReLU@614ddd49
+src.MaxPool@1f554b06
+src.Flatten@694e1548
+src.DenseLayer@1c3a4799
+src.ReLU@131276c2
+src.DenseLayer@26aa12dd
+src.ReLU@3fd7a715
+src.DenseLayer@711f39f9
+src.Softmax@71bbf57e

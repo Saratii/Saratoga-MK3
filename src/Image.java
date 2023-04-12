@@ -29,7 +29,7 @@ public class Image {
         }
     }
     public static void shuffle(List<Image> arr){
-        Random rnd = new Random();
+        Random rnd = new Random(0);
         for (int i = arr.size() - 1; i > 0; i--) {
             int index = rnd.nextInt(i + 1);
             Image temp = arr.get(index);
