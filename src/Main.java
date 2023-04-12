@@ -14,12 +14,15 @@ public class Main {
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_PURPLE = "\033[0;35m";
-    public static final double ALPHA = 0.001;
+    public static final double ALPHA = 0.0001;
     public static final double batchSize = 30;
     public static final int imagesUsedPerClass = 400;
     public static final double percentageTested = 0.2;
+    public static final int numThreads = 1;
     public static final Boolean train = true;
     public static final Boolean forceTest = true;
+    public static final int maxEpochs = 200;
+
     
     public static void main(String[] args) throws IOException {
         List<List<Image>> data = setupData(imagesUsedPerClass, percentageTested);
@@ -89,12 +92,12 @@ public class Main {
         int epoch = 0;
         double avgLoss = Double.POSITIVE_INFINITY;
         long startTime = System.currentTimeMillis();
-        while(avgLoss > 0.01 && epoch < 5){
+        while(avgLoss > 0.01 && epoch < maxEpochs){
             avgLoss = 0;
             for(int i = 0; i < batches.length; i++){
                 for(int j = 0; j < batches[i].length; j++){
-                    avgLoss += model.forward(batches[i][j].imageData, batches[i][j].label);
-                    model.backward();
+                    avgLoss += model.forward(batches[i][j].imageData, batches[i][j].label, 0);
+                    model.backward(0);
                 }
                 model.updateParams();
             }
@@ -116,7 +119,7 @@ public class Main {
         return model;
     }
     public static Matrix classify(Image im, Model model) throws FileNotFoundException, IOException{
-        model.forward(im.imageData, im.label);
+        model.forward(im.imageData, im.label, 0);
         Softmax soft = (Softmax) model.layers.get(model.layers.size() - 1);
         return soft.result;
     }
