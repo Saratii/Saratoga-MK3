@@ -10,21 +10,21 @@ public class Model {
     Matrix expected;
     long startTime;
     Boolean profiling = false;
-    public double forward(Matrix inputs, Matrix expected){
+    public double forward(Matrix inputs, Matrix expected, int threadIndex){
         for(int i = 0; i < layers.size(); i++){
             startTime = System.currentTimeMillis();
-            inputs = layers.get(i).forward(inputs);
+            inputs = layers.get(i).forward(inputs, threadIndex);
         }
         double l = Loss.forward(inputs, expected);
         this.expected = expected;
         this.inputs = inputs;
         return l;
     }
-    public void backward(){
+    public void backward(int threadIndex){
         Matrix gradients = Loss.backward(inputs, expected);
         for(int i = 0; i < layers.size(); i++){
             startTime = System.currentTimeMillis();
-            gradients = layers.get(layers.size() - 1 - i).backward(gradients);
+            gradients = layers.get(layers.size() - 1 - i).backward(gradients, threadIndex);
         }
     }
     public void updateParams(){

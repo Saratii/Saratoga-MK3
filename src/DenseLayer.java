@@ -17,7 +17,8 @@ public class DenseLayer extends Layer{
     public DenseLayer(int NUM_NODES) {
         this.NUM_NODES = NUM_NODES;
     }
-    public Matrix forward(Matrix inputs){
+    @Override
+    public Matrix forward(Matrix inputs, int threadIndex){
         if(!initialized){
             weightGradient = new Matrix(1, inputs.size, NUM_NODES);
             weightGradient.seedZeros();
@@ -45,7 +46,8 @@ public class DenseLayer extends Layer{
         inputs = outputs;
         return outputs;
     }
-    public Matrix backward(Matrix previousDerivatives){
+    @Override
+    public Matrix backward(Matrix previousDerivatives, int threadIndex){
         biasGradient = previousDerivatives;
         Matrix passedOnDerivatives = new Matrix(1, inputs.size, 1);
         for(int i = 0; i < inputs.size; i++){
@@ -61,6 +63,7 @@ public class DenseLayer extends Layer{
         }
         return passedOnDerivatives;
     }
+    @Override
     public void updateParams(){
         for(int i = 0; i < biasGradient.size; i++){
             biases.matrix[0][i] -= biasGradient.matrix[0][i] * Main.ALPHA;
@@ -71,6 +74,7 @@ public class DenseLayer extends Layer{
         biasGradient.seedZeros();
         weightGradient.seedZeros();
     }
+    @Override
     public void write(int layerIndex, Model model) throws FileNotFoundException, UnsupportedEncodingException{
         PrintWriter writer = new PrintWriter("logs/log-" +  model.layers.get(layerIndex), "UTF-8");
         writer.println(model.layers.get(layerIndex));
