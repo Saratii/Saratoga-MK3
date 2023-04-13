@@ -80,7 +80,7 @@ public class build {
                     }
                 } else if(layerName.equals("DenseLayer")){
                     int numNodes = 0;
-                    int numInputs;
+                    int numInputs = 0;
                     boolean biasFlag = true;
                     Matrix weights = new Matrix(0, 0, 0);
                     Matrix biases = new Matrix(0, 0 , 0);
@@ -110,12 +110,9 @@ public class build {
                             }
                         }
                     }
-                    DenseLayer dense = new DenseLayer(numNodes);
-                    dense.initialized = true;
+                    DenseLayer dense = new DenseLayer(numInputs, numNodes);
                     dense.weights = weights;
                     dense.biases = biases;
-                    dense.outputs = new Matrix(1, numNodes, 1);
-
                     model.layers.add(dense);
                 } else if(layerName.equals("Flatten")){
                     model.layers.add(new Flatten());

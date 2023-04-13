@@ -27,7 +27,7 @@ public class Main {
     public static final int maxEpochs = 50;
 
     
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         List<List<Image>> data = setupData(imagesUsedPerClass, percentageTested);
         List<Image> trainingData = data.get(0);
         List<Image> testingData = data.get(1);
@@ -53,7 +53,7 @@ public class Main {
         // ima smack you with my pimp cane
         // goofy ahh
     }
-    public static Model train(List<Image> trainingData, int batchSize) throws IOException{
+    public static Model train(List<Image> trainingData, int batchSize) throws Exception{
         File folder = new File("logs");
         if(folder.exists()) { 
             String[] entries = folder.list();
@@ -84,11 +84,11 @@ public class Main {
         model.layers.add(new ReLU());
         model.layers.add(new MaxPool(3));
         model.layers.add(new Flatten());
-        model.layers.add(new DenseLayer(100));
+        model.layers.add(new DenseLayer(160, 100));
         model.layers.add(new ReLU()); 
-        model.layers.add(new DenseLayer(100));
+        model.layers.add(new DenseLayer(100, 100));
         model.layers.add(new ReLU());
-        model.layers.add(new DenseLayer(2));
+        model.layers.add(new DenseLayer(100, 2));
         model.layers.add(new Softmax());
         model.profiling = false;
 
@@ -121,7 +121,7 @@ public class Main {
         model.write(model);
         return model;
     }
-    public static Matrix classify(Image im, Model model) throws FileNotFoundException, IOException{
+    public static Matrix classify(Image im, Model model) throws Exception{
         model.forward(im.imageData, im.label, 0);
         Softmax soft = (Softmax) model.layers.get(model.layers.size() - 1);
         return soft.layerOutput[0];
