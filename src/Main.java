@@ -22,7 +22,7 @@ public class Main {
     public static final double percentageTested = 0.0;
     public static final int numThreads = 1;
     public static final Boolean train = true;
-    public static final Boolean forceTest = false;
+    public static final Boolean forceTest = false; 
     public static final int maxEpochs = 50;
 
     
@@ -94,16 +94,36 @@ public class Main {
         int epoch = 0;
         double avgLoss = Double.POSITIVE_INFINITY;
         long startTime = System.currentTimeMillis();
-        while(avgLoss > 0.01 && epoch < maxEpochs){
+        Thread[] threads = new Thread[numThreads];
+        Double[]threadLossSums = new Double[numThreads];
+        while(avgLoss > 0.01 && epoch < 100){
             avgLoss = 0;
             for(int i = 0; i < batches.length; i++){
-                for(int j = 0; j < batches[i].length; j++){
-                    avgLoss += model.forward(batches[i][j].imageData, batches[i][j].label, 0);
-                    model.backward(0);
+                final int batchIndexForThread = i;
+                for(int j = 0; j < numThreads; j++) {
+                    final int t = j;
+                    threads[j] = new Thread(() -> {
+                        try {
+                            trainImages(t, model, batches, batchIndexForThread, threadLossSums);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    threads[j].start();
+                }
+                for (int j = 0; j < numThreads; j++) {
+                    try {
+                        threads[j].join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                for(Double loss: threadLossSums){
+                    avgLoss+=loss;
                 }
                 model.updateParams();
             }
-            avgLoss /= (batches[0].length * batches.length);
+            avgLoss /= trainingData.size();
             System.out.println(ANSI_GREEN + "Epoch: " + epoch + " Average Loss: " + avgLoss + ANSI_RESET);
             writer.println(epoch + ", " + avgLoss);
             epoch++;
@@ -117,8 +137,19 @@ public class Main {
             }
         }
         writer.close();
-        model.write(model);
+        model.write();
         return model;
+    }
+    public static void trainImages(int threadIndex, Model model, Image[][] batches, int batchIndexForThread, Double[] threadLossSums) throws Exception{
+        double loss = 0;
+        for(int i = threadIndex; i < batches[batchIndexForThread].length; i+=numThreads){
+            if(batches[batchIndexForThread][i] == null){
+                break;
+            }
+            loss += model.forward(batches[batchIndexForThread][i].imageData, batches[batchIndexForThread][i].label, threadIndex);
+            model.backward(threadIndex);
+        }
+        threadLossSums[threadIndex] = loss;
     }
     public static Matrix classify(Image im, Model model) throws Exception{
         model.forward(im.imageData, im.label, 0);
