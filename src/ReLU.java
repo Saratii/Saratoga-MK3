@@ -5,7 +5,10 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
 public class ReLU extends Layer{
-    Matrix values;
+    Matrix[] values;
+    public ReLU(){
+        values = new Matrix[Main.numThreads];
+    }
     @Override
     public Matrix forward(Matrix values, int threadIndex){
         Matrix result = new Matrix(values.z, values.rows, values.cols);
@@ -14,7 +17,7 @@ public class ReLU extends Layer{
                 result.matrix[j][i] = (values.matrix[j][i] > 0) ? values.matrix[j][i] : 0.0;
             }
         }
-        this.values = result;
+        this.values[threadIndex] = result;
         return result;
     }
     @Override
@@ -22,7 +25,7 @@ public class ReLU extends Layer{
         Matrix result = new Matrix(dvalues.z, dvalues.rows, dvalues.cols);
         for(int j = 0; j < dvalues.z; j++){
             for(int i = 0; i < dvalues.rows * dvalues.cols; i++){
-                result.matrix[j][i] = (values.matrix[j][i] > 0) ? dvalues.matrix[j][i] : 0.0;
+                result.matrix[j][i] = (values[threadIndex].matrix[j][i] > 0) ? dvalues.matrix[j][i] : 0.0;
             }
         }
         return result;
