@@ -32,10 +32,10 @@ public class Model {
             layer.updateParams();
         }
     }
-    public void write(Model model) throws FileNotFoundException, UnsupportedEncodingException{
+    public void write() throws FileNotFoundException, UnsupportedEncodingException{
         PrintWriter writer = new PrintWriter("logs/log-architecture", "UTF-8");
         for(int i = 0; i < layers.size(); i++){
-            layers.get(i).write(i, model);
+            layers.get(i).write(i, this);
             writer.println(layers.get(i));
         }
         writer.close();
