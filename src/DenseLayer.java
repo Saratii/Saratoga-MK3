@@ -13,11 +13,14 @@ public class DenseLayer extends Layer{
     Boolean initialized = false;
     public Matrix biases;
     private Matrix[] biasGradient;
-    private Matrix weightGradient;
+    private Matrix[] weightGradient;
     public DenseLayer(int numInChannels, int NUM_NODES) {
         this.NUM_NODES = NUM_NODES;
-        weightGradient = new Matrix(1, numInChannels, NUM_NODES);
-        weightGradient.seedZeros();
+        weightGradient = new Matrix[Main.numThreads];
+        for(int i = 0; i < weightGradient.length; i++){
+            weightGradient[i] = new Matrix(1, numInChannels, NUM_NODES);
+            weightGradient[i].seedZeros();
+        }
         biasGradient = new Matrix[Main.numThreads];
         for(int i = 0; i < Main.numThreads; i++){
             biasGradient[i] = new Matrix(1, NUM_NODES, 1);
@@ -59,11 +62,7 @@ public class DenseLayer extends Layer{
             passedOnDerivatives.matrix[0][i] = 0.0;
             for(int j = 0; j < NUM_NODES; j++){
                 passedOnDerivatives.matrix[0][i] += previousDerivatives.matrix[0][j] * weights.matrix[0][j * inputs.size + i];
-                weightGradient.matrix[0][j * inputs.size + i] += previousDerivatives.matrix[0][j] * inputs.matrix[0][i];
-                if(Double.isNaN(weightGradient.matrix[0][j * inputs.size + i])){
-                    Arrays.toString(inputs.matrix[0]);
-                    Arrays.toString(previousDerivatives.matrix[0]);
-                }
+                weightGradient[threadIndex].matrix[0][j * inputs.size + i] += previousDerivatives.matrix[0][j] * inputs.matrix[0][i];
             }
         }
         return passedOnDerivatives;
@@ -76,10 +75,12 @@ public class DenseLayer extends Layer{
             }
             biasGradient[j].seedZeros();
         }
-        for(int i = 0; i < weightGradient.size; i++){
-            weights.matrix[0][i] -= weightGradient.matrix[0][i] * Main.ALPHA;
+        for(int j = 0; j < weightGradient.length; j++){
+            for(int i = 0; i < weightGradient[j].size; i++){
+                weights.matrix[0][i] -= weightGradient[j].matrix[0][i] * Main.ALPHA;
+            }
+            weightGradient[j].seedZeros();
         }
-        weightGradient.seedZeros();
     }
     @Override
     public void write(int layerIndex, Model model) throws FileNotFoundException, UnsupportedEncodingException{
