@@ -12,24 +12,30 @@ public class DenseLayer extends Layer{
     int NUM_NODES;
     Boolean initialized = false;
     public Matrix biases;
-    private Matrix biasGradient;
+    private Matrix[] biasGradient;
     private Matrix weightGradient;
-    public DenseLayer(int NUM_NODES) {
+    public DenseLayer(int numInChannels, int NUM_NODES) {
         this.NUM_NODES = NUM_NODES;
+        weightGradient = new Matrix(1, numInChannels, NUM_NODES);
+        weightGradient.seedZeros();
+        biasGradient = new Matrix[Main.numThreads];
+        for(int i = 0; i < Main.numThreads; i++){
+            biasGradient[i] = new Matrix(1, NUM_NODES, 1);
+            biasGradient[i].seedZeros();
+        }
+        biases = new Matrix(1, NUM_NODES, 1);
+        biases.seedZeros();
+        weights = new Matrix(1, numInChannels, NUM_NODES);
+        weights.seedUniform();
+        outputs = new Matrix(1, NUM_NODES, 1);
     }
     @Override
-    public Matrix forward(Matrix inputs, int threadIndex){
-        if(!initialized){
-            weightGradient = new Matrix(1, inputs.size, NUM_NODES);
-            weightGradient.seedZeros();
-            biasGradient = new Matrix(1, NUM_NODES, 1);
-            biasGradient.seedZeros();
-            biases = new Matrix(1, NUM_NODES, 1);
-            biases.seedZeros();
-            weights = new Matrix(1, inputs.size, NUM_NODES);
-            weights.seedUniform();
-            outputs = new Matrix(1, NUM_NODES, 1);
-            initialized = true;
+    public Matrix forward(Matrix inputs, int threadIndex) throws Exception{
+        if(inputs.rows != weights.rows){
+            throw new Exception("invalid input channels in dense layer, expected " + inputs.rows);
+        }
+        if(inputs.z != 1){
+            throw new Exception("flatten your input ");
         }
         this.inputs = inputs;
         for(int i = 0; i < NUM_NODES; i++){
@@ -43,12 +49,11 @@ public class DenseLayer extends Layer{
                 Arrays.toString(weights.matrix[0]);
             }
         }
-        inputs = outputs;
-        return outputs;
+        return outputs; 
     }
     @Override
     public Matrix backward(Matrix previousDerivatives, int threadIndex){
-        biasGradient = previousDerivatives;
+        biasGradient[threadIndex].add(previousDerivatives);
         Matrix passedOnDerivatives = new Matrix(1, inputs.size, 1);
         for(int i = 0; i < inputs.size; i++){
             passedOnDerivatives.matrix[0][i] = 0.0;
@@ -65,13 +70,15 @@ public class DenseLayer extends Layer{
     }
     @Override
     public void updateParams(){
-        for(int i = 0; i < biasGradient.size; i++){
-            biases.matrix[0][i] -= biasGradient.matrix[0][i] * Main.ALPHA;
+        for(int j = 0; j < biasGradient.length; j++){
+            for(int i = 0; i < biasGradient[j].size; i++){
+                biases.matrix[0][i] -= biasGradient[j].matrix[0][i] * Main.ALPHA;
+            }
+            biasGradient[j].seedZeros();
         }
         for(int i = 0; i < weightGradient.size; i++){
             weights.matrix[0][i] -= weightGradient.matrix[0][i] * Main.ALPHA;
         }
-        biasGradient.seedZeros();
         weightGradient.seedZeros();
     }
     @Override

@@ -10,7 +10,7 @@ public class Model {
     Matrix expected;
     long startTime;
     Boolean profiling = false;
-    public double forward(Matrix inputs, Matrix expected, int threadIndex){
+    public double forward(Matrix inputs, Matrix expected, int threadIndex) throws Exception{
         for(int i = 0; i < layers.size(); i++){
             startTime = System.currentTimeMillis();
             inputs = layers.get(i).forward(inputs, threadIndex);
