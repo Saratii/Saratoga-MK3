@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class DenseLayer extends Layer{
     public Matrix weights;
-    Matrix inputs;
+    Matrix inputs[];
     Matrix outputs;
     int NUM_NODES;
     Boolean initialized = false;
@@ -17,6 +17,7 @@ public class DenseLayer extends Layer{
     public DenseLayer(int numInChannels, int NUM_NODES) {
         this.NUM_NODES = NUM_NODES;
         weightGradient = new Matrix[Main.numThreads];
+        inputs = new Matrix[Main.numThreads];
         for(int i = 0; i < weightGradient.length; i++){
             weightGradient[i] = new Matrix(1, numInChannels, NUM_NODES);
             weightGradient[i].seedZeros();
@@ -40,7 +41,7 @@ public class DenseLayer extends Layer{
         if(inputs.z != 1){
             throw new Exception("flatten your input ");
         }
-        this.inputs = inputs;
+        this.inputs[threadIndex] = inputs;
         for(int i = 0; i < NUM_NODES; i++){
             double sum = biases.matrix[0][i];
             for(int j = 0; j < inputs.rows * inputs.cols; j++){
@@ -57,12 +58,12 @@ public class DenseLayer extends Layer{
     @Override
     public Matrix backward(Matrix previousDerivatives, int threadIndex){
         biasGradient[threadIndex].add(previousDerivatives);
-        Matrix passedOnDerivatives = new Matrix(1, inputs.size, 1);
-        for(int i = 0; i < inputs.size; i++){
+        Matrix passedOnDerivatives = new Matrix(1, inputs[threadIndex].size, 1);
+        for(int i = 0; i < inputs[threadIndex].size; i++){
             passedOnDerivatives.matrix[0][i] = 0.0;
             for(int j = 0; j < NUM_NODES; j++){
-                passedOnDerivatives.matrix[0][i] += previousDerivatives.matrix[0][j] * weights.matrix[0][j * inputs.size + i];
-                weightGradient[threadIndex].matrix[0][j * inputs.size + i] += previousDerivatives.matrix[0][j] * inputs.matrix[0][i];
+                passedOnDerivatives.matrix[0][i] += previousDerivatives.matrix[0][j] * weights.matrix[0][j * inputs[threadIndex].size + i];
+                weightGradient[threadIndex].matrix[0][j * inputs[threadIndex].size + i] += previousDerivatives.matrix[0][j] * inputs[threadIndex].matrix[0][i];
             }
         }
         return passedOnDerivatives;
@@ -88,9 +89,9 @@ public class DenseLayer extends Layer{
         writer.println(model.layers.get(layerIndex));
         writer.println("Total Parameters{" + (weights.size + biases.size) + "}");
         writer.println("Number of Nodes{" + NUM_NODES + "}\n");
-        writer.println("Number of Inputs{" + (inputs.size) + "}");
+        writer.println("Number of Inputs{" + (inputs[0].size) + "}");
         writer.println(biases.toString(false) + "\n");
-        writer.println("Number of weights{" + inputs.size + ", " + NUM_NODES + "}\n");
+        writer.println("Number of weights{" + inputs[0].size + ", " + NUM_NODES + "}\n");
         writer.println(weights.toString(false));
         writer.close();
     }

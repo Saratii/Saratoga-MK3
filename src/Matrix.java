@@ -73,7 +73,8 @@ public class Matrix {
                 matrix[j][i] = (matrix[j][i] - 128) / 128;
             }
         }
-    }public void reverseNormalizePixels(){
+    }
+    public void reverseNormalizePixels(){
         for(int j = 0; j < z; j++){
             for(int i = 0; i < rows * cols; i++){
                 matrix[j][i] = matrix[j][i] * 128 + 128;
