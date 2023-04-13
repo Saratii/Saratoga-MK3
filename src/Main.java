@@ -7,6 +7,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+//Epoch: 49 Average Loss: 0.551881104706981
+//Completed in 50 epochs
+//Average time per epoch: 2277 ms
 
 public class Main {
     public static final String ANSI_RESET = "\u001B[0m";
@@ -16,12 +19,12 @@ public class Main {
     public static final String ANSI_PURPLE = "\033[0;35m";
     public static final double ALPHA = 0.0001;
     public static final double batchSize = 30;
-    public static final int imagesUsedPerClass = 400;
-    public static final double percentageTested = 0.2;
+    public static final int imagesUsedPerClass = 300;
+    public static final double percentageTested = 0.0;
     public static final int numThreads = 1;
     public static final Boolean train = true;
-    public static final Boolean forceTest = true;
-    public static final int maxEpochs = 200;
+    public static final Boolean forceTest = false;
+    public static final int maxEpochs = 50;
 
     
     public static void main(String[] args) throws IOException {
@@ -74,16 +77,16 @@ public class Main {
         } 
     
         Model model = new Model();
-        model.layers.add(new ConvolutionLayer(1, 12, 1, 3));
+        model.layers.add(new ConvolutionLayer(1, 10, 1, 3));
         model.layers.add(new ReLU());
         model.layers.add(new MaxPool(3));
-        model.layers.add(new ConvolutionLayer(12, 12, 1, 3));
+        model.layers.add(new ConvolutionLayer(10, 10, 1, 3));
         model.layers.add(new ReLU());
         model.layers.add(new MaxPool(3));
         model.layers.add(new Flatten());
-        model.layers.add(new DenseLayer(128));
+        model.layers.add(new DenseLayer(100));
         model.layers.add(new ReLU()); 
-        model.layers.add(new DenseLayer(128));
+        model.layers.add(new DenseLayer(100));
         model.layers.add(new ReLU());
         model.layers.add(new DenseLayer(2));
         model.layers.add(new Softmax());
@@ -121,7 +124,7 @@ public class Main {
     public static Matrix classify(Image im, Model model) throws FileNotFoundException, IOException{
         model.forward(im.imageData, im.label, 0);
         Softmax soft = (Softmax) model.layers.get(model.layers.size() - 1);
-        return soft.result;
+        return soft.layerOutput[0];
     }
     public static List<List<Image>> setupData(int imagesPerClass, double percentageTested) throws IOException{
         List<Path> dogDirectory = Files.list(Path.of("Animals/dog")).limit(imagesPerClass).toList();

@@ -45,7 +45,7 @@ public class Matrix {
         s.deleteCharAt(s.length()-1).deleteCharAt(s.length()-1);
         return s.append("]").toString();
     }
-    public void seed(){ //fills 1d array with random values -1 to 1
+    public void seed(){
         for(int j = 0; j < z; j++){
             for(int i = 0; i < rows * cols; i++){
                 matrix[j][i] = r.nextDouble() * 2 - 1;
