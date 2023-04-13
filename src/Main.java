@@ -20,7 +20,7 @@ public class Main {
     public static final double batchSize = 30;
     public static final int imagesUsedPerClass = 300;
     public static final double percentageTested = 0.0;
-    public static final int numThreads = 1;
+    public static final int numThreads = 2;
     public static final Boolean train = true;
     public static final Boolean forceTest = false; 
     public static final int maxEpochs = 50;
@@ -74,7 +74,6 @@ public class Main {
                 batches[i][j] = trainingData.get(i * batches[0].length + j);
             }
         } 
-    
         Model model = new Model();
         model.layers.add(new ConvolutionLayer(1, 10, 1, 3));
         model.layers.add(new ReLU());
@@ -100,7 +99,7 @@ public class Main {
             avgLoss = 0;
             for(int i = 0; i < batches.length; i++){
                 final int batchIndexForThread = i;
-                for(int j = 0; j < numThreads; j++) {
+                for(int j = 0; j < numThreads; j++){
                     final int t = j;
                     threads[j] = new Thread(() -> {
                         try {
@@ -111,7 +110,7 @@ public class Main {
                     });
                     threads[j].start();
                 }
-                for (int j = 0; j < numThreads; j++) {
+                for (int j = 0; j < numThreads; j++){
                     try {
                         threads[j].join();
                     } catch (InterruptedException e) {
