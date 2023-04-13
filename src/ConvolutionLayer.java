@@ -3,8 +3,6 @@ package src;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ConvolutionLayer extends Layer{
     Matrix[] input;
@@ -12,15 +10,25 @@ public class ConvolutionLayer extends Layer{
     int NUM_OUT_CHANNELS;
     int STRIDE;
     int KERNAL_SIZE;
-    List<Matrix> biasGradientsPerThread;
-    List<Matrix[]> weightGradientsPerThread;
+    Matrix[] biasGradientsPerThread;
+    Matrix[][] weightGradientsPerThread;
     public Matrix[] kernals;
     public Matrix biases;
     public boolean initialized = false;
 
     public ConvolutionLayer(int NUM_IN_CHANNELS, int NUM_OUT_CHANNELS, int STRIDE, int KERNAL_SIZE){
-        biasGradientsPerThread = new ArrayList<>();
-        weightGradientsPerThread = new ArrayList<>();
+        biasGradientsPerThread = new Matrix[Main.numThreads];
+        for(int i = 0; i < Main.numThreads; i ++){
+            biasGradientsPerThread[i] = new Matrix(1, NUM_OUT_CHANNELS, 1);
+            biasGradientsPerThread[i].seedZeros();
+        }
+        weightGradientsPerThread = new Matrix[Main.numThreads][NUM_IN_CHANNELS * NUM_OUT_CHANNELS];
+        for(int i = 0; i < Main.numThreads; i++){
+            for(int j = 0; j < weightGradientsPerThread[i].length; j++){
+                weightGradientsPerThread[i][j] = new Matrix(1, KERNAL_SIZE, KERNAL_SIZE);
+                weightGradientsPerThread[i][j].seedZeros();
+            }
+        }
         this.NUM_IN_CHANNELS = NUM_IN_CHANNELS;
         this.NUM_OUT_CHANNELS = NUM_OUT_CHANNELS;
         this.STRIDE = STRIDE;
@@ -53,7 +61,7 @@ public class ConvolutionLayer extends Layer{
         return result;
     }
     @Override
-    public Matrix backward(Matrix previousGradients, int threadIndex){ //dLdO = previousGradients
+    public Matrix backward(Matrix previousGradients, int threadIndex){
         Matrix dldf = input[threadIndex].convolution(previousGradients);
         Matrix result = new Matrix(input[threadIndex].z, input[threadIndex].rows, input[threadIndex].cols);
         Matrix biasGradient = new Matrix(1, NUM_OUT_CHANNELS, 1);
@@ -73,31 +81,35 @@ public class ConvolutionLayer extends Layer{
                 }
             }
         }
-        weightGradientsPerThread.add(kernalGradient);
+        for(int i = 0; i < kernalGradient.length; i++){
+            weightGradientsPerThread[threadIndex][i].add(kernalGradient[i]);
+        }
         for(int i = 0; i < previousGradients.z; i++){
             for(int j = 0; j < previousGradients.matrix[i].length; j++){
                 biasGradient.matrix[0][i] = previousGradients.matrix[i][j];
             }
         }
-        biasGradientsPerThread.add(biasGradient);
+        biasGradientsPerThread[threadIndex].add(biasGradient);
         return result;
     }
     @Override
     public void updateParams(){
-        for(int k = 0; k < weightGradientsPerThread.size(); k++){
-            for(int i = 0; i < weightGradientsPerThread.get(k).length; i++){
-                for(int j = 0; j < weightGradientsPerThread.get(k)[i].size; j++){
-                    kernals[i].matrix[0][j] -= weightGradientsPerThread.get(k)[i].matrix[0][j] * Main.ALPHA;
+        for(int k = 0; k < weightGradientsPerThread.length; k++){
+            for(int i = 0; i < weightGradientsPerThread[k].length; i++){
+                for(int j = 0; j < weightGradientsPerThread[k][i].size; j++){
+                    kernals[i].matrix[0][j] -= weightGradientsPerThread[k][i].matrix[0][j] * Main.ALPHA;
                 }
+                weightGradientsPerThread[k][i].seedZeros();
             }
         }
-        for(int i = 0; i < biasGradientsPerThread.size(); i++){
-            for(int j = 0; j < biasGradientsPerThread.get(i).size; j++){
-                biases.matrix[0][j] -= biasGradientsPerThread.get(i).matrix[0][j] * Main.ALPHA;
+        
+        for(int i = 0; i < biasGradientsPerThread.length; i++){
+            for(int j = 0; j < biasGradientsPerThread[i].size; j++){
+                biases.matrix[0][j] -= biasGradientsPerThread[i].matrix[0][j] * Main.ALPHA;
             }
+            biasGradientsPerThread[i].seedZeros();
         }
-        biasGradientsPerThread = new ArrayList<>();
-        weightGradientsPerThread = new ArrayList<>();
+        
     }
     @Override
     public void write(int layerIndex, Model model) throws FileNotFoundException, UnsupportedEncodingException{
@@ -116,5 +128,5 @@ public class ConvolutionLayer extends Layer{
             writer.println(kernal.toString(false)); 
         }
         writer.close();
-    }
+    }   
 }
