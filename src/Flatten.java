@@ -17,12 +17,8 @@ public class Flatten extends Layer{
         for(int i = 0; i < input.z; i++){
             for(int j = 0; j < input.rows * input.cols; j++){
                 result.matrix[0][i * input.rows * input.cols + j] = input.matrix[i][j];
-                if(Double.isNaN(result.matrix[0][i * input.rows * input.cols + j])){
-                    System.out.println("mommu did a fucky wucky");
-                }
             }
         }
-        
         return result;
     }
     @Override
