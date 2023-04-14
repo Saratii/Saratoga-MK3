@@ -4,12 +4,13 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
+
 public class ConvolutionLayer extends Layer{
     Matrix[] input;
-    int NUM_IN_CHANNELS;
-    int NUM_OUT_CHANNELS;
-    int STRIDE;
-    int KERNAL_SIZE;
+    final int NUM_IN_CHANNELS;
+    final int NUM_OUT_CHANNELS;
+    final int STRIDE;
+    final int KERNAL_SIZE;
     Matrix[] biasGradientsPerThread;
     Matrix[][] weightGradientsPerThread;
     public Matrix[] kernals;
@@ -22,6 +23,7 @@ public class ConvolutionLayer extends Layer{
             biasGradientsPerThread[i] = new Matrix(1, NUM_OUT_CHANNELS, 1);
             biasGradientsPerThread[i].seedZeros();
         }
+        
         weightGradientsPerThread = new Matrix[Main.numThreads][NUM_IN_CHANNELS * NUM_OUT_CHANNELS];
         for(int i = 0; i < Main.numThreads; i++){
             for(int j = 0; j < weightGradientsPerThread[i].length; j++){
@@ -58,6 +60,7 @@ public class ConvolutionLayer extends Layer{
                 result.matrix[j][k] += biases.matrix[0][j];
             }
         }
+        
         return result;
     }
     @Override
