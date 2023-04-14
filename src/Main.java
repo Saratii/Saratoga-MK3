@@ -20,7 +20,7 @@ public class Main {
     public static final double batchSize = 30;
     public static final int imagesUsedPerClass = 300;
     public static final double percentageTested = 0.0;
-    public static final int numThreads = 2;
+    public static final int numThreads = 1;
     public static final Boolean train = true;
     public static final Boolean forceTest = false; 
     public static final int maxEpochs = 50;
@@ -129,12 +129,6 @@ public class Main {
         }
         System.out.println(ANSI_CYAN + "Completed in " + epoch + " epochs" + ANSI_RESET);
         System.out.println(ANSI_CYAN + "Average time per epoch: " + ((System.currentTimeMillis() - startTime) / epoch) + " ms" + ANSI_RESET);
-        if(model.profiling){
-            for(int i = 0; i < model.layers.size(); i++){
-                System.out.println("Forward: " + model.layers.get(i).forwardTime);
-                System.out.println("Backward: " + model.layers.get(i).backwardTime + "\n");
-            }
-        }
         writer.close();
         model.write();
         return model;

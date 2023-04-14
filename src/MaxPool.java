@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
 public class MaxPool extends Layer{
-    int kernalSize;
+    final int kernalSize;
     Matrix[] gradients;
     public MaxPool(int kernalSize){
         this.kernalSize = kernalSize;
