@@ -6,21 +6,34 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-//Epoch: 49 Average Loss: 0.551881104706981
-//Completed in 50 epochs
-//Average time per epoch: 2277 ms
-
+// Epoch: 97 Average Loss: 0.4020941242442993
+// Epoch: 98 Average Loss: 0.3987083252728734
+// Epoch: 99 Average Loss: 0.39731885312127097
+// Completed in 100 epochs
+// Average time per epoch: 2288 ms
+// Epoch: 97 Average Loss: 0.4020941242442994
+// Epoch: 98 Average Loss: 0.3987083252728735
+// Epoch: 99 Average Loss: 0.3973188531212713
+// Completed in 100 epochs
+// Average time per epoch: 1267 ms
+// Completed in 100 epochs
+// Average time per epoch: 842 ms
+// Epoch: 97 Average Loss: 0.40209412424429936
+// Epoch: 98 Average Loss: 0.39870832527287464
+// Epoch: 99 Average Loss: 0.39731885312127113
+// Completed in 100 epochs
+// Average time per epoch: 752 ms
 public class Main {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_GREEN = "\u001B[32m"; //0.981139127400272 - 0.9823673800926379
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_PURPLE = "\033[0;35m";
     public static final double ALPHA = 0.0001;
-    public static final double batchSize = 30;
+    public static final int batchSize = 30;
     public static final int imagesUsedPerClass = 300;
     public static final double percentageTested = 0.0;
-    public static final int numThreads = 1;
+    public static final int numThreads = 4;
     public static final Boolean train = true;
     public static final Boolean forceTest = false; 
     public static final int maxEpochs = 50;
@@ -32,7 +45,7 @@ public class Main {
         List<Image> testingData = data.get(1);
         Model model;
         if(train){
-            model = train(trainingData, 10);
+            model = train(trainingData, batchSize);
         } else {
             model = build.buildModel();
         }
@@ -142,7 +155,7 @@ public class Main {
             loss += model.forward(batches[batchIndexForThread][i].imageData, batches[batchIndexForThread][i].label, threadIndex);
             model.backward(threadIndex);
         }
-        threadLossSums[threadIndex] = loss;
+        threadLossSums[threadIndex] = loss; //6.230492886465755 - (2.935795471425176 +  3.2946974150405803)
     }
     public static Matrix classify(Image im, Model model) throws Exception{
         model.forward(im.imageData, im.label, 0);
@@ -178,4 +191,3 @@ public class Main {
         return data;
     }
 }
-

@@ -3,12 +3,11 @@ package src;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 
 public class DenseLayer extends Layer{
     public Matrix weights;
-    Matrix inputs[];
-    Matrix outputs;
+    Matrix[] inputs;
+    Matrix[] outputs;
     int NUM_NODES;
     Boolean initialized = false;
     public Matrix biases;
@@ -18,6 +17,7 @@ public class DenseLayer extends Layer{
         this.NUM_NODES = NUM_NODES;
         weightGradient = new Matrix[Main.numThreads];
         inputs = new Matrix[Main.numThreads];
+        outputs = new Matrix[Main.numThreads];
         for(int i = 0; i < weightGradient.length; i++){
             weightGradient[i] = new Matrix(1, numInChannels, NUM_NODES);
             weightGradient[i].seedZeros();
@@ -26,12 +26,14 @@ public class DenseLayer extends Layer{
         for(int i = 0; i < Main.numThreads; i++){
             biasGradient[i] = new Matrix(1, NUM_NODES, 1);
             biasGradient[i].seedZeros();
+            outputs[i] = new Matrix(1, NUM_NODES, 1);
         }
+        
         biases = new Matrix(1, NUM_NODES, 1);
         biases.seedZeros();
         weights = new Matrix(1, numInChannels, NUM_NODES);
         weights.seedUniform();
-        outputs = new Matrix(1, NUM_NODES, 1);
+        
     }
     @Override
     public Matrix forward(Matrix inputs, int threadIndex) throws Exception{
@@ -47,13 +49,9 @@ public class DenseLayer extends Layer{
             for(int j = 0; j < inputs.rows * inputs.cols; j++){
                 sum += inputs.matrix[0][j] * weights.matrix[0][i * inputs.rows * inputs.cols + j];
             }
-            outputs.matrix[0][i] = sum;
-            if(Double.isNaN(outputs.matrix[0][i])){
-                Arrays.toString(inputs.matrix[0]);
-                Arrays.toString(weights.matrix[0]);
-            }
+            outputs[threadIndex].matrix[0][i] = sum;
         }
-        return outputs; 
+        return outputs[threadIndex]; 
     }
     @Override
     public Matrix backward(Matrix previousDerivatives, int threadIndex){
