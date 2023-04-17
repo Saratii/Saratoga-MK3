@@ -1,10 +1,10 @@
 package src;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Random;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -16,19 +16,21 @@ public class Image {
     Matrix label;
     String stringLabel;
     BufferedImage bufferedImage;
-    public Image(Path path, String label) throws IOException{
-        this.bufferedImage = Matrix.resizeImage(Matrix.makeSquare(ImageIO.read(path.toFile())), 40, 40);
+
+    public Image(Path path, String label) throws IOException {
+        this.bufferedImage = Matrix.resizeImage(Matrix.makeSquare(ImageIO.read(path.toFile())), Main.imageSize, Main.imageSize);
         this.imageData = Matrix.imageToMatrix(bufferedImage);
         imageData.normalizePixels();
         this.label = new Matrix(1, 2, 1);
         this.stringLabel = label;
-        if(label == "dog"){
-            this.label.matrix = new Double[][]{{1.0, 0.0}};
-        } else if(label == "elefante"){
-            this.label.matrix = new Double[][]{{0.0, 1.0}};
+        if(label == "dog") {
+            this.label.matrix = new Double[][] {{1.0, 0.0}};
+        } else if(label == "elefante") {
+            this.label.matrix = new Double[][] {{0.0, 1.0}};
         }
     }
-    public static void shuffle(List<Image> arr){
+
+    public static void shuffle(List<Image> arr) {
         Random r = new Random(0);
         for (int i = arr.size() - 1; i > 0; i--) {
             int index = r.nextInt(i + 1);
@@ -37,7 +39,8 @@ public class Image {
             arr.set(i, temp);
         }
     }
-    public void show(){
+
+    public void show() {
         JFrame frame = new JFrame();
         frame.getContentPane().setLayout(new FlowLayout());
         frame.getContentPane().add(new JLabel(new ImageIcon(bufferedImage)));

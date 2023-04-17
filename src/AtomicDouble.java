@@ -3,7 +3,7 @@ package src;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class AtomicDouble {
-    private AtomicReference<Double> value;
+    private final AtomicReference<Double> value;
 
     public AtomicDouble(double initialValue) {
         value = new AtomicReference<>(initialValue);
