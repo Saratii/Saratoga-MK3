@@ -38,6 +38,7 @@ https://iopscience.iop.org/article/10.1088/1742-6596/1004/1/012028/meta
 https://ieeexplore.ieee.org/abstract/document/8462533
 https://www.nature.com/articles/nature14539
 https://towardsdatascience.com/backpropagation-in-a-convolutional-layer-24c8d64d8509
+Images from https://www.kaggle.com/datasets/alessiocorrado99/animals10 
 
 
 
