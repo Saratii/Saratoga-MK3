@@ -23,10 +23,10 @@ public class Main {
     public static final int batchSize = 30;
     public static final int imagesUsedPerClass = 300;
     public static final double percentageTested = 0.2;
-    public static final int numThreads = 8;
-    public static final Boolean train = true;
+    public static final int numThreads = 9;
+    public static final Boolean train = false;
     public static final Boolean forceTest = true;
-    public static final int maxEpochs = 500;
+    public static final int maxEpochs = 5000;
     public static final int imageSize = 30;
     public static final double minimumLoss = 0.01;
 
