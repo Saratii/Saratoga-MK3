@@ -1,11 +1,17 @@
 package src;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
+
+
 // Epoch: 97 Average Loss: 0.4020941242442993
 // Epoch: 98 Average Loss: 0.3987083252728734
 // Epoch: 99 Average Loss: 0.39731885312127097
@@ -65,7 +71,7 @@ public class Main {
         // ima smack you with my pimp cane
         // goofy ahh
     }
-    public static Model train(List<Image> trainingData, int batchSize) throws Exception{
+    public static Model train(List<Image> trainingData, int batchSize) throws CustomException, FileNotFoundException, UnsupportedEncodingException{
         File folder = new File("logs");
         if(folder.exists()) { 
             String[] entries = folder.list();
@@ -104,38 +110,36 @@ public class Main {
         model.profiling = false;
 
         int epoch = 0;
-        double avgLoss = Double.POSITIVE_INFINITY;
+        AtomicDouble avgLoss = new AtomicDouble(Double.POSITIVE_INFINITY);
         long startTime = System.currentTimeMillis();
         Thread[] threads = new Thread[numThreads];
-        Double[]threadLossSums = new Double[numThreads];
-        while(avgLoss > 0.01 && epoch < 100){
-            avgLoss = 0;
-            for(int i = 0; i < batches.length; i++){
+        while (avgLoss.get() > 0.01 && epoch < 100) {
+            avgLoss.set(0.0);
+            for (int i = 0; i < batches.length; i++) {
                 final int batchIndexForThread = i;
-                for(int j = 0; j < numThreads; j++){
+                for (int j = 0; j < numThreads; j++) {
                     final int t = j;
                     threads[j] = new Thread(() -> {
-                        try {
-                            trainImages(t, model, batches, batchIndexForThread, threadLossSums);
+                         try {
+                            avgLoss.add(trainImages(t, model, batches, batchIndexForThread));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     });
                     threads[j].start();
                 }
-                for (int j = 0; j < numThreads; j++){
+                for (int j = 0; j < numThreads; j++) {
                     try {
                         threads[j].join();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
-                for(Double loss: threadLossSums){
-                    avgLoss+=loss;
-                }
+        
                 model.updateParams();
             }
-            avgLoss /= trainingData.size();
+            avgLoss.divide(trainingData.size());
+            
             System.out.println(ANSI_GREEN + "Epoch: " + epoch + " Average Loss: " + avgLoss + ANSI_RESET);
             writer.println(epoch + ", " + avgLoss);
             epoch++;
@@ -146,7 +150,7 @@ public class Main {
         model.write();
         return model;
     }
-    public static void trainImages(int threadIndex, Model model, Image[][] batches, int batchIndexForThread, Double[] threadLossSums) throws Exception{
+    public static double trainImages(int threadIndex, Model model, Image[][] batches, int batchIndexForThread) throws Exception{
         double loss = 0;
         for(int i = threadIndex; i < batches[batchIndexForThread].length; i+=numThreads){
             if(batches[batchIndexForThread][i] == null){
@@ -155,7 +159,7 @@ public class Main {
             loss += model.forward(batches[batchIndexForThread][i].imageData, batches[batchIndexForThread][i].label, threadIndex);
             model.backward(threadIndex);
         }
-        threadLossSums[threadIndex] = loss; //6.230492886465755 - (2.935795471425176 +  3.2946974150405803)
+        return loss;
     }
     public static Matrix classify(Image im, Model model) throws Exception{
         model.forward(im.imageData, im.label, 0);
