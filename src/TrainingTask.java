@@ -7,8 +7,7 @@ public class TrainingTask implements Runnable {
     private int batchIndexForThread;
     private AtomicDouble avgLoss;
 
-    public TrainingTask(int threadIndex, Model model, Image[][] batches, int batchIndexForThread,
-            AtomicDouble avgLoss) {
+    public TrainingTask(int threadIndex, Model model, Image[][] batches, int batchIndexForThread, AtomicDouble avgLoss) {
         this.threadIndex = threadIndex;
         this.model = model;
         this.batches = batches;
@@ -18,12 +17,11 @@ public class TrainingTask implements Runnable {
 
     public double trainImages() throws Exception {
         double loss = 0;
-        for (int i = threadIndex; i < batches[batchIndexForThread].length; i += Main.numThreads) {
-            if(batches[batchIndexForThread][i] == null) {
+        for(int i = threadIndex; i < batches[batchIndexForThread].length; i += Main.numThreads){
+            if(batches[batchIndexForThread][i] == null){
                 break;
             }
-            loss += model.forward(batches[batchIndexForThread][i].imageData, batches[batchIndexForThread][i].label,
-                    threadIndex);
+            loss += model.forward(batches[batchIndexForThread][i].imageData, batches[batchIndexForThread][i].label, threadIndex);
             model.backward(threadIndex);
         }
         return loss;
@@ -35,9 +33,9 @@ public class TrainingTask implements Runnable {
 
     @Override
     public void run() {
-        try {
+        try{
             avgLoss.add(trainImages());
-        } catch (Exception e) {
+        } catch (Exception e){
             e.printStackTrace();
         }
     }

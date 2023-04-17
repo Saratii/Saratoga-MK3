@@ -9,7 +9,7 @@ public class FeatureMap {
         JPanel panel = new JPanel();
         GridLayout layout = new GridLayout(3, 5);
         panel.setLayout(layout);
-        for (BufferedImage image : images) {
+        for(BufferedImage image : images){
             JLabel label = new JLabel(new ImageIcon(image));
             panel.add(label);
         }

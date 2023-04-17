@@ -15,10 +15,10 @@ public class Softmax extends Layer {
     public Matrix forward(Matrix inputs, int threadIndex) {
         Matrix result;
         result = new Matrix(1, inputs.size, 1);
-        for (int i = 0; i < inputs.size; i++) {
+        for(int i = 0; i < inputs.size; i++){
             double shiftConstant = Matrix.maxValue(inputs.matrix[0]);
             double sum = 0.0;
-            for (int j = 0; j < inputs.size; j++) {
+            for(int j = 0; j < inputs.size; j++){
                 sum += Math.exp(inputs.matrix[0][j] - shiftConstant);
             }
             result.matrix[0][i] = Math.exp(inputs.matrix[0][i] - shiftConstant) / sum;
@@ -30,10 +30,9 @@ public class Softmax extends Layer {
     @Override
     public Matrix backward(Matrix dvalues, int threadIndex) {
         Matrix result = new Matrix(1, dvalues.size, dvalues.size);
-        for (int i = 0; i < dvalues.size; i++) {
-            for (int j = 0; j < dvalues.size; j++) {
-                result.matrix[0][j * dvalues.size + i] = layerOutput[threadIndex].matrix[0][i]
-                        * ((i == j ? 1 : 0) - layerOutput[threadIndex].matrix[0][j]);
+        for(int i = 0; i < dvalues.size; i++){
+            for(int j = 0; j < dvalues.size; j++){
+                result.matrix[0][j * dvalues.size + i] = layerOutput[threadIndex].matrix[0][i] * ((i == j ? 1 : 0) - layerOutput[threadIndex].matrix[0][j]);
             }
         }
         return result.multiply(dvalues);

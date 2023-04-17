@@ -23,16 +23,16 @@ public class Image {
         imageData.normalizePixels();
         this.label = new Matrix(1, 2, 1);
         this.stringLabel = label;
-        if(label == "dog") {
+        if(label == "dog"){
             this.label.matrix = new Double[][] {{1.0, 0.0}};
-        } else if(label == "elefante") {
+        } else if(label == "elefante"){
             this.label.matrix = new Double[][] {{0.0, 1.0}};
         }
     }
 
     public static void shuffle(List<Image> arr) {
         Random r = new Random(0);
-        for (int i = arr.size() - 1; i > 0; i--) {
+        for(int i = arr.size() - 1; i > 0; i--){
             int index = r.nextInt(i + 1);
             Image temp = arr.get(index);
             arr.set(index, arr.get(i));

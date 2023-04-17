@@ -22,30 +22,31 @@ public class Main {
     public static final double ALPHA = 0.0001;
     public static final int batchSize = 30;
     public static final int imagesUsedPerClass = 300;
-    public static final double percentageTested = 0.0;
+    public static final double percentageTested = 0.2;
     public static final int numThreads = 8;
     public static final Boolean train = true;
-    public static final Boolean forceTest = false;
-    public static final int maxEpochs = 50;
-    public static final int imageSize = 40;
+    public static final Boolean forceTest = true;
+    public static final int maxEpochs = 500;
+    public static final int imageSize = 30;
+    public static final double minimumLoss = 0.01;
 
     public static void main(String[] args) throws Exception {
         List<List<Image>> data = setupData(imagesUsedPerClass, percentageTested);
         List<Image> trainingData = data.get(0);
         List<Image> testingData = data.get(1);
         Model model;
-        if(train) {
+        if(train){
             model = train(trainingData, batchSize);
-        } else {
+        } else{
             model = build.buildModel();
         }
-        if(forceTest) {
+        if(forceTest){
             int numRight = 0;
-            for (Image image : testingData) {
+            for(Image image : testingData){
                 Matrix result = classify(image, model);
                 System.out.println("Predicted: " + result);
                 System.out.println("Expected: " + image.label + "\n");
-                if((result.matrix[0][0] < result.matrix[0][1]) == (image.label.matrix[0][0] < image.label.matrix[0][1])) {
+                if((result.matrix[0][0] < result.matrix[0][1]) == (image.label.matrix[0][0] < image.label.matrix[0][1])){
                     numRight++;
                 }
             }
@@ -56,20 +57,20 @@ public class Main {
 
     public static Model train(List<Image> trainingData, int batchSize) throws FileNotFoundException, UnsupportedEncodingException, InterruptedException {
         File folder = new File("logs");
-        if(folder.exists()) {
+        if(folder.exists()){
             String[] entries = folder.list();
-            for (String s : entries) {
+            for(String s : entries){
                 File currentFile = new File(folder.getPath(), s);
                 currentFile.delete();
             }
-        } else {
+        } else{
             folder.mkdirs();
         }
         PrintWriter writer = new PrintWriter("logs/log-graph", "UTF-8");
         Image[][] batches = new Image[Math.ceilDiv(trainingData.size(), batchSize)][batchSize];
-        for (int i = 0; i < batches.length; i++) {
-            for (int j = 0; j < batches[i].length; j++) {
-                if(trainingData.size() <= i * batches[0].length + j) {
+        for(int i = 0; i < batches.length; i++){
+            for(int j = 0; j < batches[i].length; j++){
+                if(trainingData.size() <= i * batches[0].length + j){
                     break;
                 }
                 batches[i][j] = trainingData.get(i * batches[0].length + j);
@@ -83,34 +84,32 @@ public class Main {
         model.layers.add(new ReLU());
         model.layers.add(new MaxPool(3));
         model.layers.add(new Flatten());
-        model.layers.add(new DenseLayer(160, 100));
+        model.layers.add(new DenseLayer(90, 32));
         model.layers.add(new ReLU());
-        model.layers.add(new DenseLayer(100, 100));
+        model.layers.add(new DenseLayer(32, 32));
         model.layers.add(new ReLU());
-        model.layers.add(new DenseLayer(100, 2));
+        model.layers.add(new DenseLayer(32, 2));
         model.layers.add(new Softmax());
-        model.profiling = false;
         int epoch = 0;
         AtomicDouble avgLoss = new AtomicDouble(Double.POSITIVE_INFINITY);
         long startTime = System.currentTimeMillis();
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
         TrainingTask[] threads = new TrainingTask[numThreads];
         Future<?>[] threadResults = new Future[numThreads];
-        for (int i = 0; i < numThreads; i++) {
+        for(int i = 0; i < numThreads; i++){
             threads[i] = new TrainingTask(i, model, batches, 0, avgLoss);
         }
-        while (avgLoss.get() > 0.01 && epoch < 100) {
+        while(avgLoss.get() > minimumLoss && epoch < maxEpochs){
             avgLoss.set(0.0);
-            for (int i = 0; i < batches.length; i++) {
-                for (int j = 0; j < numThreads; j++) {
+            for(int i = 0; i < batches.length; i++){
+                for(int j = 0; j < numThreads; j++){
                     threads[j].setBatchIndex(i);
                     threadResults[j] = executor.submit(threads[j]);
                 }
-                for (int j = 0; j < numThreads; j++) {
-                    try {
+                for(int j = 0; j < numThreads; j++){
+                    try{
                         threadResults[j].get();
-                    } catch (Exception e) { // it would make sarati vevwy vewy happy if you could help sarati fix the
-                                            // rounding :)))
+                    } catch (Exception e){
                         System.out.println(e.getStackTrace());
                     }
                 }
@@ -121,6 +120,7 @@ public class Main {
             writer.println(epoch + ", " + avgLoss);
             epoch++;
         }
+        executor.shutdown();
         System.out.println(ANSI_CYAN + "Completed in " + epoch + " epochs" + ANSI_RESET);
         System.out.println(ANSI_CYAN + "Average time per epoch: " + ((System.currentTimeMillis() - startTime) / epoch) + " ms" + ANSI_RESET);
         writer.close();
@@ -139,17 +139,17 @@ public class Main {
         List<Path> elefanteDirectory = Files.list(Path.of("Animals/elefante")).limit(imagesPerClass).toList();
         List<Image> images = new ArrayList<>();
         List<Image> testImages = new ArrayList<>();
-        for (int i = 0; i < dogDirectory.size(); i++) {
-            if(i < (1 - percentageTested) * dogDirectory.size()) {
+        for(int i = 0; i < dogDirectory.size(); i++){
+            if(i < (1 - percentageTested) * dogDirectory.size()){
                 images.add(new Image(dogDirectory.get(i), "dog"));
-            } else {
+            } else{
                 testImages.add(new Image(dogDirectory.get(i), "dog"));
             }
         }
-        for (int i = 0; i < elefanteDirectory.size(); i++) {
-            if(i < (1 - percentageTested) * elefanteDirectory.size()) {
+        for(int i = 0; i < elefanteDirectory.size(); i++){
+            if(i < (1 - percentageTested) * elefanteDirectory.size()){
                 images.add(new Image(elefanteDirectory.get(i), "elefante"));
-            } else {
+            } else{
                 testImages.add(new Image(elefanteDirectory.get(i), "elefante"));
             }
         }

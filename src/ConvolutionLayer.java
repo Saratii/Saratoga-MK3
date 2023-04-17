@@ -18,13 +18,13 @@ public class ConvolutionLayer extends Layer {
 
     public ConvolutionLayer(int NUM_IN_CHANNELS, int NUM_OUT_CHANNELS, int STRIDE, int KERNAL_SIZE) {
         biasGradientsPerThread = new Matrix[Main.numThreads];
-        for (int i = 0; i < Main.numThreads; i++) {
+        for(int i = 0; i < Main.numThreads; i++){
             biasGradientsPerThread[i] = new Matrix(1, NUM_OUT_CHANNELS, 1);
             biasGradientsPerThread[i].seedZeros();
         }
         weightGradientsPerThread = new Matrix[Main.numThreads][NUM_IN_CHANNELS * NUM_OUT_CHANNELS];
-        for (int i = 0; i < Main.numThreads; i++) {
-            for (int j = 0; j < weightGradientsPerThread[i].length; j++) {
+        for(int i = 0; i < Main.numThreads; i++){
+            for(int j = 0; j < weightGradientsPerThread[i].length; j++){
                 weightGradientsPerThread[i][j] = new Matrix(1, KERNAL_SIZE, KERNAL_SIZE);
                 weightGradientsPerThread[i][j].seedZeros();
             }
@@ -36,7 +36,7 @@ public class ConvolutionLayer extends Layer {
         kernals = new Matrix[NUM_IN_CHANNELS * NUM_OUT_CHANNELS];
         biases = new Matrix(1, NUM_OUT_CHANNELS, 1);
         biases.seedZeros();
-        for (int i = 0; i < kernals.length; i++) {
+        for(int i = 0; i < kernals.length; i++){
             kernals[i] = new Matrix(1, KERNAL_SIZE, KERNAL_SIZE);
             kernals[i].seed();
         }
@@ -48,15 +48,14 @@ public class ConvolutionLayer extends Layer {
         this.input[threadIndex] = input;
         Matrix result = new Matrix(NUM_OUT_CHANNELS, input.rows - KERNAL_SIZE + 1, input.cols - KERNAL_SIZE + 1);
         result.seedZeros();
-        for (int j = 0; j < NUM_OUT_CHANNELS; j++) {
-            for (int inputIndex = 0; inputIndex < NUM_IN_CHANNELS; inputIndex++) {
-                Double[] temp = Matrix.simpleCov(input.matrix[inputIndex],
-                        kernals[j * NUM_IN_CHANNELS + inputIndex].matrix[0]);
-                for (int k = 0; k < result.matrix[j].length; k++) {
+        for(int j = 0; j < NUM_OUT_CHANNELS; j++){
+            for(int inputIndex = 0; inputIndex < NUM_IN_CHANNELS; inputIndex++){
+                Double[] temp = Matrix.simpleCov(input.matrix[inputIndex], kernals[j * NUM_IN_CHANNELS + inputIndex].matrix[0]);
+                for(int k = 0; k < result.matrix[j].length; k++){
                     result.matrix[j][k] += temp[k];
                 }
             }
-            for (int k = 0; k < result.matrix[j].length; k++) {
+            for(int k = 0; k < result.matrix[j].length; k++){
                 result.matrix[j][k] += biases.matrix[0][j];
             }
         }
@@ -69,27 +68,26 @@ public class ConvolutionLayer extends Layer {
         Matrix result = new Matrix(input[threadIndex].z, input[threadIndex].rows, input[threadIndex].cols);
         Matrix biasGradient = new Matrix(1, NUM_OUT_CHANNELS, 1);
         Matrix[] kernalGradient = new Matrix[NUM_IN_CHANNELS * NUM_OUT_CHANNELS];
-        for (int i = 0; i < kernals.length; i++) {
+        for(int i = 0; i < kernals.length; i++){
             kernalGradient[i] = new Matrix(1, KERNAL_SIZE, KERNAL_SIZE);
         }
         result.seedZeros();
-        for (int i = 0; i < result.z; i++) {
-            for (int j = 0; j < previousGradients.z; j++) {
-                Matrix temp = kernals[j * result.z + i].reverse().doubleBigConvolution(previousGradients.matrix[j],
-                        previousGradients.rows, previousGradients.cols);
-                for (int k = 0; k < temp.rows * temp.cols; k++) {
+        for(int i = 0; i < result.z; i++){
+            for(int j = 0; j < previousGradients.z; j++){
+                Matrix temp = kernals[j * result.z + i].reverse().doubleBigConvolution(previousGradients.matrix[j], previousGradients.rows, previousGradients.cols);
+                for(int k = 0; k < temp.rows * temp.cols; k++){
                     result.matrix[i][k] += temp.matrix[0][k];
                 }
-                for (int k = 0; k < kernals[j * result.z + i].size; k++) {
+                for(int k = 0; k < kernals[j * result.z + i].size; k++){
                     kernalGradient[j * result.z + i].matrix[0][k] = dldf.matrix[j * result.z + i][k];
                 }
             }
         }
-        for (int i = 0; i < kernalGradient.length; i++) {
+        for(int i = 0; i < kernalGradient.length; i++){
             weightGradientsPerThread[threadIndex][i].add(kernalGradient[i]);
         }
-        for (int i = 0; i < previousGradients.z; i++) {
-            for (int j = 0; j < previousGradients.matrix[i].length; j++) {
+        for(int i = 0; i < previousGradients.z; i++){
+            for(int j = 0; j < previousGradients.matrix[i].length; j++){
                 biasGradient.matrix[0][i] = previousGradients.matrix[i][j];
             }
         }
@@ -99,16 +97,16 @@ public class ConvolutionLayer extends Layer {
 
     @Override
     public void updateParams() {
-        for (int k = 0; k < weightGradientsPerThread.length; k++) {
-            for (int i = 0; i < weightGradientsPerThread[k].length; i++) {
-                for (int j = 0; j < weightGradientsPerThread[k][i].size; j++) {
+        for(int k = 0; k < weightGradientsPerThread.length; k++){
+            for(int i = 0; i < weightGradientsPerThread[k].length; i++){
+                for(int j = 0; j < weightGradientsPerThread[k][i].size; j++){
                     kernals[i].matrix[0][j] -= weightGradientsPerThread[k][i].matrix[0][j] * Main.ALPHA;
                 }
                 weightGradientsPerThread[k][i].seedZeros();
             }
         }
-        for (int i = 0; i < biasGradientsPerThread.length; i++) {
-            for (int j = 0; j < biasGradientsPerThread[i].size; j++) {
+        for(int i = 0; i < biasGradientsPerThread.length; i++){
+            for(int j = 0; j < biasGradientsPerThread[i].size; j++){
                 biases.matrix[0][j] -= biasGradientsPerThread[i].matrix[0][j] * Main.ALPHA;
             }
             biasGradientsPerThread[i].seedZeros();
@@ -128,7 +126,7 @@ public class ConvolutionLayer extends Layer {
         writer.println("Biases{" + biases.size + "}");
         writer.println(biases.toString(false) + "\n");
         writer.println("Kernal Weights{" + kernals.length * kernals[0].size + "}");
-        for (Matrix kernal : kernals) {
+        for(Matrix kernal : kernals){
             writer.println(kernal.toString(false));
         }
         writer.close();

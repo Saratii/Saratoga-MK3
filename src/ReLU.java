@@ -14,8 +14,8 @@ public class ReLU extends Layer {
     @Override
     public Matrix forward(Matrix values, int threadIndex) {
         Matrix result = new Matrix(values.z, values.rows, values.cols);
-        for (int j = 0; j < values.z; j++) {
-            for (int i = 0; i < values.rows * values.cols; i++) {
+        for(int j = 0; j < values.z; j++){
+            for(int i = 0; i < values.rows * values.cols; i++){
                 result.matrix[j][i] = (values.matrix[j][i] > 0) ? values.matrix[j][i] : 0.0;
             }
         }
@@ -26,8 +26,8 @@ public class ReLU extends Layer {
     @Override
     public Matrix backward(Matrix dvalues, int threadIndex) {
         Matrix result = new Matrix(dvalues.z, dvalues.rows, dvalues.cols);
-        for (int j = 0; j < dvalues.z; j++) {
-            for (int i = 0; i < dvalues.rows * dvalues.cols; i++) {
+        for(int j = 0; j < dvalues.z; j++){
+            for(int i = 0; i < dvalues.rows * dvalues.cols; i++){
                 result.matrix[j][i] = (values[threadIndex].matrix[j][i] > 0) ? dvalues.matrix[j][i] : 0.0;
             }
         }
