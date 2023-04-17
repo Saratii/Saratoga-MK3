@@ -20,7 +20,7 @@ python graph.py
 ```
 
 
-Images can be loaded by YOU into the model by creating folders in the root directory and then just changing the strings for where the folders are loaded. Currently, the model is loaded with 600 images of two classes each. It works for as many classes as you need.
+Images can be loaded by YOU into the model by creating folders in the root directory and then just changing the strings for where the folders are loaded. Currently, the model is loaded with 600 images of two classes each. It works for as many classes as you need. It is untested on colored 3-4 channel images or 3 dimensional images (9-12 channel) but the code supports it. 
 
 
 AI works by fitting an extremely complex math equation with parameters to output the correct class over many iterations and images. The parameters are updated by calculating multi-dimensional gradients and Jacobians for the parameter with respect to loss. The larger the model is and the larger the input data, the longer the runtime per epoch will be. Do not expect it to finish quickly, as it is computing an obscene amount of matrix operations. If you need more memory, you may change the Java JVM memory parameters in preferences or by using the command line. With my very limited testing, I was able to fit a model of 100 classes of animal with 95% accuracy. Train time was several days. Gradient values and layer output equations were tested for accuracy and performance against Pytorch. Accuracy was perfect and output the same values as pytorch. Performance in most cases was far better than pytorch due to pytorch having bloat and slow Auto Grad. 
@@ -38,6 +38,7 @@ https://iopscience.iop.org/article/10.1088/1742-6596/1004/1/012028/meta
 https://ieeexplore.ieee.org/abstract/document/8462533
 https://www.nature.com/articles/nature14539
 https://towardsdatascience.com/backpropagation-in-a-convolutional-layer-24c8d64d8509
+Images from https://www.kaggle.com/datasets/alessiocorrado99/animals10 
 
 
 
