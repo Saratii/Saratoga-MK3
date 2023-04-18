@@ -7,5 +7,9 @@ src.MaxPool@4d5b6aac
 src.Flatten@3e84448c
 src.DenseLayer@4a7f959b
 src.ReLU@429bffaa
-src.DenseLayer@5403f35f
-src.Softmax@483f6d77
+src.Dropout@5403f35f
+src.DenseLayer@483f6d77
+src.ReLU@7e5afaa6
+src.Dropout@63a12c68
+src.DenseLayer@28f3b248
+src.Softmax@1b1426f4
