@@ -16,12 +16,12 @@ public class Softmax extends Layer {
         Matrix result;
         result = new Matrix(1, inputs.size, 1);
         for(int i = 0; i < inputs.size; i++){
-            double shiftConstant = Matrix.maxValue(inputs.matrix[0]);
+            double shiftConstant = MathUtils.maxValue(inputs.matrix[0]);
             double sum = 0.0;
             for(int j = 0; j < inputs.size; j++){
                 sum += Math.exp(inputs.matrix[0][j] - shiftConstant);
             }
-            result.matrix[0][i] = Math.exp(inputs.matrix[0][i] - shiftConstant) / sum;
+            result.matrix[0][i] = Math.exp(inputs.matrix[0][i] - shiftConstant) / (sum);
         }
         layerOutput[threadIndex] = result;
         return result;
@@ -37,10 +37,10 @@ public class Softmax extends Layer {
         }
         return result.multiply(dvalues);
     }
-
-    public void write(int layerIndex, Model model) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter("logs/log-" + model.layers.get(layerIndex), "UTF-8");
-        writer.println(model.layers.get(layerIndex));
+    @Override
+    public void write() throws FileNotFoundException, UnsupportedEncodingException {
+        PrintWriter writer = new PrintWriter("logs/log-" + this, "UTF-8");
+        writer.println(this);
         writer.close();
     }
 }

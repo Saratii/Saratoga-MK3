@@ -16,8 +16,8 @@ public class Flatten extends Layer {
         this.rows = input.rows;
         this.cols = input.cols;
         for(int i = 0; i < input.z; i++){
-            for(int j = 0; j < input.rows * input.cols; j++){
-                result.matrix[0][i * input.rows * input.cols + j] = input.matrix[i][j];
+            for(int j = 0; j < input.innerSize; j++){
+                result.matrix[0][i * input.innerSize + j] = input.matrix[i][j];
             }
         }
         return result;
@@ -27,17 +27,17 @@ public class Flatten extends Layer {
     public Matrix backward(Matrix notInput, int threadIndex) {
         Matrix result = new Matrix(z, rows, cols);
         for(int i = 0; i < z; i++){
-            for(int j = 0; j < rows * cols; j++){
-                result.matrix[i][j] = notInput.matrix[0][i * rows * cols + j];
+            for(int j = 0; j < result.innerSize; j++){
+                result.matrix[i][j] = notInput.matrix[0][i * result.innerSize + j];
             }
         }
         return result;
     }
 
     @Override
-    public void write(int layerIndex, Model model) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter("logs/log-" + model.layers.get(layerIndex), "UTF-8");
-        writer.println(model.layers.get(layerIndex));
+    public void write() throws FileNotFoundException, UnsupportedEncodingException {
+        PrintWriter writer = new PrintWriter("logs/log-" + this, "UTF-8");
+        writer.println(this);
         writer.close();
     }
 }

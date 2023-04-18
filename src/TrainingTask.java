@@ -1,6 +1,8 @@
 package src;
 
-public class TrainingTask implements Runnable {
+import java.util.concurrent.Callable;
+
+public class TrainingTask implements Callable<Integer> {
     private final int threadIndex;
     private final Model model;
     private final Image[][] batches;
@@ -32,11 +34,8 @@ public class TrainingTask implements Runnable {
     }
 
     @Override
-    public void run() {
-        try{
-            avgLoss.add(trainImages());
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+    public Integer call() throws Exception {
+        avgLoss.add(trainImages());
+        return 1;
     }
 }

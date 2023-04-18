@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 
 public class Layer {
+    boolean isClassifying = false;
     public Matrix forward(Matrix inputs, int threadIndex) throws Exception {
         return inputs;
     }
@@ -15,6 +16,6 @@ public class Layer {
     public void updateParams() {
     }
 
-    public void write(int layerIndex, Model model) throws FileNotFoundException, UnsupportedEncodingException {
+    public void write() throws FileNotFoundException, UnsupportedEncodingException {
     }
 }

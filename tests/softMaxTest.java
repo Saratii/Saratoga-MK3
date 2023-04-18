@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import src.MathUtils;
 import src.Matrix;
 import src.Softmax;
 
@@ -19,7 +20,7 @@ public class softMaxTest {
         for(int i = 0; i < a.size; i++){
             assertEquals(expected.matrix[0][i], b.matrix[0][i], 0.0001);
         }
-        assertEquals(Double.valueOf(1.0), Double.valueOf(Matrix.sum(b.matrix[0])), 0.000001);
+        assertEquals(Double.valueOf(1.0), Double.valueOf(MathUtils.sum(b.matrix[0])), 0.000001);
         Matrix c = new Matrix(1, 68, 69);
         c.seed();
         Matrix d = s.forward(c, 0);
@@ -30,6 +31,6 @@ public class softMaxTest {
         for(int i = 0; i < c.size; i++){
             assertEquals(d.matrix[0][i], Double.valueOf(Math.exp(c.matrix[0][i]) / sum), 0.000001);
         }
-        assertEquals(Double.valueOf(Matrix.sum(d.matrix[0])), Double.valueOf(1.0), 0.000001);
+        assertEquals(Double.valueOf(MathUtils.sum(d.matrix[0])), Double.valueOf(1.0), 0.000001);
     }
 }

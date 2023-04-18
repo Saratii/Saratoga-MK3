@@ -46,8 +46,8 @@ public class DenseLayer extends Layer {
         this.inputs[threadIndex] = inputs;
         for(int i = 0; i < NUM_NODES; i++){
             double sum = biases.matrix[0][i];
-            for(int j = 0; j < inputs.rows * inputs.cols; j++){
-                sum += inputs.matrix[0][j] * weights.matrix[0][i * inputs.rows * inputs.cols + j];
+            for(int j = 0; j < inputs.innerSize; j++){
+                sum += inputs.matrix[0][j] * weights.matrix[0][i * inputs.innerSize + j];
             }
             outputs[threadIndex].matrix[0][i] = sum;
         }
@@ -85,9 +85,9 @@ public class DenseLayer extends Layer {
     }
 
     @Override
-    public void write(int layerIndex, Model model) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter("logs/log-" + model.layers.get(layerIndex), "UTF-8");
-        writer.println(model.layers.get(layerIndex));
+    public void write() throws FileNotFoundException, UnsupportedEncodingException {
+        PrintWriter writer = new PrintWriter("logs/log-" + this, "UTF-8");
+        writer.println(this);
         writer.println("Total Parameters{" + (weights.size + biases.size) + "}");
         writer.println("Number of Nodes{" + NUM_NODES + "}\n");
         writer.println("Number of Inputs{" + (inputs[0].size) + "}");
