@@ -9,7 +9,7 @@ public class Model {
     public ArrayList<Layer> layers = new ArrayList<>();
     Matrix[] inputs;
     Matrix[] expected;
-    Boolean profiling = false;
+    boolean isClassifying;
 
     public Model() {
         expected = new Matrix[Main.numThreads];
@@ -18,6 +18,7 @@ public class Model {
 
     public double forward(Matrix inputs, Matrix expected, int threadIndex) throws Exception {
         for(int i = 0; i < layers.size(); i++){
+            layers.get(i).isClassifying = isClassifying;
             inputs = layers.get(i).forward(inputs, threadIndex);
         }
         double l = Loss.forward(inputs, expected);
@@ -43,7 +44,7 @@ public class Model {
     public void write() throws FileNotFoundException, UnsupportedEncodingException {
         PrintWriter writer = new PrintWriter("logs/log-architecture", "UTF-8");
         for(int i = 0; i < layers.size(); i++){
-            layers.get(i).write(i, this);
+            layers.get(i).write();
             writer.println(layers.get(i));
         }
         writer.close();

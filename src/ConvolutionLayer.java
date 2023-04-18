@@ -75,7 +75,7 @@ public class ConvolutionLayer extends Layer {
         for(int i = 0; i < result.z; i++){
             for(int j = 0; j < previousGradients.z; j++){
                 Matrix temp = kernals[j * result.z + i].reverse().doubleBigConvolution(previousGradients.matrix[j], previousGradients.rows, previousGradients.cols);
-                for(int k = 0; k < temp.rows * temp.cols; k++){
+                for(int k = 0; k < temp.innerSize; k++){
                     result.matrix[i][k] += temp.matrix[0][k];
                 }
                 for(int k = 0; k < kernals[j * result.z + i].size; k++){
@@ -114,9 +114,9 @@ public class ConvolutionLayer extends Layer {
     }
 
     @Override
-    public void write(int layerIndex, Model model) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter("logs/log-" + model.layers.get(layerIndex), "UTF-8");
-        writer.println(model.layers.get(layerIndex));
+    public void write() throws FileNotFoundException, UnsupportedEncodingException {
+        PrintWriter writer = new PrintWriter("logs/log-" + this, "UTF-8");
+        writer.println(this);
         writer.println("Total Parameters{" + (kernals.length * kernals[0].size) + "}");
         writer.println("Number of Kernals{" + kernals.length + "}");
         writer.println("Stride {" + STRIDE + "}");

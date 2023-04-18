@@ -46,7 +46,7 @@ public class MaxPool extends Layer {
     public Matrix backward(Matrix prevGradients, int threadIndex) {
         int i = 0;
         for(int j = 0; j < gradients[threadIndex].z; j++){
-            for(int k = 0; k < gradients[threadIndex].rows * gradients[threadIndex].cols; k++){
+            for(int k = 0; k < gradients[threadIndex].innerSize; k++){
                 gradients[threadIndex].matrix[j][k] *= prevGradients.matrix[j][prevGradients.convert(k / gradients[threadIndex].cols / kernalSize,
                         (k % gradients[threadIndex].cols) / kernalSize)];
                 i++;
@@ -59,9 +59,9 @@ public class MaxPool extends Layer {
     }
 
     @Override
-    public void write(int layerIndex, Model model) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter("logs/log-" + model.layers.get(layerIndex), "UTF-8");
-        writer.println(model.layers.get(layerIndex));
+    public void write() throws FileNotFoundException, UnsupportedEncodingException {
+        PrintWriter writer = new PrintWriter("logs/log-" + this, "UTF-8");
+        writer.println(this);
         writer.println("Size of Kernals{" + kernalSize + "}");
         writer.close();
     }

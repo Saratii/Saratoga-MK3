@@ -133,6 +133,20 @@ public class build {
                     model.layers.add(new MaxPool(kernalSize));
                 } else if(layerName.equals("ReLU")){
                     model.layers.add(new ReLU());
+                } else if(layerName.equals("Dropout")){
+                    double percentageLost = 0;
+                    try (BufferedReader configFile = new BufferedReader(new FileReader("logs/log-" + line))){
+                        while((line = configFile.readLine()) != null){
+                            if(line.contains("Dropout Percentage")){
+                                matcher = pattern.matcher(line);
+                                if(matcher.find()){
+                                    percentageLost = Integer.parseInt(matcher.group());
+                                }
+                            }
+                        }
+                    }
+                    Dropout dropout = new Dropout(percentageLost);
+                    model.layers.add(dropout);
                 }
             }
         }

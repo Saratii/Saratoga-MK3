@@ -11,18 +11,20 @@ import java.awt.*;
 
 public class Matrix {
     private static JFrame frame;
-    private Random r = new Random(0);
+    private Random r = new Random();
     public Double[][] matrix;
     public int z;
     public int rows;
     public int cols;
     public int size;
+    public int innerSize;
 
     public Matrix(int z, int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
         this.z = z;
         this.size = rows * cols * z;
+        this.innerSize = rows * cols;
         this.matrix = new Double[z][rows * cols];
     }
 
@@ -35,7 +37,7 @@ public class Matrix {
         StringBuilder s = new StringBuilder("[");
         for(int j = 0; j < z; j++){
             s.append("[");
-            for(int i = 0; i < rows * cols; i++){
+            for(int i = 0; i < innerSize; i++){
                 if(rounding){
                     s.append(String.format("%.4f, ", matrix[j][i]));
                 } else{
@@ -51,7 +53,7 @@ public class Matrix {
 
     public void seed() {
         for(int j = 0; j < z; j++){
-            for(int i = 0; i < rows * cols; i++){
+            for(int i = 0; i < innerSize; i++){
                 matrix[j][i] = r.nextDouble() * 2 - 1;
             }
         }
@@ -59,7 +61,7 @@ public class Matrix {
 
     public void seedPositive() {
         for(int j = 0; j < z; j++){
-            for(int i = 0; i < rows * cols; i++){
+            for(int i = 0; i < innerSize; i++){
                 matrix[j][i] = r.nextDouble();
             }
         }
@@ -67,7 +69,7 @@ public class Matrix {
 
     public void seedZeros() {
         for(int j = 0; j < z; j++){
-            for(int i = 0; i < rows * cols; i++){
+            for(int i = 0; i < innerSize; i++){
                 matrix[j][i] = 0.0;
             }
         }
@@ -75,7 +77,7 @@ public class Matrix {
 
     public void normalizePixels() {
         for(int j = 0; j < z; j++){
-            for(int i = 0; i < rows * cols; i++){
+            for(int i = 0; i < innerSize; i++){
                 matrix[j][i] = (matrix[j][i] - 128) / 128;
             }
         }
@@ -83,7 +85,7 @@ public class Matrix {
 
     public void reverseNormalizePixels() {
         for(int j = 0; j < z; j++){
-            for(int i = 0; i < rows * cols; i++){
+            for(int i = 0; i < innerSize; i++){
                 matrix[j][i] = matrix[j][i] * 128 + 128;
             }
         }
@@ -91,7 +93,7 @@ public class Matrix {
 
     public void seedGaussian() {
         for(int j = 0; j < z; j++){
-            for(int i = 0; i < rows * cols; i++){
+            for(int i = 0; i < innerSize; i++){
                 matrix[j][i] = r.nextGaussian();
             }
         }
@@ -100,7 +102,7 @@ public class Matrix {
     public void seedUniform() {
         double bound = 1 / Math.sqrt(rows);
         for(int j = 0; j < z; j++){
-            for(int i = 0; i < rows * cols; i++){
+            for(int i = 0; i < innerSize; i++){
                 matrix[j][i] = (r.nextDouble() - 0.5) * 2 * bound;
             }
         }
@@ -144,34 +146,6 @@ public class Matrix {
             }
         }
         return image;
-    }
-
-    public static double maxValue(Double[] inputs) {
-        double max = Double.NEGATIVE_INFINITY;
-        for(double value : inputs){
-            if(value > max){
-                max = value;
-            }
-        }
-        return max;
-    }
-
-    public static double minValue(Double[] inputs) {
-        double min = Double.POSITIVE_INFINITY;
-        for(double value : inputs){
-            if(value < min){
-                min = value;
-            }
-        }
-        return min;
-    }
-
-    public static double sum(Double[] inputs) {
-        double sum = 0;
-        for(int i = 0; i < inputs.length; i++){
-            sum += inputs[i];
-        }
-        return sum;
     }
 
     public static Double[] simpleCov(Double[] input, Double[] kernal) {
@@ -298,12 +272,6 @@ public class Matrix {
         return sum;
     }
 
-    public void ReLU() {
-        for(int i = 0; i < size; i++){
-            matrix[0][i] = (matrix[0][i] < 0) ? 0.0 : matrix[0][i];
-        }
-    }
-
     public int convert(int x, int y) {
         return y * cols + x;
     }
@@ -347,7 +315,7 @@ public class Matrix {
 
     public boolean equals(Matrix other) {
         for(int i = 0; i < z; i++){
-            for(int j = 0; j < rows * cols; j++){
+            for(int j = 0; j < innerSize; j++){
                 if(Math.abs(matrix[i][j] - other.matrix[i][j]) > 0.001){
                     return false;
                 }
@@ -358,7 +326,7 @@ public class Matrix {
 
     public void add(Matrix b) {
         for(int i = 0; i < z; i++){
-            for(int j = 0; j < rows * cols; j++){
+            for(int j = 0; j < innerSize; j++){
                 matrix[i][j] += b.matrix[i][j];
             }
         }
