@@ -1,5 +1,5 @@
 Flatten@6d1310f6
 DenseLayer@3228d990
-ReLU@54e7391d
-DenseLayer@50b8ae8d
-Softmax@255990cc
+ReLU@33a2499c
+DenseLayer@e72dba7
+Softmax@33c2bd

@@ -8,7 +8,6 @@ import java.io.UnsupportedEncodingException;
 
 public class DenseLayer extends Layer {
     public Matrix weights;
-    public Matrix biases;
     public INDArray bias;
     Matrix[] inputs = new Matrix[Main.numThreads];
     Matrix[] outputs = new Matrix[Main.numThreads];;
@@ -26,8 +25,6 @@ public class DenseLayer extends Layer {
             biasGradient[i].seedZeros();
             outputs[i] = new Matrix(1, numOutChannels, 1);
         }
-        biases = new Matrix(1, numOutChannels, 1);
-        biases.seedZeros();
         bias = Nd4j.zeros(DataType.DOUBLE, numOutChannels, 1);
         weights = new Matrix(1, numInChannels, numOutChannels);
         weights.seedUniform();
@@ -39,7 +36,6 @@ public class DenseLayer extends Layer {
         INDArray input = inputs.convertToTensor();
         INDArray weight = weights.convertToTensor();
         weight = weight.reshape(weight.size(1), weight.size(0)).transpose();
-        INDArray biase = biases.convertToTensor();
         long[] inputDims = input.shape();
         long[] weightDims = weight.shape();
         if (inputDims.length != 2) {
@@ -76,8 +72,6 @@ public class DenseLayer extends Layer {
     public void updateParams() {
         for(int j = 0; j < biasGradient.length; j++) {
             INDArray biasGrad = biasGradient[j].convertToTensor();
-            INDArray bias = biases.convertToTensor();
-            biases = Matrix.convertToMatrix(bias.sub(biasGrad.mul(Main.ALPHA)));
             this.bias = this.bias.sub(biasGrad.mul(Main.ALPHA));
             biasGradient[j].seedZeros();
         }
@@ -93,10 +87,10 @@ public class DenseLayer extends Layer {
     public void write() throws FileNotFoundException, UnsupportedEncodingException {
         PrintWriter writer = new PrintWriter("src/main/logs/log-" + this, "UTF-8");
         writer.println(this);
-        writer.println("Total Parameters{" + (weights.size + biases.size) + "}");
+        writer.println("Total Parameters{" + (weights.size + bias.length()) + "}");
         writer.println("Number of Nodes{" + numOutChannels + "}\n");
         writer.println("Number of Inputs{" + (inputs[0].size) + "}");
-        writer.println(biases.toString(false) + "\n");
+        writer.println(bias.toString() + "\n");
         writer.println("Number of weights{" + inputs[0].size + ", " + numOutChannels + "}\n");
         writer.println(weights.toString(false));
         writer.close();

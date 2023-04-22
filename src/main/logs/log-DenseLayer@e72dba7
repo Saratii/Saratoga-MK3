@@ -1,9 +1,10 @@
-DenseLayer@50b8ae8d
+DenseLayer@e72dba7
 Total Parameters{34}
 Number of Nodes{2}
 
 Number of Inputs{16}
-[[0.00731867009880157, -0.00731867009880157]]
+[[0.0073], 
+ [-0.0073]]
 
 Number of weights{16, 2}
 

@@ -300,13 +300,25 @@ public class Matrix {
     }
     public static Matrix convertToMatrix(INDArray vector) {
         long[] shape = vector.shape();
-        Matrix matrix = new Matrix(1, (int)shape[0], (int)shape[1]);
-        for(int j = 0; j < shape[0]; j++) {
-            for (int k = 0; k < shape[1]; k++) {
-                matrix.matrix[0][j * (int) shape[1] + k] = vector.getDouble(j, k);
+        Matrix matri;
+        if(shape.length == 3) {
+             matri = new Matrix((int) shape[0], (int) shape[1], (int) shape[2]);
+            for (int j = 0; j < shape[0]; j++) {
+                for (int k = 0; k < shape[1]; k++) {
+                    for (int i = 0; i < shape[2]; i++) {
+                        matri.matrix[j][k * (int) shape[1] + i] = vector.getDouble(j, k, i);
+                    }
+                }
+            }
+        } else {
+            matri = new Matrix(1, (int) shape[0], (int) shape[1]);
+            for(int j = 0; j < shape[0]; j++) {
+                for (int k = 0; k < shape[1]; k++) {
+                    matri.matrix[0][j * (int) shape[1] + k] = vector.getDouble(j, k);
+                }
             }
         }
-        return matrix;
+        return matri;
     }
     public Matrix multiply(Matrix matrixB) {
         INDArray tensorB = matrixB.convertToTensor();
