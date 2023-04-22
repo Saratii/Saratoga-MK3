@@ -1,3 +1,4 @@
+import org.nd4j.linalg.api.buffer.DataType;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
@@ -27,7 +28,7 @@ public class DenseLayer extends Layer {
         }
         biases = new Matrix(1, numOutChannels, 1);
         biases.seedZeros();
-        bias = Nd4j.zeros(numOutChannels, 1);
+        bias = Nd4j.zeros(DataType.DOUBLE, numOutChannels, 1);
         weights = new Matrix(1, numInChannels, numOutChannels);
         weights.seedUniform();
     }
@@ -47,7 +48,7 @@ public class DenseLayer extends Layer {
         if (inputDims[0] != weightDims[0]) {
             throw new Exception("invalid input channels in dense layer, expected " + inputDims[0]);
         }
-        INDArray result = input.transpose().mmul(weight).add(biase.reshape(bias.size(1), bias.size(0)));
+        INDArray result = input.transpose().mmul(weight).add(bias.reshape(bias.size(1), bias.size(0)));
         outputs[threadIndex] = Matrix.convertToMatrix(result.transpose());
         return outputs[threadIndex];
     }
@@ -77,6 +78,7 @@ public class DenseLayer extends Layer {
             INDArray biasGrad = biasGradient[j].convertToTensor();
             INDArray bias = biases.convertToTensor();
             biases = Matrix.convertToMatrix(bias.sub(biasGrad.mul(Main.ALPHA)));
+            this.bias = this.bias.sub(biasGrad.mul(Main.ALPHA));
             biasGradient[j].seedZeros();
         }
         for(int j = 0; j < weightGradient.length; j++){
