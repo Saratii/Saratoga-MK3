@@ -19,19 +19,18 @@ public class Softmax extends Layer {
         outputs[threadIndex] = Matrix.convertToMatrix(result);
         return outputs[threadIndex];
     }
-    //needs to be a 2x1
-    // chain = 1x2
-    //result = 2x1
-    @Override //its softmax(i) * (1 - softmax(i))
+    @Override
     public Matrix backward(Matrix dvalues, int threadIndex) {
         INDArray chain = dvalues.convertToTensor();
-        chain = chain.reshape(chain.size(1), chain.size(0));
+        INDArray result = Nd4j.create(DataType.DOUBLE, chain.length(), chain.length());
         INDArray output = outputs[threadIndex].convertToTensor();
-        INDArray result = Nd4j.create(DataType.DOUBLE, output.shape());
-        for(int i = 0; i < output.length(); i++){
-            result.putScalar(i,output.getDouble(i) * (1 - output.getDouble(i)));
+
+        for(int i = 0; i < chain.length(); i++){
+            for(int j = 0; j < chain.length(); j++){
+                result.putScalar(j, i, output.getDouble(i, 0) * ((i == j ? 1 : 0) - output.getDouble(j, 0)));
+            }
         }
-        return Matrix.convertToMatrix(result.transpose().mmul(chain.transpose()).transpose());
+        return Matrix.convertToMatrix(result.mmul(chain));
     }
     @Override
     public void write() throws FileNotFoundException, UnsupportedEncodingException {
