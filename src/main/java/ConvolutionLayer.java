@@ -15,18 +15,17 @@ public class ConvolutionLayer extends Layer {
     final int STRIDE;
     final int KERNAL_SIZE;
     INDArray[] biasGradients = new INDArray[Main.numThreads];
-    Matrix[][] weightGradientsPerThread;
+    INDArray[][] weightGradients;
     public INDArray[] kernels;
     public INDArray bias;
     public ConvolutionLayer(int NUM_IN_CHANNELS, int NUM_OUT_CHANNELS, int STRIDE, int KERNAL_SIZE) {
         for(int i = 0; i < Main.numThreads; i++){
             biasGradients[i] = Nd4j.zeros(DataType.DOUBLE, NUM_OUT_CHANNELS, 1);
         }
-        weightGradientsPerThread = new Matrix[Main.numThreads][NUM_IN_CHANNELS * NUM_OUT_CHANNELS];
+        weightGradients = new INDArray[Main.numThreads][NUM_IN_CHANNELS * NUM_OUT_CHANNELS];
         for(int i = 0; i < Main.numThreads; i++){
-            for(int j = 0; j < weightGradientsPerThread[i].length; j++){
-                weightGradientsPerThread[i][j] = new Matrix(1, KERNAL_SIZE, KERNAL_SIZE);
-                weightGradientsPerThread[i][j].seedZeros();
+            for(int j = 0; j < weightGradients[i].length; j++){
+                weightGradients[i][j] = Nd4j.zeros(DataType.DOUBLE, KERNAL_SIZE, KERNAL_SIZE);
             }
         }
         this.NUM_IN_CHANNELS = NUM_IN_CHANNELS;
@@ -95,7 +94,7 @@ public class ConvolutionLayer extends Layer {
             }
         }
         for(int i = 0; i < kernalGradient.length; i++){
-            weightGradientsPerThread[threadIndex][i].add(kernalGradient[i]);
+            weightGradients[threadIndex][i].addi(kernalGradient[i].convertToTensor());
         }
         for(int i = 0; i < previousGradients.z; i++){
             for(int j = 0; j < previousGradients.matrix[i].length; j++){
@@ -109,12 +108,12 @@ public class ConvolutionLayer extends Layer {
 
     @Override
     public void updateParams() {
-        for(int k = 0; k < weightGradientsPerThread.length; k++){
-            for(int i = 0; i < weightGradientsPerThread[k].length; i++){
-                for(int j = 0; j < weightGradientsPerThread[k][i].size; j++){
-                    kernels[i].putScalar(j, kernels[i].getDouble(j) - weightGradientsPerThread[k][i].matrix[0][j] * Main.ALPHA);
+        for(int k = 0; k < weightGradients.length; k++){
+            for(int i = 0; i < weightGradients[k].length; i++){
+                for(int j = 0; j < weightGradients[k][i].length(); j++){
+                    kernels[i].putScalar(j, kernels[i].getDouble(j) - weightGradients[k][i].getDouble(j) * Main.ALPHA);
                 }
-                weightGradientsPerThread[k][i].seedZeros();
+                weightGradients[k][i].assign(0.0);
             }
         }
         for(int i = 0; i < biasGradients.length; i++){
