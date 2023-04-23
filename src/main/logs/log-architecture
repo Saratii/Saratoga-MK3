@@ -1,7 +1,7 @@
 ConvolutionLayer@6ca320ab
-ReLU@7dd712e8
-MaxPool@2c282004
-ConvolutionLayer@22ee2d0
+ReLU@2c282004
+MaxPool@22ee2d0
+ConvolutionLayer@7bfc3126
 ReLU@3e792ce3
 MaxPool@53bc1328
 Flatten@26f143ed
