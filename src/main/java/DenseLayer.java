@@ -8,21 +8,20 @@ import java.io.UnsupportedEncodingException;
 
 public class DenseLayer extends Layer {
     public Matrix weights;
-    public INDArray bias;
-    INDArray[] inputs = new INDArray[Main.numThreads];
-    Matrix[] outputs = new Matrix[Main.numThreads];;
+    private INDArray bias;
+    private INDArray[] inputs = new INDArray[Main.numThreads];
+    private INDArray[] outputs = new INDArray[Main.numThreads];;
     int numOutChannels;
     private final INDArray[] biasGradient = new INDArray[Main.numThreads];
-    private final Matrix[] weightGradient = new Matrix[Main.numThreads];
+    private final INDArray[] weightGradient = new INDArray[Main.numThreads];
     public DenseLayer(int numInChannels, int numOutChannels) {
         this.numOutChannels = numOutChannels;
         for(int i = 0; i < weightGradient.length; i++){
-            weightGradient[i] = new Matrix(1, numInChannels, numOutChannels);
-            weightGradient[i].seedZeros();
+            weightGradient[i] = Nd4j.zeros(DataType.DOUBLE, numInChannels, numOutChannels);
         }
         for(int i = 0; i < Main.numThreads; i++){
             biasGradient[i] = Nd4j.zeros(DataType.DOUBLE, numOutChannels, 1);
-            outputs[i] = new Matrix(1, numOutChannels, 1);
+            outputs[i] = Nd4j.create(numOutChannels, 1);
         }
         bias = Nd4j.zeros(DataType.DOUBLE, numOutChannels, 1);
         weights = new Matrix(1, numInChannels, numOutChannels);
@@ -43,8 +42,8 @@ public class DenseLayer extends Layer {
             throw new Exception("invalid input channels in dense layer, expected " + inputDims[0]);
         }
         INDArray result = input.transpose().mmul(weight).add(bias.reshape(bias.size(1), bias.size(0)));
-        outputs[threadIndex] = Matrix.convertToMatrix(result.transpose());
-        return outputs[threadIndex].convertToTensor();
+        outputs[threadIndex] = result.transpose();
+        return outputs[threadIndex];
     }
 
     @Override
@@ -55,7 +54,7 @@ public class DenseLayer extends Layer {
             passedOnDerivatives.matrix[0][i] = 0.0;
             for(int j = 0; j < numOutChannels; j++){
                 passedOnDerivatives.matrix[0][i] += chain.matrix[0][j] * weights.matrix[0][j * (int)inputs[threadIndex].length() + i];
-                weightGradient[threadIndex].matrix[0][j * (int)inputs[threadIndex].length() + i] += chain.matrix[0][j] * inputs[threadIndex].getDouble(i);
+                weightGradient[threadIndex].putScalar(j * inputs[threadIndex].length() + i, weightGradient[threadIndex].getDouble(j * inputs[threadIndex].length() + i) + chain.matrix[0][j] * inputs[threadIndex].getDouble(i));
             }
         }
         return passedOnDerivatives;
@@ -68,10 +67,10 @@ public class DenseLayer extends Layer {
             biasGradient[j].assign(0.0);
         }
         for(int j = 0; j < weightGradient.length; j++){
-            for(int i = 0; i < weightGradient[j].size; i++){
-                weights.matrix[0][i] -= weightGradient[j].matrix[0][i] * Main.ALPHA;
+            for(int i = 0; i < weightGradient[j].length(); i++){
+                weights.matrix[0][i] -= weightGradient[j].getDouble(i) * Main.ALPHA;
             }
-            weightGradient[j].seedZeros();
+            weightGradient[j].assign(0.0);
         }
     }
 
