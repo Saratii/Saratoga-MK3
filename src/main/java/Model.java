@@ -22,7 +22,7 @@ public class Model {
             layers.get(i).isClassifying = isClassifying;
             input = layers.get(i).forward(input, threadIndex, batchIndexForThread);
         }
-        double l = Loss.forward(Matrix.convertToMatrix(input), expected);
+        double l = Loss.forward(input, expected);
         this.expected[threadIndex] = expected;
         this.inputs[threadIndex] = Matrix.convertToMatrix(input);
         return l;
