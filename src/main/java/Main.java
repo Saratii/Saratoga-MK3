@@ -72,14 +72,14 @@ public class Main {
             }
         }
         Model model = new Model();
-//        model.layers.add(new ConvolutionLayer(1, 24, 1, 5));
-//        model.layers.add(new ReLU());
-//        model.layers.add(new MaxPool(3));
-//        model.layers.add(new ConvolutionLayer(24, 14, 1, 3));
-//        model.layers.add(new ReLU());
-//        model.layers.add(new MaxPool(3));
+        model.layers.add(new ConvolutionLayer(1, 24, 1, 5));
+        model.layers.add(new ReLU());
+        model.layers.add(new MaxPool(3));
+        model.layers.add(new ConvolutionLayer(24, 14, 1, 3));
+        model.layers.add(new ReLU());
+        model.layers.add(new MaxPool(3));
         model.layers.add(new Flatten());
-        model.layers.add(new DenseLayer(90*90, 16));
+        model.layers.add(new DenseLayer(1134, 16));
         model.layers.add(new ReLU());
         model.layers.add(new DenseLayer(16, 2));
         model.layers.add(new Softmax());
@@ -136,9 +136,9 @@ public class Main {
     }
 
     public static Matrix classify(Image im, Model model) throws Exception {
-        model.forward(im.imageData, im.label, 0, 0);
+        model.forward(im.imageData.convertToTensor(), im.label, 0, 0);
         Softmax soft = (Softmax) model.layers.get(model.layers.size() - 1);
-        return soft.outputs[0];
+        return Matrix.convertToMatrix(soft.outputs[0]);
     }
 
     public static List<List<Image>> setupData(int imagesPerClass, double percentageTested) throws IOException {

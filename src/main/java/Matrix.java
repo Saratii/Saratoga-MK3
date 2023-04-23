@@ -375,4 +375,13 @@ public class Matrix {
             a[i] = 0.0;
         }
     }
+    public Double sum(){
+        Double sum = 0.0;
+        for(int i = 0; i < z; i++){
+            for(int j = 0; j < innerSize; j++){
+                sum+=matrix[i][j];
+            }
+        }
+        return sum;
+    }
 }

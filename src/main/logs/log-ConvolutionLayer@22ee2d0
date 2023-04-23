@@ -1,0 +1,1035 @@
+ConvolutionLayer@22ee2d0
+Total Parameters{3024}
+Number of Kernals{336}
+Stride {1}
+Size of Kernals{3, 3}
+
+Number of Input Channels{24}
+
+Number of Output Channels{14}
+
+Biases{14}
+[[6.0418e23], 
+ [7.5617e23], 
+ [0], 
+ [1.399e23], 
+ [1.4137e24], 
+ [-1.4181e10], 
+ [1.0653e24], 
+ [0], 
+ [1.1078e24], 
+ [2.4427e23], 
+ [6.4205e23], 
+ [1.2136e23], 
+ [1.2563e24], 
+ [2.7489e23]]
+
+Kernal Weights{3024}
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]
+[[       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN], 
+ [       NaN,       NaN,       NaN]]

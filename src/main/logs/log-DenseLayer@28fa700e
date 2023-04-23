@@ -1,0 +1,11 @@
+DenseLayer@28fa700e
+Total Parameters{34}
+Number of Nodes{2}
+
+Number of Inputs{16}
+[[NaN], 
+ [NaN]]
+
+Number of weights{16, 2}
+
+[[NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN]]

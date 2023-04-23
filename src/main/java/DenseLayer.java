@@ -9,7 +9,7 @@ import java.io.UnsupportedEncodingException;
 public class DenseLayer extends Layer {
     public Matrix weights;
     public INDArray bias;
-    Matrix[] inputs = new Matrix[Main.numThreads];
+    INDArray[] inputs = new INDArray[Main.numThreads];
     Matrix[] outputs = new Matrix[Main.numThreads];;
     int numOutChannels;
     private final Matrix[] biasGradient = new Matrix[Main.numThreads];;
@@ -31,9 +31,8 @@ public class DenseLayer extends Layer {
     }
 
     @Override
-    public Matrix forward(Matrix inputs, int threadIndex, int batchIndexForThread) throws Exception {
-        this.inputs[threadIndex] = inputs;
-        INDArray input = inputs.convertToTensor();
+    public INDArray forward(INDArray input, int threadIndex, int batchIndexForThread) throws Exception {
+        this.inputs[threadIndex] = input;
         INDArray weight = weights.convertToTensor();
         weight = weight.reshape(weight.size(1), weight.size(0)).transpose();
         long[] inputDims = input.shape();
@@ -46,23 +45,19 @@ public class DenseLayer extends Layer {
         }
         INDArray result = input.transpose().mmul(weight).add(bias.reshape(bias.size(1), bias.size(0)));
         outputs[threadIndex] = Matrix.convertToMatrix(result.transpose());
-        return outputs[threadIndex];
+        return outputs[threadIndex].convertToTensor();
     }
 
-//    Epoch: 4 Average Loss: 0.5719871986523103
-//    Completed in 5 epochs
-//    Average time per epoch: 2913 ms <-- mine
-
-
     @Override
-    public Matrix backward(Matrix previousDerivatives, int threadIndex) {
+    public Matrix backward(Matrix chain, int threadIndex) {
+        Matrix previousDerivatives = chain;
         biasGradient[threadIndex] = Matrix.convertToMatrix(biasGradient[threadIndex].convertToTensor().add(previousDerivatives.convertToTensor()));
-        Matrix passedOnDerivatives = new Matrix(1, inputs[threadIndex].size, 1);
-        for(int i = 0; i < inputs[threadIndex].size; i++){
+        Matrix passedOnDerivatives = new Matrix(1, (int) inputs[threadIndex].length(), 1);
+        for(int i = 0; i < inputs[threadIndex].length(); i++){
             passedOnDerivatives.matrix[0][i] = 0.0;
             for(int j = 0; j < numOutChannels; j++){
-                passedOnDerivatives.matrix[0][i] += previousDerivatives.matrix[0][j] * weights.matrix[0][j * inputs[threadIndex].size + i];
-                weightGradient[threadIndex].matrix[0][j * inputs[threadIndex].size + i] += previousDerivatives.matrix[0][j] * inputs[threadIndex].matrix[0][i];
+                passedOnDerivatives.matrix[0][i] += previousDerivatives.matrix[0][j] * weights.matrix[0][j * (int)inputs[threadIndex].length() + i];
+                weightGradient[threadIndex].matrix[0][j * (int)inputs[threadIndex].length() + i] += previousDerivatives.matrix[0][j] * inputs[threadIndex].getDouble(i);
             }
         }
         return passedOnDerivatives;
@@ -89,9 +84,9 @@ public class DenseLayer extends Layer {
         writer.println(this);
         writer.println("Total Parameters{" + (weights.size + bias.length()) + "}");
         writer.println("Number of Nodes{" + numOutChannels + "}\n");
-        writer.println("Number of Inputs{" + (inputs[0].size) + "}");
+        writer.println("Number of Inputs{" + (inputs[0].length()) + "}");
         writer.println(bias.toString() + "\n");
-        writer.println("Number of weights{" + inputs[0].size + ", " + numOutChannels + "}\n");
+        writer.println("Number of weights{" + inputs[0].length() + ", " + numOutChannels + "}\n");
         writer.println(weights.toString(false));
         writer.close();
     }

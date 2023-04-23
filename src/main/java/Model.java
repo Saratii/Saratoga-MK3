@@ -1,4 +1,7 @@
+import org.nd4j.linalg.api.ndarray.INDArray;
+
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -14,20 +17,19 @@ public class Model {
         inputs = new Matrix[Main.numThreads];
     }
 
-    public double forward(Matrix inputs, Matrix expected, int threadIndex, int batchIndexForThread) throws Exception {
+    public double forward(INDArray input, Matrix expected, int threadIndex, int batchIndexForThread) throws Exception {
         for(int i = 0; i < layers.size(); i++){
             layers.get(i).isClassifying = isClassifying;
-            inputs = layers.get(i).forward(inputs, threadIndex, batchIndexForThread);
+            input = layers.get(i).forward(input, threadIndex, batchIndexForThread);
         }
-        double l = Loss.forward(inputs, expected);
+        double l = Loss.forward(Matrix.convertToMatrix(input), expected);
         this.expected[threadIndex] = expected;
-        this.inputs[threadIndex] = inputs;
+        this.inputs[threadIndex] = Matrix.convertToMatrix(input);
         return l;
     }
 
     public void backward(int threadIndex) {
-        Matrix gradients;
-        gradients = Loss.backward(inputs[threadIndex], expected[threadIndex]);
+        Matrix gradients = Loss.backward(inputs[threadIndex], expected[threadIndex]);
         for(int i = 0; i < layers.size(); i++){
             gradients = layers.get(layers.size() - 1 - i).backward(gradients, threadIndex);
         }
@@ -39,7 +41,7 @@ public class Model {
         }
     }
 
-    public void write() throws FileNotFoundException, UnsupportedEncodingException {
+    public void write() throws IOException {
         PrintWriter writer = new PrintWriter("src/main/logs/log-architecture", "UTF-8");
         for(int i = 0; i < layers.size(); i++){
             layers.get(i).write();

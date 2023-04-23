@@ -21,7 +21,7 @@ public class TrainingTask implements Callable<Integer> {
             if(batches[batchIndexForThread][i] == null){
                 break;
             }
-            loss += model.forward(batches[batchIndexForThread][i].imageData, batches[batchIndexForThread][i].label, threadIndex, i);
+            loss += model.forward(batches[batchIndexForThread][i].imageData.convertToTensor(), batches[batchIndexForThread][i].label, threadIndex, i);
             model.backward(threadIndex);
         }
         return loss;

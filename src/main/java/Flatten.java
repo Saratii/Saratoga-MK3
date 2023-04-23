@@ -6,16 +6,11 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
 public class Flatten extends Layer {
-    int z;
-    int rows;
-    int cols;
     long[] dims;
-
     @Override
-    public Matrix forward(Matrix inputs, int threadIndex, int batchIndexForThread) {
-        INDArray input = inputs.convertToTensor();
+    public INDArray forward(INDArray input, int threadIndex, int batchIndexForThread) {
         dims = input.shape();
-        return Matrix.convertToMatrix(input.reshape(input.length(), 1));
+        return input.reshape(input.length(), 1);
     }
 
     @Override

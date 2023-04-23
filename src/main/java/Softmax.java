@@ -8,26 +8,23 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
 public class Softmax extends Layer {
-    Matrix[] outputs = new Matrix[Main.numThreads];
+    INDArray[] outputs = new INDArray[Main.numThreads];
 
     @Override
-    public Matrix forward(Matrix inputs, int threadIndex, int batchIndexForThread) {
-        INDArray input = inputs.convertToTensor();
+    public INDArray forward(INDArray input, int threadIndex, int batchIndexForThread) {
         INDArray expArray = Transforms.exp(input.sub(input.max()));
         INDArray sumExp = expArray.sum();
         INDArray result = expArray.div(sumExp);
-        outputs[threadIndex] = Matrix.convertToMatrix(result);
+        outputs[threadIndex] = result;
         return outputs[threadIndex];
     }
     @Override
     public Matrix backward(Matrix dvalues, int threadIndex) {
         INDArray chain = dvalues.convertToTensor();
         INDArray result = Nd4j.create(DataType.DOUBLE, chain.length(), chain.length());
-        INDArray output = outputs[threadIndex].convertToTensor();
-
         for(int i = 0; i < chain.length(); i++){
             for(int j = 0; j < chain.length(); j++){
-                result.putScalar(j, i, output.getDouble(i, 0) * ((i == j ? 1 : 0) - output.getDouble(j, 0)));
+                result.putScalar(j, i, outputs[threadIndex].getDouble(i, 0) * ((i == j ? 1 : 0) - outputs[threadIndex].getDouble(j, 0)));
             }
         }
         return Matrix.convertToMatrix(result.mmul(chain));

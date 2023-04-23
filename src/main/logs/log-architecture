@@ -1,5 +1,11 @@
-Flatten@6d1310f6
-DenseLayer@3228d990
-ReLU@33a2499c
-DenseLayer@e72dba7
-Softmax@33c2bd
+ConvolutionLayer@6ca320ab
+ReLU@7dd712e8
+MaxPool@2c282004
+ConvolutionLayer@22ee2d0
+ReLU@3e792ce3
+MaxPool@53bc1328
+Flatten@26f143ed
+DenseLayer@3c1e3314
+ReLU@5f577419
+DenseLayer@28fa700e
+Softmax@3d526ad9
