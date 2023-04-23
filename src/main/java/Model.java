@@ -1,21 +1,14 @@
 import org.nd4j.linalg.api.ndarray.INDArray;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class Model {
     public ArrayList<Layer> layers = new ArrayList<>();
-    Matrix[] inputs;
-    Matrix[] expected;
+    INDArray[] inputs = new INDArray[Main.numThreads];
+    Matrix[] expected = new Matrix[Main.numThreads];
     boolean isClassifying;
-
-    public Model() {
-        expected = new Matrix[Main.numThreads];
-        inputs = new Matrix[Main.numThreads];
-    }
 
     public double forward(INDArray input, Matrix expected, int threadIndex, int batchIndexForThread) throws Exception {
         for(int i = 0; i < layers.size(); i++){
@@ -24,14 +17,14 @@ public class Model {
         }
         double l = Loss.forward(input, expected);
         this.expected[threadIndex] = expected;
-        this.inputs[threadIndex] = Matrix.convertToMatrix(input);
+        this.inputs[threadIndex] = input;
         return l;
     }
 
     public void backward(int threadIndex) {
-        Matrix gradients = Loss.backward(inputs[threadIndex], expected[threadIndex]);
+        INDArray gradient = Loss.backward(inputs[threadIndex], expected[threadIndex]);
         for(int i = 0; i < layers.size(); i++){
-            gradients = layers.get(layers.size() - 1 - i).backward(gradients, threadIndex);
+            gradient = layers.get(layers.size() - 1 - i).backward(gradient, threadIndex);
         }
     }
 

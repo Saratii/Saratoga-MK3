@@ -2,15 +2,16 @@ import org.nd4j.linalg.api.buffer.DataType;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 public class DenseLayer extends Layer {
     public Matrix weights;
-    private INDArray bias;
-    private INDArray[] inputs = new INDArray[Main.numThreads];
-    private INDArray[] outputs = new INDArray[Main.numThreads];;
+    public INDArray weightssss;
+    private final INDArray bias;
+    private final INDArray[] inputs = new INDArray[Main.numThreads];
+    private final INDArray[] outputs = new INDArray[Main.numThreads];;
     int numOutChannels;
     private final INDArray[] biasGradients = new INDArray[Main.numThreads];
     private final INDArray[] weightGradients = new INDArray[Main.numThreads];
@@ -26,19 +27,18 @@ public class DenseLayer extends Layer {
         bias = Nd4j.zeros(DataType.DOUBLE, numOutChannels, 1);
         weights = new Matrix(1, numInChannels, numOutChannels);
         weights.seedUniform();
+        weightssss = weights.convertToTensor();
     }
 
     @Override
     public INDArray forward(INDArray input, int threadIndex, int batchIndexForThread) throws Exception {
         this.inputs[threadIndex] = input;
-        INDArray weight = weights.convertToTensor();
-        weight = weight.reshape(weight.size(1), weight.size(0)).transpose();
+        INDArray weight = weightssss.reshape(weightssss.size(1), weightssss.size(0)).transpose();
         long[] inputDims = input.shape();
-        long[] weightDims = weight.shape();
         if (inputDims.length != 2) {
             throw new Exception("flatten your input ");
         }
-        if (inputDims[0] != weightDims[0]) {
+        if (inputDims[0] != weight.size(0)) {
             throw new Exception("invalid input channels in dense layer, expected " + inputDims[0]);
         }
         INDArray result = input.transpose().mmul(weight).add(bias.reshape(bias.size(1), bias.size(0)));
@@ -47,14 +47,14 @@ public class DenseLayer extends Layer {
     }
 
     @Override
-    public Matrix backward(Matrix chain, int threadIndex) {
-        biasGradients[threadIndex].addi(chain.convertToTensor());
-        Matrix passedOnDerivatives = new Matrix(1, (int) inputs[threadIndex].length(), 1);
+    public INDArray backward(INDArray chain, int threadIndex) {
+        biasGradients[threadIndex].addi(chain);
+        INDArray passedOnDerivatives = Nd4j.create(DataType.DOUBLE,inputs[threadIndex].length(), 1);
         for(int i = 0; i < inputs[threadIndex].length(); i++){
-            passedOnDerivatives.matrix[0][i] = 0.0;
+            passedOnDerivatives.putScalar(i, 0.0);
             for(int j = 0; j < numOutChannels; j++){
-                passedOnDerivatives.matrix[0][i] += chain.matrix[0][j] * weights.matrix[0][j * (int)inputs[threadIndex].length() + i];
-                weightGradients[threadIndex].putScalar(j * inputs[threadIndex].length() + i, weightGradients[threadIndex].getDouble(j * inputs[threadIndex].length() + i) + chain.matrix[0][j] * inputs[threadIndex].getDouble(i));
+                passedOnDerivatives.putScalar(i, passedOnDerivatives.getDouble(i) + chain.getDouble(j) * weightssss.getDouble(j * inputs[threadIndex].length() + i));
+                weightGradients[threadIndex].putScalar(j * inputs[threadIndex].length() + i, weightGradients[threadIndex].getDouble(j * inputs[threadIndex].length() + i) + chain.getDouble(j) * inputs[threadIndex].getDouble(i));
             }
         }
         return passedOnDerivatives;
@@ -68,7 +68,7 @@ public class DenseLayer extends Layer {
         }
         for(int j = 0; j < weightGradients.length; j++){
             for(int i = 0; i < weightGradients[j].length(); i++){
-                weights.matrix[0][i] -= weightGradients[j].getDouble(i) * Main.ALPHA;
+                weightssss.putScalar(i, weightssss.getDouble(i) - weightGradients[j].getDouble(i) * Main.ALPHA);
             }
             weightGradients[j].assign(0.0);
         }
@@ -76,15 +76,15 @@ public class DenseLayer extends Layer {
 
 
     @Override
-    public void write() throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter("src/main/logs/log-" + this, "UTF-8");
+    public void write() throws IOException {
+        PrintWriter writer = new PrintWriter("src/main/logs/log-" + this, StandardCharsets.UTF_8);
         writer.println(this);
         writer.println("Total Parameters{" + (weights.size + bias.length()) + "}");
         writer.println("Number of Nodes{" + numOutChannels + "}\n");
         writer.println("Number of Inputs{" + (inputs[0].length()) + "}");
         writer.println(bias.toString() + "\n");
         writer.println("Number of weights{" + inputs[0].length() + ", " + numOutChannels + "}\n");
-        writer.println(weights.toString(false));
+        writer.println(weightssss.toString());
         writer.close();
     }
 }

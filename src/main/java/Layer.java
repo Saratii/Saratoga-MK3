@@ -10,8 +10,8 @@ public class Layer {
         return inputs;
     }
 
-    public Matrix backward(Matrix inputs, int threadIndex) {
-        return inputs;
+    public INDArray backward(INDArray input, int threadIndex) {
+        return input;
     }
 
     public void updateParams() {

@@ -13,7 +13,7 @@ public class ConvolutionLayer extends Layer {
     final int NUM_IN_CHANNELS;
     final int NUM_OUT_CHANNELS;
     final int STRIDE;
-    final int KERNAL_SIZE;
+    final int KERNEL_SIZE;
     INDArray[] biasGradients = new INDArray[Main.numThreads];
     INDArray[][] weightGradients;
     public INDArray[] kernels;
@@ -31,7 +31,7 @@ public class ConvolutionLayer extends Layer {
         this.NUM_IN_CHANNELS = NUM_IN_CHANNELS;
         this.NUM_OUT_CHANNELS = NUM_OUT_CHANNELS;
         this.STRIDE = STRIDE;
-        this.KERNAL_SIZE = KERNAL_SIZE;
+        this.KERNEL_SIZE = KERNAL_SIZE;
         kernels = new INDArray[NUM_IN_CHANNELS * NUM_OUT_CHANNELS];
         bias = Nd4j.zeros(DataType.DOUBLE, NUM_OUT_CHANNELS, 1);
         for(int i = 0; i < kernels.length; i++){
@@ -47,9 +47,9 @@ public class ConvolutionLayer extends Layer {
         this.input[threadIndex] = input;
         Matrix result;
         if(input.shape().length > 2){
-            result = new Matrix(NUM_OUT_CHANNELS, (int)input.size(1) - KERNAL_SIZE + 1, (int)input.size(2) - KERNAL_SIZE + 1);
+            result = new Matrix(NUM_OUT_CHANNELS, (int)input.size(1) - KERNEL_SIZE + 1, (int)input.size(2) - KERNEL_SIZE + 1);
         } else {
-            result = new Matrix(NUM_OUT_CHANNELS, (int)input.size(0) - KERNAL_SIZE + 1, (int)input.size(1) - KERNAL_SIZE + 1);
+            result = new Matrix(NUM_OUT_CHANNELS, (int)input.size(0) - KERNEL_SIZE + 1, (int)input.size(1) - KERNEL_SIZE + 1);
         }
 
         result.seedZeros();
@@ -68,7 +68,8 @@ public class ConvolutionLayer extends Layer {
     }
 
     @Override
-    public Matrix backward(Matrix previousGradients, int threadIndex) {
+    public INDArray backward(INDArray chain, int threadIndex) {
+        Matrix previousGradients = Matrix.convertToMatrix(chain);
         Matrix dldf = Matrix.convertToMatrix(input[threadIndex]).convolution(previousGradients);
         Matrix result;
         if(input[threadIndex].shape().length > 2) {
@@ -79,7 +80,7 @@ public class ConvolutionLayer extends Layer {
         Matrix biasGradient = new Matrix(1, NUM_OUT_CHANNELS, 1);
         Matrix[] kernalGradient = new Matrix[NUM_IN_CHANNELS * NUM_OUT_CHANNELS];
         for(int i = 0; i < kernels.length; i++){
-            kernalGradient[i] = new Matrix(1, KERNAL_SIZE, KERNAL_SIZE);
+            kernalGradient[i] = new Matrix(1, KERNEL_SIZE, KERNEL_SIZE);
         }
         result.seedZeros();
         for(int i = 0; i < result.z; i++){
@@ -103,7 +104,7 @@ public class ConvolutionLayer extends Layer {
         }
         biasGradients[threadIndex] = biasGradients[threadIndex].add(biasGradient.convertToTensor());
 
-        return result;
+        return result.convertToTensor();
     }
 
     @Override
@@ -131,7 +132,7 @@ public class ConvolutionLayer extends Layer {
         writer.println("Total Parameters{" + (kernels.length * kernels[0].length()) + "}");
         writer.println("Number of Kernals{" + kernels.length + "}");
         writer.println("Stride {" + STRIDE + "}");
-        writer.println("Size of Kernals{" + KERNAL_SIZE + ", " + KERNAL_SIZE + "}\n");
+        writer.println("Size of Kernals{" + KERNEL_SIZE + ", " + KERNEL_SIZE + "}\n");
         writer.println("Number of Input Channels{" + NUM_IN_CHANNELS + "}\n");
         writer.println("Number of Output Channels{" + NUM_OUT_CHANNELS + "}\n");
         writer.println("Biases{" + bias.length() + "}");

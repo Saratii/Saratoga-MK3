@@ -1,4 +1,7 @@
+import org.nd4j.linalg.api.buffer.DataType;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.cpu.nativecpu.NDArray;
+import org.nd4j.linalg.factory.Nd4j;
 
 public class Loss {
     static double eps = 1E-15;
@@ -14,11 +17,11 @@ public class Loss {
         return -sum;
     }
 
-    public static Matrix backward(Matrix yPredicted, Matrix yTrue) {
-        Matrix results = new Matrix(1, yTrue.rows, yTrue.cols);
+    public static INDArray backward(INDArray yPredicted, Matrix yTrue) {
+        INDArray result = Nd4j.create(DataType.DOUBLE, yTrue.rows, yTrue.cols);
         for(int i = 0; i < yTrue.size; i++){
-            results.matrix[0][i] = -1 * yTrue.matrix[0][i] / (yPredicted.matrix[0][i] + eps);
+            result.putScalar(i, -yTrue.matrix[0][i] / (yPredicted.getDouble(i) + eps));
         }
-        return results;
+        return result;
     }
 }

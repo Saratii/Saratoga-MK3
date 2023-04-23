@@ -16,13 +16,12 @@ public class ReLU extends Layer {
     }
 
     @Override
-    public Matrix backward(Matrix dvalues, int threadIndex) {
-        INDArray chain = dvalues.convertToTensor();
+    public INDArray backward(INDArray chain, int threadIndex) {
         INDArray inputs = values[threadIndex];
         for(int i = 0; i < chain.length(); i++){
             chain.putScalar(i, inputs.getDouble(i) > 0 ? chain.getDouble(i) : 0.0);
         }
-        return Matrix.convertToMatrix(chain);
+        return chain;
     }
 
     @Override

@@ -14,9 +14,8 @@ public class Flatten extends Layer {
     }
 
     @Override
-    public Matrix backward(Matrix chains, int threadIndex) {
-        INDArray chain = chains.convertToTensor();
-        return Matrix.convertToMatrix(chain.reshape(dims));
+    public INDArray backward(INDArray chain, int threadIndex) {
+        return chain.reshape(dims);
     }
 
     @Override
