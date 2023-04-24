@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
 public class DenseLayer extends Layer {
-    public Matrix weights;
     public INDArray weightssss;
     private final INDArray bias;
     private final INDArray[] inputs = new INDArray[Main.numThreads];
@@ -21,11 +20,11 @@ public class DenseLayer extends Layer {
             weightGradients[i] = Nd4j.zeros(DataType.DOUBLE, numInChannels, numOutChannels);
         }
         for(int i = 0; i < Main.numThreads; i++){
-            biasGradients[i] = Nd4j.zeros(DataType.DOUBLE, numOutChannels, 1);
+            biasGradients[i] = Nd4j.zeros(DataType.DOUBLE, 1, numOutChannels);
             outputs[i] = Nd4j.create(numOutChannels, 1);
         }
-        bias = Nd4j.zeros(DataType.DOUBLE, numOutChannels, 1);
-        weights = new Matrix(1, numInChannels, numOutChannels);
+        bias = Nd4j.zeros(DataType.DOUBLE, 1, numOutChannels);
+        Matrix weights = new Matrix(1, numInChannels, numOutChannels);
         weights.seedUniform();
         weightssss = weights.convertToTensor();
     }
@@ -41,13 +40,14 @@ public class DenseLayer extends Layer {
         if (inputDims[0] != weight.size(0)) {
             throw new Exception("invalid input channels in dense layer, expected " + inputDims[0]);
         }
-        INDArray result = input.transpose().mmul(weight).add(bias.reshape(bias.size(1), bias.size(0)));
+        INDArray result = input.transpose().mmul(weight).add(bias);
         outputs[threadIndex] = result.transpose();
         return outputs[threadIndex];
     }
 
     @Override
     public INDArray backward(INDArray chain, int threadIndex) {
+        chain = chain.reshape(chain.size(1), chain.size(0));
         biasGradients[threadIndex].addi(chain);
         INDArray passedOnDerivatives = Nd4j.create(DataType.DOUBLE,inputs[threadIndex].length(), 1);
         for(int i = 0; i < inputs[threadIndex].length(); i++){
@@ -79,7 +79,7 @@ public class DenseLayer extends Layer {
     public void write() throws IOException {
         PrintWriter writer = new PrintWriter("src/main/logs/log-" + this, StandardCharsets.UTF_8);
         writer.println(this);
-        writer.println("Total Parameters{" + (weights.size + bias.length()) + "}");
+        writer.println("Total Parameters{" + (weightssss.length() + bias.length()) + "}");
         writer.println("Number of Nodes{" + numOutChannels + "}\n");
         writer.println("Number of Inputs{" + (inputs[0].length()) + "}");
         writer.println(bias.toString() + "\n");

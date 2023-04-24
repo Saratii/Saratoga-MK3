@@ -27,7 +27,7 @@ public class Main {
     public static final Boolean train = true;
     public static final Boolean forceTest = true;
     public static final int maxEpochs = 5;
-    public static final int imageSize = 90;
+    public static final int imageSize = 40;
     public static final double minimumLoss = 0.01;
     public static final boolean testWhileTrain = true;
     public final static Random r = new Random(0);
@@ -79,7 +79,7 @@ public class Main {
         model.layers.add(new ReLU());
         model.layers.add(new MaxPool(3));
         model.layers.add(new Flatten());
-        model.layers.add(new DenseLayer(1134, 16));
+        model.layers.add(new DenseLayer(224, 16));
         model.layers.add(new ReLU());
         model.layers.add(new DenseLayer(16, 2));
         model.layers.add(new Softmax());

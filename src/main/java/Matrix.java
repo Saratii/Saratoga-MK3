@@ -273,8 +273,8 @@ public class Matrix {
         return sum;
     }
 
-    public int convert(int x, int y) {
-        return y * cols + x;
+    public int convert(int i, int j) {
+        return j * cols + i;
     }
     
     public INDArray convertToTensor() {
