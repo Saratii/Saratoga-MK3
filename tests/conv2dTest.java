@@ -7,7 +7,7 @@ import src.Flatten;
 import src.Matrix;
 
 public class conv2dTest {
-    public static double[][] conv2dAllahAkbar(Double[] input, int width, int height, Double[] kernal, int kernalWidth, int kernalHeight){
+    public static double[][] conv2d(Double[] input, int width, int height, Double[] kernal, int kernalWidth, int kernalHeight){
         int smallWidth = width - kernalWidth + 1;
         int smallHeight = height - kernalHeight + 1;
         double[][] output = new double[smallWidth][smallHeight];
@@ -118,7 +118,6 @@ public class conv2dTest {
         }
     }
 }
-//i can try to fix it, u go be
 // Parameter containing:
 // tensor([-0.0465,  0.0305], requires_grad=True)
 
